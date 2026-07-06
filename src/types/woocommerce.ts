@@ -16,9 +16,12 @@ export interface WCProduct {
   short_description: string;
   stock_status: string;
   categories: WCCategory[];
-  images: {
-    id: number;
-    src: string;
-    alt: string;
-  }[];
+  images: WCImage[];
+}
+
+export interface WCImage {
+  id: number;
+  src: string;
+  alt: string;
+  name?: string;
 }
