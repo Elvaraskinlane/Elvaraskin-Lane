@@ -5,7 +5,7 @@ import ProductGallery from "@/components/product/ProductGallery";
 import AddToCartPanel from "@/components/product/AddToCartPanel";
 import BestsellersCarousel from "@/components/home/BestsellersCarousel";
 import ProductShare from "@/components/product/ProductShare";
-import DOMPurify from "isomorphic-dompurify";
+
 export default async function ProductDetailsPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   
@@ -53,7 +53,7 @@ export default async function ProductDetailsPage({ params }: { params: Promise<{
             {/* Render raw HTML description safely */}
             <div 
               className="font-body-md text-lg text-on-surface-variant/90 leading-relaxed prose prose-stone prose-p:mb-6 max-w-none"
-              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.description || product.short_description || "<p>A beautifully crafted product to elevate your routine.</p>") }}
+              dangerouslySetInnerHTML={{ __html: product.description || product.short_description || "<p>A beautifully crafted product to elevate your routine.</p>" }}
             />
 
             {/* Key Benefits (Static for now, can map from WC Meta later) */}

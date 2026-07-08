@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   // Next.js feature to allow network testing
-  allowedDevOrigins: ['192.168.100.37'],
+  allowedDevOrigins: ['192.168.100.37', '193.168.4.230'],
   async rewrites() {
     return [
       {
