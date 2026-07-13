@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useUIStore } from "@/store/useUIStore";
 import { useCartStore } from "@/store/useCartStore";
 import { useAuthStore } from "@/store/useAuthStore";
@@ -17,6 +17,8 @@ export default function TopNavBar() {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const { openAuthModal, openCartDrawer } = useUIStore();
   const { cart } = useCartStore();
@@ -49,7 +51,7 @@ export default function TopNavBar() {
     },
     {
       name: "BRANDS",
-      href: "/brands",
+      href: "/shop",
       megaMenu: {
         cols: "grid-cols-4",
         sections: [
@@ -198,14 +200,26 @@ export default function TopNavBar() {
 
         {/* Navigation Links (Desktop) */}
         <div className="hidden md:flex items-center space-x-8 h-full">
-          {navMenus.map((link, index) => (
+          {navMenus.map((link) => {
+            let isActive = false;
+            if (link.name === "SHOP") {
+              isActive = pathname === "/shop" && !searchParams.has("brand") && !searchParams.has("concern");
+            } else if (link.name === "BRANDS") {
+              isActive = searchParams.has("brand");
+            } else if (link.name === "CATEGORIES") {
+              isActive = searchParams.has("category") || pathname.startsWith("/category");
+            } else if (link.name === "CONCERNS") {
+              isActive = searchParams.has("concern");
+            }
+
+            return (
             <div key={link.name} className="relative group h-full flex items-center py-4">
               <Link 
                 href={link.href}
-                className={`font-label-md text-label-md transition-all duration-300 hover:text-black dark:hover:text-primary-fixed hover:opacity-80 flex items-center gap-1
-                  ${index === 0 
-                    ? "text-black dark:text-primary-fixed border-b border-black dark:border-primary-fixed pb-1" 
-                    : "text-gray-700 dark:text-on-surface-variant pb-1"
+                className={`font-label-md text-label-md transition-all duration-300 hover:text-black dark:hover:text-primary-fixed hover:opacity-80 flex items-center gap-1 hover:underline underline-offset-8 decoration-2
+                  ${isActive 
+                    ? "text-black dark:text-primary-fixed underline underline-offset-8 decoration-2" 
+                    : "text-gray-700 dark:text-on-surface-variant"
                   }`}
               >
                 {link.name}
@@ -245,7 +259,8 @@ export default function TopNavBar() {
                 </div>
               )}
             </div>
-          ))}
+          );
+          })}
         </div>
 
         {/* Brand Logo */}

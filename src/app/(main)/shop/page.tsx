@@ -9,10 +9,11 @@ export const metadata = {
 export default async function ShopPage({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
+  const resolvedParams = await searchParams;
   // Fetch real data from WooCommerce Database
-  const products = await getProducts(24, searchParams);
+  const products = await getProducts(24, resolvedParams);
 
   return (
     <div className="flex flex-col w-full animate-fade-in">
