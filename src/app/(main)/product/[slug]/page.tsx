@@ -28,7 +28,7 @@ export default async function ProductDetailsPage({ params }: { params: Promise<{
           <span className="material-symbols-outlined text-[16px] opacity-50">chevron_right</span>
           {product.categories?.[0] && (
             <>
-              <Link href={`/search?category=${product.categories[0].id}`} className="hover:text-primary transition-colors">
+              <Link href={`/category/${product.categories[0].slug}`} className="hover:text-primary transition-colors">
                 {product.categories[0].name}
               </Link>
               <span className="material-symbols-outlined text-[16px] opacity-50">chevron_right</span>
