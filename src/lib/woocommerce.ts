@@ -38,7 +38,13 @@ export async function getProducts(
         });
         if (catRes.ok) {
           const cats = await catRes.json();
-          if (cats.length > 0) url += `&category=${cats[0].id}`;
+          if (cats.length > 0) {
+            url += `&category=${cats[0].id}`;
+          } else {
+            return []; // Category not found, return empty
+          }
+        } else {
+          return [];
         }
       }
 
@@ -50,7 +56,13 @@ export async function getProducts(
         });
         if (tagRes.ok) {
           const tags = await tagRes.json();
-          if (tags.length > 0) url += `&tag=${tags[0].id}`;
+          if (tags.length > 0) {
+            url += `&tag=${tags[0].id}`;
+          } else {
+            return []; // Tag not found, return empty
+          }
+        } else {
+          return [];
         }
       }
 
@@ -72,9 +84,17 @@ export async function getProducts(
               const terms = await termRes.json();
               if (terms.length > 0) {
                 url += `&attribute=pa_brand&attribute_term=${terms[0].id}`;
+              } else {
+                return []; // Brand term not found, return empty
               }
+            } else {
+              return [];
             }
+          } else {
+            return []; // pa_brand attribute not found, return empty
           }
+        } else {
+          return [];
         }
       }
     }
