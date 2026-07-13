@@ -30,71 +30,71 @@ export async function getProducts(
         url += `&order=${searchParams.order}`;
       }
 
-      // Map category slug to ID
+      // Helper to fetch and match multiple slugs
+      const matchSlugsToIds = async (endpoint: string, slugs: string[], matchField: string = "slug") => {
+        const res = await fetch(`${WORDPRESS_URL}/wp-json/wc/v3/products/${endpoint}`, {
+          headers: { Authorization: `Basic ${Buffer.from(`${CONSUMER_KEY}:${CONSUMER_SECRET}`).toString("base64")}` },
+          next: { revalidate: 3600 }
+        });
+        if (!res.ok) return [];
+        const items = await res.json();
+        return items
+          .filter((item: any) => slugs.includes(item[matchField]))
+          .map((item: any) => item.id);
+      };
+
+      // Map category slug(s) to ID(s)
       if (searchParams.category && typeof searchParams.category === "string") {
-        const catRes = await fetch(`${WORDPRESS_URL}/wp-json/wc/v3/products/categories?slug=${searchParams.category}`, {
-          headers: { Authorization: `Basic ${Buffer.from(`${CONSUMER_KEY}:${CONSUMER_SECRET}`).toString("base64")}` },
-          next: { revalidate: 3600 }
-        });
-        if (catRes.ok) {
-          const cats = await catRes.json();
-          if (cats.length > 0) {
-            url += `&category=${cats[0].id}`;
+        const slugs = searchParams.category.split(',').filter(Boolean);
+        if (slugs.length > 0) {
+          const ids = await matchSlugsToIds('categories?per_page=100', slugs);
+          if (ids.length > 0) {
+            url += `&category=${ids.join(',')}`;
           } else {
-            return []; // Category not found, return empty
+            return []; // No matching categories found
           }
-        } else {
-          return [];
         }
       }
 
-      // Map concern (tag) slug to ID
+      // Map concern (tag) slug(s) to ID(s)
       if (searchParams.concern && typeof searchParams.concern === "string") {
-        const tagRes = await fetch(`${WORDPRESS_URL}/wp-json/wc/v3/products/tags?slug=${searchParams.concern}`, {
-          headers: { Authorization: `Basic ${Buffer.from(`${CONSUMER_KEY}:${CONSUMER_SECRET}`).toString("base64")}` },
-          next: { revalidate: 3600 }
-        });
-        if (tagRes.ok) {
-          const tags = await tagRes.json();
-          if (tags.length > 0) {
-            url += `&tag=${tags[0].id}`;
+        const slugs = searchParams.concern.split(',').filter(Boolean);
+        if (slugs.length > 0) {
+          const ids = await matchSlugsToIds('tags?per_page=100', slugs);
+          if (ids.length > 0) {
+            url += `&tag=${ids.join(',')}`;
           } else {
-            return []; // Tag not found, return empty
+            return []; // No matching tags found
           }
-        } else {
-          return [];
         }
       }
 
-      // Map brand (attribute pa_brand) slug to ID
+      // Map brand (attribute pa_brand) slug(s) to ID(s)
       if (searchParams.brand && typeof searchParams.brand === "string") {
-        const attrRes = await fetch(`${WORDPRESS_URL}/wp-json/wc/v3/products/attributes`, {
-          headers: { Authorization: `Basic ${Buffer.from(`${CONSUMER_KEY}:${CONSUMER_SECRET}`).toString("base64")}` },
-          next: { revalidate: 3600 }
-        });
-        if (attrRes.ok) {
-          const attributes = await attrRes.json();
-          const brandAttr = attributes.find((a: any) => a.slug === "pa_brand");
-          if (brandAttr) {
-            const termRes = await fetch(`${WORDPRESS_URL}/wp-json/wc/v3/products/attributes/${brandAttr.id}/terms?slug=${searchParams.brand}`, {
-              headers: { Authorization: `Basic ${Buffer.from(`${CONSUMER_KEY}:${CONSUMER_SECRET}`).toString("base64")}` },
-              next: { revalidate: 3600 }
-            });
-            if (termRes.ok) {
-              const terms = await termRes.json();
-              if (terms.length > 0) {
-                url += `&attribute=pa_brand&attribute_term=${terms[0].id}`;
+        const slugs = searchParams.brand.split(',').filter(Boolean);
+        if (slugs.length > 0) {
+          const attrRes = await fetch(`${WORDPRESS_URL}/wp-json/wc/v3/products/attributes`, {
+            headers: { Authorization: `Basic ${Buffer.from(`${CONSUMER_KEY}:${CONSUMER_SECRET}`).toString("base64")}` },
+            next: { revalidate: 3600 }
+          });
+          
+          if (attrRes.ok) {
+            const attributes = await attrRes.json();
+            const brandAttr = attributes.find((a: any) => a.slug === "pa_brand");
+            
+            if (brandAttr) {
+              const ids = await matchSlugsToIds(`attributes/${brandAttr.id}/terms?per_page=100`, slugs);
+              if (ids.length > 0) {
+                url += `&attribute=pa_brand&attribute_term=${ids.join(',')}`;
               } else {
-                return []; // Brand term not found, return empty
+                return []; // No matching brand terms found
               }
             } else {
-              return [];
+              return []; // pa_brand attribute not found
             }
           } else {
-            return []; // pa_brand attribute not found, return empty
+            return [];
           }
-        } else {
-          return [];
         }
       }
     }

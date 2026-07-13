@@ -109,8 +109,24 @@ export default function ShopFilters() {
     router.push(`/shop?${params.toString()}`, { scroll: false });
   };
 
+  const handleResetFilters = () => {
+    router.push(`/shop`, { scroll: false });
+  };
+
+  const hasActiveFilters = activeCategories.length > 0 || activeBrands.length > 0 || activeConcerns.length > 0;
+
   return (
     <div className="w-full space-y-4">
+      {hasActiveFilters && (
+        <button 
+          onClick={handleResetFilters}
+          className="w-full py-3 mb-2 flex items-center justify-center gap-2 border border-black dark:border-primary-fixed text-black dark:text-primary-fixed hover:bg-black hover:text-white dark:hover:bg-primary-fixed dark:hover:text-background transition-colors duration-300 font-label-md uppercase tracking-wider"
+        >
+          <span className="material-symbols-outlined text-[18px]">filter_alt_off</span>
+          Reset Filters
+        </button>
+      )}
+
       {/* Categories Accordion */}
       <div className="border border-outline-variant/30 rounded-md overflow-hidden bg-surface">
         <button 
