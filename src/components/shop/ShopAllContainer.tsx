@@ -16,6 +16,8 @@ export default function ShopAllContainer({ initialProducts }: { initialProducts:
   const [visibleProducts, setVisibleProducts] = useState(initialProducts);
   const [page, setPage] = useState(1);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(initialProducts.length === 24);
+  const [noMoreMessage, setNoMoreMessage] = useState(false);
 
   const initialSearch = searchParams.get("search") || "";
   const [searchQuery, setSearchQuery] = useState(initialSearch);
@@ -31,6 +33,8 @@ export default function ShopAllContainer({ initialProducts }: { initialProducts:
   useEffect(() => {
     setVisibleProducts(initialProducts);
     setPage(1);
+    setHasMore(initialProducts.length === 24);
+    setNoMoreMessage(false);
   }, [initialProducts]);
 
   const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -79,6 +83,13 @@ export default function ShopAllContainer({ initialProducts }: { initialProducts:
       if (newProducts && newProducts.length > 0) {
         setVisibleProducts(prev => [...prev, ...newProducts]);
         setPage(nextPage);
+        if (newProducts.length < 24) {
+          setHasMore(false);
+          setNoMoreMessage(true);
+        }
+      } else {
+        setHasMore(false);
+        setNoMoreMessage(true);
       }
     } catch (error) {
       console.error("Error loading more products:", error);
@@ -86,8 +97,6 @@ export default function ShopAllContainer({ initialProducts }: { initialProducts:
       setIsLoadingMore(false);
     }
   };
-
-
 
   return (
     <div className="w-full max-w-[1280px] mx-auto px-margin-mobile md:px-margin-desktop py-margin-desktop grid grid-cols-1 md:grid-cols-12 gap-gutter">
@@ -176,7 +185,7 @@ export default function ShopAllContainer({ initialProducts }: { initialProducts:
         </div>
 
         {/* Load More Button */}
-        {initialProducts.length === 24 && (
+        {hasMore ? (
           <div className="flex justify-center items-center mt-12 border-t border-outline-variant pt-12 pb-8">
             <button
               onClick={handleLoadMore}
@@ -186,7 +195,11 @@ export default function ShopAllContainer({ initialProducts }: { initialProducts:
               {isLoadingMore ? "Loading..." : "Load More Products"}
             </button>
           </div>
-        )}
+        ) : noMoreMessage ? (
+          <div className="flex justify-center items-center mt-12 border-t border-outline-variant pt-12 pb-8">
+            <p className="font-body-md text-on-surface-variant italic">You have reached the end of the collection.</p>
+          </div>
+        ) : null}
       </section>
 
     </div>
