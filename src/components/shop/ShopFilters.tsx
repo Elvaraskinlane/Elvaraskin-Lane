@@ -7,6 +7,10 @@ export default function ShopFilters() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  const activeCategories = searchParams.get('category')?.split(',').filter(Boolean) || [];
+  const activeBrands = searchParams.get('brand')?.split(',').filter(Boolean) || [];
+  const activeConcerns = searchParams.get('concern')?.split(',').filter(Boolean) || [];
+
   // Accordion state
   const [openSection, setOpenSection] = useState<string | null>("categories");
 
@@ -35,23 +39,23 @@ export default function ShopFilters() {
     { name: "Dry Skin", value: "dry-skin" },
   ];
 
-  // Helper to create query string
-  const createQueryString = useCallback(
-    (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams.toString());
-      if (params.get(name) === value) {
-        params.delete(name); // Toggle off if already selected
-      } else {
-        params.set(name, value);
-      }
-      return params.toString();
-    },
-    [searchParams]
-  );
+  const handleFilterChange = (key: string, value: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    let currentValues = params.get(key)?.split(',').filter(Boolean) || [];
 
-  const handleFilterChange = (name: string, value: string) => {
-    const queryString = createQueryString(name, value);
-    router.push(`/shop?${queryString}`);
+    if (currentValues.includes(value)) {
+      currentValues = currentValues.filter(v => v !== value);
+    } else {
+      currentValues.push(value);
+    }
+
+    if (currentValues.length > 0) {
+      params.set(key, currentValues.join(','));
+    } else {
+      params.delete(key);
+    }
+
+    router.push(`/shop?${params.toString()}`, { scroll: false });
   };
 
   return (
@@ -75,7 +79,7 @@ export default function ShopFilters() {
                   <label className="flex items-center cursor-pointer hover:text-primary transition-colors font-body-md text-on-surface-variant">
                     <input 
                       type="checkbox" 
-                      checked={searchParams.get("category") === cat.value}
+                      checked={activeCategories.includes(cat.value)}
                       onChange={() => handleFilterChange("category", cat.value)}
                       className="form-checkbox rounded-sm text-primary border-outline-variant focus:ring-primary mr-3 w-4 h-4 bg-transparent cursor-pointer" 
                     />
@@ -107,7 +111,7 @@ export default function ShopFilters() {
                   <label className="flex items-center cursor-pointer hover:text-primary transition-colors font-body-md text-on-surface-variant">
                     <input 
                       type="checkbox" 
-                      checked={searchParams.get("brand") === brand.value}
+                      checked={activeBrands.includes(brand.value)}
                       onChange={() => handleFilterChange("brand", brand.value)}
                       className="form-checkbox rounded-sm text-primary border-outline-variant focus:ring-primary mr-3 w-4 h-4 bg-transparent cursor-pointer" 
                     />
@@ -139,7 +143,7 @@ export default function ShopFilters() {
                   <label className="flex items-center cursor-pointer hover:text-primary transition-colors font-body-md text-on-surface-variant">
                     <input 
                       type="checkbox" 
-                      checked={searchParams.get("concern") === concern.value}
+                      checked={activeConcerns.includes(concern.value)}
                       onChange={() => handleFilterChange("concern", concern.value)}
                       className="form-checkbox rounded-sm text-primary border-outline-variant focus:ring-primary mr-3 w-4 h-4 bg-transparent cursor-pointer" 
                     />

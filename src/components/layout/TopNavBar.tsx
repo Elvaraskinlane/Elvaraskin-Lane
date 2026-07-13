@@ -44,45 +44,127 @@ export default function TopNavBar() {
 
   const navMenus = [
     {
-      name: "Shop Categories",
-      href: "/shop",
-      dropdown: [
-        { 
-          name: "Face", 
-          href: "/category/face",
-          subItems: [
-            { name: "Cleansers", href: "/category/cleansers" },
-            { name: "Toners", href: "/category/toners" },
-            { name: "Moisturisers", href: "/category/moisturisers" }
-          ]
-        },
-        { name: "Sunscreen", href: "/category/sunscreen" },
-        { name: "Bath & Body", href: "/category/bath-body" },
-        { name: "Hair Care", href: "/category/hair-care" },
-        { name: "Makeup", href: "/category/makeup" },
-      ]
+      name: "SHOP",
+      href: "/shop"
     },
     {
-      name: "Brands",
-      href: "/shop",
-      dropdown: [
-        { name: "COSRX", href: "/shop?brand=cosrx" },
-        { name: "Anua", href: "/shop?brand=anua" },
-        { name: "The Ordinary", href: "/shop?brand=the-ordinary" },
-        { name: "Medicube", href: "/shop?brand=medicube" },
-      ]
+      name: "BRANDS",
+      href: "/brands",
+      megaMenu: {
+        cols: "grid-cols-4",
+        sections: [
+          {
+            title: "Signature Picks",
+            links: [
+              { name: "Anua", href: "/shop?brand=anua" },
+              { name: "COSRX", href: "/shop?brand=cosrx" },
+              { name: "The Ordinary", href: "/shop?brand=the-ordinary" },
+              { name: "Medicube", href: "/shop?brand=medicube" },
+              { name: "Beauty of Joseon", href: "/shop?brand=beauty-of-joseon" },
+              { name: "Naturium", href: "/shop?brand=naturium" },
+              { name: "Paula's Choice", href: "/shop?brand=paulas-choice" }
+            ]
+          },
+          {
+            title: "All Brands",
+            links: [
+              { name: "Simple", href: "/shop?brand=simple" },
+              { name: "Dove", href: "/shop?brand=dove" },
+              { name: "Dr. Teals", href: "/shop?brand=dr-teals" },
+              { name: "Isntree", href: "/shop?brand=isntree" }
+            ]
+          },
+          {
+            title: "Brand of the Month",
+            isCustom: true,
+            customContent: (
+              <div className="bg-gray-50 dark:bg-surface-container p-4 rounded-md h-full flex flex-col justify-between">
+                <div>
+                  <div className="aspect-[4/3] bg-gray-200 dark:bg-outline-variant/30 mb-3 flex items-center justify-center rounded-sm overflow-hidden">
+                    <span className="text-gray-400 dark:text-outline-variant text-xs">Featured Brand</span>
+                  </div>
+                  <h4 className="font-semibold text-sm mb-1 text-black dark:text-on-surface">COSRX</h4>
+                  <p className="text-xs text-gray-500 dark:text-on-surface-variant mb-4">Explore the bestselling Snail Mucin collection.</p>
+                </div>
+                <Link href="/shop?brand=cosrx" className="text-xs font-semibold uppercase tracking-wider text-black dark:text-primary hover:underline">
+                  Shop COSRX
+                </Link>
+              </div>
+            )
+          }
+        ]
+      }
     },
     {
-      name: "Shop by Concern",
+      name: "CATEGORIES",
       href: "/shop",
-      dropdown: [
-        { name: "Acne & Breakouts", href: "/shop?concern=acne-breakouts" },
-        { name: "Dark Spots", href: "/shop?concern=dark-spots" },
-        { name: "Dry Skin", href: "/shop?concern=dry-skin" },
-      ]
+      megaMenu: {
+        cols: "grid-cols-4",
+        sections: [
+          {
+            title: "Face Care",
+            links: [
+              { name: "Cleansers", href: "/category/cleansers" },
+              { name: "Toners & Mists", href: "/category/toners-mists" },
+              { name: "Eyes & Lips", href: "/category/eyes-lips" },
+              { name: "Masks & Exfoliators", href: "/category/masks-exfoliators" },
+              { name: "Moisturisers & Serums", href: "/category/moisturisers-serums" }
+            ]
+          },
+          {
+            title: "Body & Hair",
+            links: [
+              { name: "Bath & Body", href: "/category/bath-body" },
+              { name: "Hair Care", href: "/category/hair-care" },
+              { name: "Sunscreen", href: "/category/sunscreen" },
+              { name: "Oral Care", href: "/category/oral-care" }
+            ]
+          },
+          {
+            title: "Specialized Collections",
+            links: [
+              { name: "Babies & Children", href: "/category/babies-children" },
+              { name: "Makeup", href: "/category/makeup" },
+              { name: "Men", href: "/category/men" },
+              { name: "Gifts", href: "/category/gifts" },
+              { name: "Travel Size", href: "/category/travel-size" },
+              { name: "Aesthetician Kits", href: "/category/aesthetician-kits" }
+            ]
+          }
+        ]
+      }
     },
-    { name: "About", href: "/about" },
-    { name: "Contact", href: "/contact" },
+    {
+      name: "CONCERNS",
+      href: "/shop",
+      megaMenu: {
+        cols: "grid-cols-4",
+        sections: [
+          {
+            title: "Targeted Solutions",
+            links: [
+              { name: "Acne & Breakouts", href: "/shop?concern=acne-breakouts" },
+              { name: "Dark Spots & Hyperpigmentation", href: "/shop?concern=dark-spots-hyperpigmentation" },
+              { name: "Dry & Dehydrated Skin", href: "/shop?concern=dry-dehydrated-skin" },
+              { name: "Oily Skin", href: "/shop?concern=oily-skin" },
+              { name: "Sensitive Skin", href: "/shop?concern=sensitive-skin" },
+              { name: "Damaged Skin Barrier", href: "/shop?concern=damaged-skin-barrier" }
+            ]
+          },
+          {
+            title: "More Concerns",
+            links: [
+              { name: "Fine Lines & Wrinkles", href: "/shop?concern=fine-lines-wrinkles" },
+              { name: "Dull Skin", href: "/shop?concern=dull-skin" },
+              { name: "Large Pores & Uneven Texture", href: "/shop?concern=large-pores-uneven-texture" },
+              { name: "Body Care Concerns", href: "/shop?concern=body-care-concerns" },
+              { name: "Sun Protection", href: "/shop?concern=sun-protection" },
+              { name: "Lip & Eye Care", href: "/shop?concern=lip-eye-care" }
+            ]
+          }
+        ]
+      }
+    }
   ];
 
   const handleLogout = () => {
@@ -115,47 +197,47 @@ export default function TopNavBar() {
         </button>
 
         {/* Navigation Links (Desktop) */}
-        <div className="hidden md:flex items-center space-x-8">
+        <div className="hidden md:flex items-center space-x-8 h-full">
           {navMenus.map((link, index) => (
-            <div key={link.name} className="relative group">
+            <div key={link.name} className="relative group h-full flex items-center py-4">
               <Link 
                 href={link.href}
-                className={`font-label-md text-label-md transition-all duration-300 hover:text-primary dark:hover:text-primary-fixed hover:opacity-80 flex items-center gap-1
+                className={`font-label-md text-label-md transition-all duration-300 hover:text-black dark:hover:text-primary-fixed hover:opacity-80 flex items-center gap-1
                   ${index === 0 
-                    ? "text-on-background dark:text-primary-fixed border-b border-on-background pb-1" 
-                    : "text-on-surface-variant dark:text-on-surface-variant/80 pb-1"
+                    ? "text-black dark:text-primary-fixed border-b border-black dark:border-primary-fixed pb-1" 
+                    : "text-gray-700 dark:text-on-surface-variant pb-1"
                   }`}
               >
                 {link.name}
-                {link.dropdown && (
+                {link.megaMenu && (
                   <span className="material-symbols-outlined text-[16px]">expand_more</span>
                 )}
               </Link>
 
-              {/* Mega Menu / Dropdown Content */}
-              {link.dropdown && (
-                <div className="absolute top-full left-0 pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 min-w-[200px]">
-                  <div className="bg-surface shadow-lg border border-outline-variant/20 rounded-md p-4 flex flex-col gap-2">
-                    {link.dropdown.map((item) => (
-                      <div key={item.name} className="flex flex-col">
-                        <Link 
-                          href={item.href}
-                          className="font-label-md text-sm text-on-surface hover:text-primary transition-colors py-1"
-                        >
-                          {item.name}
-                        </Link>
-                        {item.subItems && (
-                          <div className="pl-4 flex flex-col gap-1 mt-1 border-l border-outline-variant/30">
-                            {item.subItems.map((sub) => (
-                              <Link 
-                                key={sub.name}
-                                href={sub.href}
-                                className="font-label-md text-xs text-on-surface-variant hover:text-primary transition-colors py-1"
-                              >
-                                {sub.name}
-                              </Link>
+              {/* High-Fidelity Mega Menu */}
+              {link.megaMenu && (
+                <div className="absolute left-0 top-full w-full bg-white dark:bg-surface text-black dark:text-on-surface shadow-xl border-t border-gray-100 dark:border-outline-variant/20 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 fixed w-screen -left-[calc((100vw-min(1280px,100vw))/2)] px-margin-mobile md:px-margin-desktop">
+                  <div className={`max-w-[1280px] mx-auto grid ${link.megaMenu.cols} gap-8 p-8`}>
+                    {link.megaMenu.sections.map((section) => (
+                      <div key={section.title} className="flex flex-col">
+                        <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-outline-variant mb-4">
+                          {section.title}
+                        </h3>
+                        {section.isCustom && section.customContent ? (
+                          section.customContent
+                        ) : (
+                          <ul className="flex flex-col space-y-3">
+                            {section.links?.map((item) => (
+                              <li key={item.name}>
+                                <Link 
+                                  href={item.href}
+                                  className="text-sm text-gray-600 dark:text-on-surface-variant hover:text-black dark:hover:text-primary transition-colors"
+                                >
+                                  {item.name}
+                                </Link>
+                              </li>
                             ))}
-                          </div>
+                          </ul>
                         )}
                       </div>
                     ))}
@@ -284,31 +366,25 @@ export default function TopNavBar() {
               <Link 
                 href={link.href}
                 className="font-label-md text-label-md text-on-background py-2"
-                onClick={() => !link.dropdown && setIsMobileMenuOpen(false)}
+                onClick={() => !link.megaMenu && setIsMobileMenuOpen(false)}
               >
                 {link.name}
               </Link>
-              {link.dropdown && (
-                <div className="pl-4 flex flex-col gap-2 mt-2 border-l border-outline-variant/30">
-                  {link.dropdown.map((item) => (
-                    <div key={item.name} className="flex flex-col">
-                      <Link 
-                        href={item.href}
-                        className="font-label-md text-sm text-on-surface-variant py-1"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        {item.name}
-                      </Link>
-                      {item.subItems && (
-                        <div className="pl-4 flex flex-col gap-1 mt-1">
-                          {item.subItems.map((sub) => (
+              {link.megaMenu && (
+                <div className="pl-4 flex flex-col gap-4 mt-2 border-l border-outline-variant/30">
+                  {link.megaMenu.sections.map((section) => (
+                    <div key={section.title} className="flex flex-col">
+                      <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">{section.title}</h4>
+                      {!section.isCustom && section.links && (
+                        <div className="pl-2 flex flex-col gap-2">
+                          {section.links.map((item) => (
                             <Link 
-                              key={sub.name}
-                              href={sub.href}
-                              className="font-label-md text-xs text-outline-variant py-1"
+                              key={item.name}
+                              href={item.href}
+                              className="font-label-md text-sm text-on-surface-variant"
                               onClick={() => setIsMobileMenuOpen(false)}
                             >
-                              {sub.name}
+                              {item.name}
                             </Link>
                           ))}
                         </div>
