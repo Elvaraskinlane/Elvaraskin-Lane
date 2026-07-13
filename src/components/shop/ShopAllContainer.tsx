@@ -143,49 +143,59 @@ export default function ShopAllContainer({ initialProducts }: { initialProducts:
         </div>
 
         {/* Dynamic Grid Mapping */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-12 mb-12">
-          {visibleProducts.map((product) => {
-            const imageUrl = product.images?.[0]?.src || "/hero-2-fixed.png";
+        {visibleProducts.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-24 text-center border-t border-outline-variant">
+            <span className="material-symbols-outlined text-6xl text-outline-variant mb-6 font-light">search_off</span>
+            <h3 className="font-headline-md text-headline-md text-on-surface mb-2">No Products Found</h3>
+            <p className="font-body-md text-body-md text-on-surface-variant max-w-md mx-auto">
+              We couldn't find any products matching your current filters. Try adjusting your search or clearing the active filters.
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-12 mb-12">
+            {visibleProducts.map((product) => {
+              const imageUrl = product.images?.[0]?.src || "/hero-2-fixed.png";
 
-            return (
-              <Link href={`/product/${product.slug}`} key={product.id} className="group cursor-pointer flex flex-col block transition-transform duration-300 hover:-translate-y-1">
-                <div className="relative bg-surface-container-low aspect-[4/5] mb-4 overflow-hidden rounded-sm flex items-center justify-center group-hover:shadow-xl transition-shadow duration-300">
-                  <Image 
-                    src={imageUrl} 
-                    alt={product.name} 
-                    fill 
-                    className="object-cover mix-blend-multiply group-hover:scale-105 transition-transform duration-700 ease-out p-4"
-                    sizes="(max-width: 640px) 100vw, 250px"
-                  />
-                  <button 
-                    className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-on-background text-background font-label-md text-label-md py-3 w-11/12 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-primary hover:text-on-primary shadow-sm uppercase tracking-wider"
-                    onClick={async (e) => {
-                      e.preventDefault(); // Prevent navigating to product page
-                      try {
-                        await addToCart(product.id, 1);
-                        alert(`${product.name} added to cart!`);
-                      } catch (err) {
-                        console.error("Cart error:", err);
-                        alert("Failed to add to cart.");
-                      }
-                    }}
-                  >
-                    ADD TO CART
-                  </button>
-                </div>
-                <div className="text-center">
-                  <h4 className="font-headline-sm text-headline-sm text-primary mb-1">{product.name}</h4>
-                  <p className="font-body-md text-body-md text-on-surface-variant">
-                    ₦{parseInt(product.price || "0").toLocaleString()}
-                  </p>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
+              return (
+                <Link href={`/product/${product.slug}`} key={product.id} className="group cursor-pointer flex flex-col block transition-transform duration-300 hover:-translate-y-1">
+                  <div className="relative bg-surface-container-low aspect-[4/5] mb-4 overflow-hidden rounded-sm flex items-center justify-center group-hover:shadow-xl transition-shadow duration-300">
+                    <Image 
+                      src={imageUrl} 
+                      alt={product.name} 
+                      fill 
+                      className="object-cover mix-blend-multiply group-hover:scale-105 transition-transform duration-700 ease-out p-4"
+                      sizes="(max-width: 640px) 100vw, 250px"
+                    />
+                    <button 
+                      className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-on-background text-background font-label-md text-label-md py-3 w-11/12 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-primary hover:text-on-primary shadow-sm uppercase tracking-wider"
+                      onClick={async (e) => {
+                        e.preventDefault(); // Prevent navigating to product page
+                        try {
+                          await addToCart(product.id, 1);
+                          alert(`${product.name} added to cart!`);
+                        } catch (err) {
+                          console.error("Cart error:", err);
+                          alert("Failed to add to cart.");
+                        }
+                      }}
+                    >
+                      ADD TO CART
+                    </button>
+                  </div>
+                  <div className="text-center">
+                    <h4 className="font-headline-sm text-headline-sm text-primary mb-1">{product.name}</h4>
+                    <p className="font-body-md text-body-md text-on-surface-variant">
+                      ₦{parseInt(product.price || "0").toLocaleString()}
+                    </p>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        )}
 
         {/* Load More Button */}
-        {hasMore ? (
+        {hasMore && visibleProducts.length > 0 ? (
           <div className="flex justify-center items-center mt-12 border-t border-outline-variant pt-12 pb-8">
             <button
               onClick={handleLoadMore}
@@ -195,7 +205,7 @@ export default function ShopAllContainer({ initialProducts }: { initialProducts:
               {isLoadingMore ? "Loading..." : "Load More Products"}
             </button>
           </div>
-        ) : noMoreMessage ? (
+        ) : noMoreMessage && visibleProducts.length > 0 ? (
           <div className="flex justify-center items-center mt-12 border-t border-outline-variant pt-12 pb-8">
             <p className="font-body-md text-on-surface-variant italic">You have reached the end of the collection.</p>
           </div>
