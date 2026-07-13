@@ -56,24 +56,55 @@ export default function TopNavBar() {
         cols: "grid-cols-4",
         sections: [
           {
-            title: "Signature Picks",
+            title: "A - D",
             links: [
+              { name: "Advanced Clinicals", href: "/shop?brand=advanced-clinicals" },
+              { name: "Advanced Korean Products", href: "/shop?brand=advanced-korean-products" },
+              { name: "AGE-R", href: "/shop?brand=age-r" },
               { name: "Anua", href: "/shop?brand=anua" },
+              { name: "Aqua Rich", href: "/shop?brand=aqua-rich" },
+              { name: "AVE HAIR", href: "/shop?brand=ave-hair" },
+              { name: "Baby Secrets", href: "/shop?brand=baby-secrets" },
+              { name: "Balance", href: "/shop?brand=balance" },
+              { name: "Caudalie", href: "/shop?brand=caudalie" },
+              { name: "Celimax", href: "/shop?brand=celimax" },
               { name: "COSRX", href: "/shop?brand=cosrx" },
-              { name: "The Ordinary", href: "/shop?brand=the-ordinary" },
-              { name: "Medicube", href: "/shop?brand=medicube" },
-              { name: "Beauty of Joseon", href: "/shop?brand=beauty-of-joseon" },
-              { name: "Naturium", href: "/shop?brand=naturium" },
-              { name: "Paula's Choice", href: "/shop?brand=paulas-choice" }
+              { name: "Dove", href: "/shop?brand=dove" },
+              { name: "Dr. Meineair", href: "/shop?brand=dr-meineair" },
+              { name: "Dr. Teals", href: "/shop?brand=dr-teals" }
             ]
           },
           {
-            title: "All Brands",
+            title: "E - L",
             links: [
+              { name: "EDEN", href: "/shop?brand=eden" },
+              { name: "EOS", href: "/shop?brand=eos" },
+              { name: "Glow Recipe", href: "/shop?brand=glow-recipe" },
+              { name: "Good Molecules", href: "/shop?brand=good-molecules" },
+              { name: "Hada Labo", href: "/shop?brand=hada-labo" },
+              { name: "IMAGIC", href: "/shop?brand=imagic" },
+              { name: "Isntree", href: "/shop?brand=isntree" },
+              { name: "Kiss Beauty", href: "/shop?brand=kiss-beauty" },
+              { name: "LA Roche Posay", href: "/shop?brand=la-roche-posay" },
+              { name: "Lanoline", href: "/shop?brand=lanoline" },
+              { name: "LUSH Hair", href: "/shop?brand=lush-hair" }
+            ]
+          },
+          {
+            title: "M - Z",
+            links: [
+              { name: "MARY & MAY", href: "/shop?brand=mary-may" },
+              { name: "Medicube", href: "/shop?brand=medicube" },
+              { name: "MISSHA", href: "/shop?brand=missha" },
+              { name: "Naturium", href: "/shop?brand=naturium" },
+              { name: "Olay", href: "/shop?brand=olay" },
+              { name: "PanOxyl", href: "/shop?brand=panoxyl" },
+              { name: "Paula's Choice", href: "/shop?brand=paulas-choice" },
               { name: "Simple", href: "/shop?brand=simple" },
-              { name: "Dove", href: "/shop?brand=dove" },
-              { name: "Dr. Teals", href: "/shop?brand=dr-teals" },
-              { name: "Isntree", href: "/shop?brand=isntree" }
+              { name: "Skin Aqua", href: "/shop?brand=skin-aqua" },
+              { name: "The Ordinary", href: "/shop?brand=the-ordinary" },
+              { name: "TIAM", href: "/shop?brand=tiam" },
+              { name: "VEE BEAUTY", href: "/shop?brand=vee-beauty" }
             ]
           },
           {

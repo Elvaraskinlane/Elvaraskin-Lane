@@ -148,8 +148,8 @@ export default function ShopAllContainer({ initialProducts }: { initialProducts:
             const imageUrl = product.images?.[0]?.src || "/hero-2-fixed.png";
 
             return (
-              <Link href={`/product/${product.slug}`} key={product.id} className="group cursor-pointer flex flex-col block">
-                <div className="relative bg-surface-container-low aspect-[4/5] mb-4 overflow-hidden rounded-sm flex items-center justify-center">
+              <Link href={`/product/${product.slug}`} key={product.id} className="group cursor-pointer flex flex-col block transition-transform duration-300 hover:-translate-y-1">
+                <div className="relative bg-surface-container-low aspect-[4/5] mb-4 overflow-hidden rounded-sm flex items-center justify-center group-hover:shadow-xl transition-shadow duration-300">
                   <Image 
                     src={imageUrl} 
                     alt={product.name} 
