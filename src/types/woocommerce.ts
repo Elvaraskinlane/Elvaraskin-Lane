@@ -5,6 +5,12 @@ export interface WCCategory {
   count: number;
 }
 
+export interface WCBrand {
+  id: number;
+  name: string;
+  slug: string;
+}
+
 export interface WCProduct {
   id: number;
   name: string;
@@ -16,6 +22,7 @@ export interface WCProduct {
   short_description: string;
   stock_status: string;
   categories: WCCategory[];
+  brands?: WCBrand[];
   images: WCImage[];
 }
 

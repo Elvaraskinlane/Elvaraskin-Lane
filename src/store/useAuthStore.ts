@@ -41,7 +41,7 @@ export const useAuthStore = create<AuthState>()(
         })
         .then(data => {
           if (data.error) return;
-          let mergedItems = [...localWishlist];
+          const mergedItems = [...localWishlist];
           let hasChanges = false;
 
           // 2. Merge remote items into local items

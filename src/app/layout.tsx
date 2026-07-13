@@ -1,16 +1,5 @@
 import type { Metadata } from "next";
-import { Bodoni_Moda, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
-
-const bodoni = Bodoni_Moda({
-  subsets: ["latin"],
-  variable: "--font-bodoni",
-});
-
-const plusJakarta = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  variable: "--font-plus-jakarta",
-});
 
 export const metadata: Metadata = {
   title: "Elvara Skinlane - Beauty that feels like you",
@@ -32,7 +21,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${bodoni.variable} ${plusJakarta.variable} bg-background text-on-background font-body-md antialiased selection:bg-secondary-container selection:text-on-secondary-container flex flex-col min-h-screen`}
+        className="bg-background text-on-background font-body-md antialiased selection:bg-secondary-container selection:text-on-secondary-container flex flex-col min-h-screen"
       >
         {children}
       </body>

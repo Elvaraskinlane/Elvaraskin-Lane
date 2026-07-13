@@ -77,8 +77,6 @@ export const useCartStore = create<CartState>((set) => ({
   updateItemQuantity: async (itemKey: string, quantity: number) => {
     set({ isLoading: true });
     try {
-      // We need to import updateCartItem at the top of the file. Wait. I'll do it separately.
-      const { updateCartItem } = await import('@/lib/cart');
       const data = await updateCartItem(itemKey, quantity);
       set({ cart: data, isLoading: false });
     } catch (error) {

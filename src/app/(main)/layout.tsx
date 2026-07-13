@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import TopNavBar from "@/components/layout/TopNavBar";
 import Footer from "@/components/layout/Footer";
 import AuthModal from "@/components/auth/AuthModal";
@@ -10,7 +11,9 @@ export default function MainLayout({
 }) {
   return (
     <>
-      <TopNavBar />
+      <Suspense fallback={<div className="h-[73px] border-b border-outline-variant/30 bg-background" />}>
+        <TopNavBar />
+      </Suspense>
       <AuthModal />
       <CartDrawer />
       <main className="flex-grow w-full">

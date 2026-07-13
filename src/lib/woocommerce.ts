@@ -4,6 +4,84 @@ const WORDPRESS_URL = process.env.NEXT_PUBLIC_WORDPRESS_URL;
 const CONSUMER_KEY = process.env.WC_CONSUMER_KEY;
 const CONSUMER_SECRET = process.env.WC_CONSUMER_SECRET;
 
+type WCTerm = {
+  id: number;
+  slug: string;
+};
+
+type WCAttribute = {
+  id: number;
+  slug: string;
+};
+
+function getAuthHeaders() {
+  return {
+    Authorization: `Basic ${Buffer.from(
+      `${CONSUMER_KEY}:${CONSUMER_SECRET}`
+    ).toString("base64")}`,
+  };
+}
+
+function isWCTerm(value: unknown): value is WCTerm {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    typeof (value as WCTerm).id === "number" &&
+    typeof (value as WCTerm).slug === "string"
+  );
+}
+
+function isWCAttribute(value: unknown): value is WCAttribute {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    typeof (value as WCAttribute).id === "number" &&
+    typeof (value as WCAttribute).slug === "string"
+  );
+}
+
+async function matchSlugsToIds(endpoint: string, slugs: string[]) {
+  const res = await fetch(`${WORDPRESS_URL}/wp-json/wc/v3/products/${endpoint}`, {
+    headers: getAuthHeaders(),
+    next: { revalidate: 3600 },
+  });
+
+  if (!res.ok) return [];
+
+  const items: unknown = await res.json();
+  if (!Array.isArray(items)) return [];
+
+  return items
+    .filter(isWCTerm)
+    .filter((item) => slugs.includes(item.slug))
+    .map((item) => item.id);
+}
+
+async function getBrandFilterQuery(slugs: string[]) {
+  const brandIds = await matchSlugsToIds("brands?per_page=100", slugs);
+  if (brandIds.length > 0) {
+    return `&brand=${brandIds.join(",")}`;
+  }
+
+  const attrRes = await fetch(`${WORDPRESS_URL}/wp-json/wc/v3/products/attributes`, {
+    headers: getAuthHeaders(),
+    next: { revalidate: 3600 },
+  });
+
+  if (!attrRes.ok) return null;
+
+  const attributes: unknown = await attrRes.json();
+  if (!Array.isArray(attributes)) return null;
+
+  const brandAttr = attributes.filter(isWCAttribute).find((attribute) => attribute.slug === "pa_brand");
+  if (!brandAttr) return null;
+
+  const attributeTermIds = await matchSlugsToIds(`attributes/${brandAttr.id}/terms?per_page=100`, slugs);
+  if (attributeTermIds.length === 0) return null;
+
+  return `&attribute=pa_brand&attribute_term=${attributeTermIds.join(",")}`;
+}
+
 export async function getProducts(
   perPage: number = 12,
   searchParams?: { [key: string]: string | string[] | undefined }
@@ -29,19 +107,6 @@ export async function getProducts(
       if (searchParams.order) {
         url += `&order=${searchParams.order}`;
       }
-
-      // Helper to fetch and match multiple slugs
-      const matchSlugsToIds = async (endpoint: string, slugs: string[], matchField: string = "slug") => {
-        const res = await fetch(`${WORDPRESS_URL}/wp-json/wc/v3/products/${endpoint}`, {
-          headers: { Authorization: `Basic ${Buffer.from(`${CONSUMER_KEY}:${CONSUMER_SECRET}`).toString("base64")}` },
-          next: { revalidate: 3600 }
-        });
-        if (!res.ok) return [];
-        const items = await res.json();
-        return items
-          .filter((item: any) => slugs.includes(item[matchField]))
-          .map((item: any) => item.id);
-      };
 
       // Map category slug(s) to ID(s)
       if (searchParams.category && typeof searchParams.category === "string") {
@@ -73,38 +138,15 @@ export async function getProducts(
       if (searchParams.brand && typeof searchParams.brand === "string") {
         const slugs = searchParams.brand.split(',').filter(Boolean);
         if (slugs.length > 0) {
-          const attrRes = await fetch(`${WORDPRESS_URL}/wp-json/wc/v3/products/attributes`, {
-            headers: { Authorization: `Basic ${Buffer.from(`${CONSUMER_KEY}:${CONSUMER_SECRET}`).toString("base64")}` },
-            next: { revalidate: 3600 }
-          });
-          
-          if (attrRes.ok) {
-            const attributes = await attrRes.json();
-            const brandAttr = attributes.find((a: any) => a.slug === "pa_brand");
-            
-            if (brandAttr) {
-              const ids = await matchSlugsToIds(`attributes/${brandAttr.id}/terms?per_page=100`, slugs);
-              if (ids.length > 0) {
-                url += `&attribute=pa_brand&attribute_term=${ids.join(',')}`;
-              } else {
-                return []; // No matching brand terms found
-              }
-            } else {
-              return []; // pa_brand attribute not found
-            }
-          } else {
-            return [];
-          }
+          const brandQuery = await getBrandFilterQuery(slugs);
+          if (!brandQuery) return [];
+          url += brandQuery;
         }
       }
     }
 
     const response = await fetch(url, {
-      headers: {
-        Authorization: `Basic ${Buffer.from(
-          `${CONSUMER_KEY}:${CONSUMER_SECRET}`
-        ).toString("base64")}`,
-      },
+      headers: getAuthHeaders(),
       next: {
         revalidate: 60, // Revalidate every minute
       },
@@ -132,11 +174,7 @@ export async function getProductBySlug(slug: string): Promise<WCProduct | null> 
 
   try {
     const response = await fetch(url, {
-      headers: {
-        Authorization: `Basic ${Buffer.from(
-          `${CONSUMER_KEY}:${CONSUMER_SECRET}`
-        ).toString("base64")}`,
-      },
+      headers: getAuthHeaders(),
       next: { revalidate: 60 },
     });
 
@@ -159,11 +197,7 @@ export async function getProductsByIds(ids: number[]): Promise<WCProduct[]> {
 
   try {
     const response = await fetch(url, {
-      headers: {
-        Authorization: `Basic ${Buffer.from(
-          `${CONSUMER_KEY}:${CONSUMER_SECRET}`
-        ).toString("base64")}`,
-      },
+      headers: getAuthHeaders(),
       next: { revalidate: 60 },
     });
 
@@ -189,9 +223,7 @@ export async function getProductsByCategorySlug(slug: string): Promise<WCProduct
     // 1. Fetch category ID by slug
     const catUrl = `${WORDPRESS_URL}/wp-json/wc/v3/products/categories?slug=${slug}`;
     const catResponse = await fetch(catUrl, {
-      headers: {
-        Authorization: `Basic ${Buffer.from(`${CONSUMER_KEY}:${CONSUMER_SECRET}`).toString("base64")}`,
-      },
+      headers: getAuthHeaders(),
       next: { revalidate: 3600 }, // Categories change rarely
     });
 
@@ -205,9 +237,7 @@ export async function getProductsByCategorySlug(slug: string): Promise<WCProduct
     // 2. Fetch products by category ID
     const url = `${WORDPRESS_URL}/wp-json/wc/v3/products?category=${categoryId}&status=publish&per_page=24`;
     const response = await fetch(url, {
-      headers: {
-        Authorization: `Basic ${Buffer.from(`${CONSUMER_KEY}:${CONSUMER_SECRET}`).toString("base64")}`,
-      },
+      headers: getAuthHeaders(),
       next: { revalidate: 60 },
     });
 
@@ -230,9 +260,7 @@ export async function searchProducts(query: string): Promise<WCProduct[]> {
 
   try {
     const response = await fetch(url, {
-      headers: {
-        Authorization: `Basic ${Buffer.from(`${CONSUMER_KEY}:${CONSUMER_SECRET}`).toString("base64")}`,
-      },
+      headers: getAuthHeaders(),
       next: { revalidate: 60 },
     });
 
