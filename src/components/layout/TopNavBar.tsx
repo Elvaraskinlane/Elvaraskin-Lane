@@ -8,7 +8,7 @@ import { useUIStore } from "@/store/useUIStore";
 import { useCartStore } from "@/store/useCartStore";
 import { useAuthStore } from "@/store/useAuthStore";
 
-export default function TopNavBar() {
+export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -18,6 +18,13 @@ export default function TopNavBar() {
   const searchRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const pathname = usePathname();
+
+  // Dynamic values for Brand of the Month
+  const featuredImage = featuredProduct?.images?.[0]?.src || "https://shop.elvaraskinlane.ng/wp-content/uploads/2026/07/cosrx-centella-cream.jpg";
+  const featuredTitle = featuredProduct?.attributes?.find((a: any) => a.name === "Brand")?.options?.[0] || "Brand of the Month";
+  const featuredDesc = featuredProduct?.name || "Explore our bestselling curated collection.";
+  const featuredLink = featuredProduct ? `/product/${featuredProduct.slug}` : "/shop";
+
   const searchParams = useSearchParams();
 
   const { openAuthModal, openCartDrawer } = useUIStore();
@@ -114,16 +121,16 @@ export default function TopNavBar() {
               <div className="bg-gray-50 dark:bg-surface-container p-4 rounded-md flex flex-col h-full">
                 <div className="relative w-full h-[75%] min-h-[200px] mb-4">
                   <Image 
-                    src="https://shop.elvaraskinlane.ng/wp-content/uploads/2026/07/cosrx-centella-cream.jpg" 
-                    alt="COSRX Featured Brand" 
+                    src={featuredImage} 
+                    alt="Featured Brand" 
                     fill
                     className="object-cover rounded-md"
                   />
                 </div>
-                <h4 className="font-bold text-lg mb-1 text-black dark:text-on-surface">COSRX</h4>
-                <p className="text-sm text-gray-500 dark:text-on-surface-variant mb-4">Explore the bestselling Snail Mucin collection.</p>
-                <Link href="/shop?brand=cosrx" className="mt-auto inline-block font-semibold text-sm hover:underline uppercase tracking-wider text-black dark:text-primary">
-                  Shop COSRX
+                <h4 className="font-bold text-lg mb-1 text-black dark:text-on-surface truncate">{featuredTitle}</h4>
+                <p className="text-sm text-gray-500 dark:text-on-surface-variant mb-4 line-clamp-2" title={featuredDesc}>{featuredDesc}</p>
+                <Link href={featuredLink} className="mt-auto inline-block font-semibold text-sm hover:underline uppercase tracking-wider text-black dark:text-primary">
+                  SHOP NOW
                 </Link>
               </div>
             )
