@@ -112,13 +112,14 @@ export default function TopNavBar() {
             isCustom: true,
             customContent: (
               <div className="bg-gray-50 dark:bg-surface-container p-4 rounded-md flex flex-col h-full">
-                <Image 
-                  src="https://shop.elvaraskinlane.ng/wp-content/uploads/2026/07/cosrx-centella-cream.jpg" 
-                  alt="COSRX Featured Brand" 
-                  width={300}
-                  height={200}
-                  className="w-full h-48 object-cover rounded-md mb-4"
-                />
+                <div className="relative w-full h-[75%] min-h-[200px] mb-4">
+                  <Image 
+                    src="https://shop.elvaraskinlane.ng/wp-content/uploads/2026/07/cosrx-centella-cream.jpg" 
+                    alt="COSRX Featured Brand" 
+                    fill
+                    className="object-cover rounded-md"
+                  />
+                </div>
                 <h4 className="font-bold text-lg mb-1 text-black dark:text-on-surface">COSRX</h4>
                 <p className="text-sm text-gray-500 dark:text-on-surface-variant mb-4">Explore the bestselling Snail Mucin collection.</p>
                 <Link href="/shop?brand=cosrx" className="mt-auto inline-block font-semibold text-sm hover:underline uppercase tracking-wider text-black dark:text-primary">
