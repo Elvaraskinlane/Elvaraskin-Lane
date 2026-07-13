@@ -42,11 +42,45 @@ export default function TopNavBar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const navLinks = [
-    { name: "Shop All", href: "/shop" },
-    { name: "Skincare", href: "/category/skincare" },
-    { name: "Rituals", href: "/category/rituals" },
-    { name: "Gifts", href: "/category/gifts" },
+  const navMenus = [
+    {
+      name: "Shop Categories",
+      href: "/shop",
+      dropdown: [
+        { 
+          name: "Face", 
+          href: "/category/face",
+          subItems: [
+            { name: "Cleansers", href: "/category/cleansers" },
+            { name: "Toners", href: "/category/toners" },
+            { name: "Moisturisers", href: "/category/moisturisers" }
+          ]
+        },
+        { name: "Sunscreen", href: "/category/sunscreen" },
+        { name: "Bath & Body", href: "/category/bath-body" },
+        { name: "Hair Care", href: "/category/hair-care" },
+        { name: "Makeup", href: "/category/makeup" },
+      ]
+    },
+    {
+      name: "Brands",
+      href: "/shop",
+      dropdown: [
+        { name: "COSRX", href: "/shop?brand=cosrx" },
+        { name: "Anua", href: "/shop?brand=anua" },
+        { name: "The Ordinary", href: "/shop?brand=the-ordinary" },
+        { name: "Medicube", href: "/shop?brand=medicube" },
+      ]
+    },
+    {
+      name: "Shop by Concern",
+      href: "/shop",
+      dropdown: [
+        { name: "Acne & Breakouts", href: "/shop?concern=acne-breakouts" },
+        { name: "Dark Spots", href: "/shop?concern=dark-spots" },
+        { name: "Dry Skin", href: "/shop?concern=dry-skin" },
+      ]
+    },
     { name: "About", href: "/about" },
     { name: "Contact", href: "/contact" },
   ];
@@ -82,18 +116,53 @@ export default function TopNavBar() {
 
         {/* Navigation Links (Desktop) */}
         <div className="hidden md:flex items-center space-x-8">
-          {navLinks.map((link, index) => (
-            <Link 
-              key={link.name} 
-              href={link.href}
-              className={`font-label-md text-label-md transition-all duration-300 hover:text-primary dark:hover:text-primary-fixed hover:opacity-80
-                ${index === 0 
-                  ? "text-on-background dark:text-primary-fixed border-b border-on-background pb-1" 
-                  : "text-on-surface-variant dark:text-on-surface-variant/80"
-                }`}
-            >
-              {link.name}
-            </Link>
+          {navMenus.map((link, index) => (
+            <div key={link.name} className="relative group">
+              <Link 
+                href={link.href}
+                className={`font-label-md text-label-md transition-all duration-300 hover:text-primary dark:hover:text-primary-fixed hover:opacity-80 flex items-center gap-1
+                  ${index === 0 
+                    ? "text-on-background dark:text-primary-fixed border-b border-on-background pb-1" 
+                    : "text-on-surface-variant dark:text-on-surface-variant/80 pb-1"
+                  }`}
+              >
+                {link.name}
+                {link.dropdown && (
+                  <span className="material-symbols-outlined text-[16px]">expand_more</span>
+                )}
+              </Link>
+
+              {/* Mega Menu / Dropdown Content */}
+              {link.dropdown && (
+                <div className="absolute top-full left-0 pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 min-w-[200px]">
+                  <div className="bg-surface shadow-lg border border-outline-variant/20 rounded-md p-4 flex flex-col gap-2">
+                    {link.dropdown.map((item) => (
+                      <div key={item.name} className="flex flex-col">
+                        <Link 
+                          href={item.href}
+                          className="font-label-md text-sm text-on-surface hover:text-primary transition-colors py-1"
+                        >
+                          {item.name}
+                        </Link>
+                        {item.subItems && (
+                          <div className="pl-4 flex flex-col gap-1 mt-1 border-l border-outline-variant/30">
+                            {item.subItems.map((sub) => (
+                              <Link 
+                                key={sub.name}
+                                href={sub.href}
+                                className="font-label-md text-xs text-on-surface-variant hover:text-primary transition-colors py-1"
+                              >
+                                {sub.name}
+                              </Link>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           ))}
         </div>
 
@@ -209,16 +278,46 @@ export default function TopNavBar() {
 
       {/* Mobile Menu Dropdown */}
       {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 w-full bg-background border-b border-outline-variant/30 px-margin-mobile py-4 shadow-lg flex flex-col space-y-4">
-          {navLinks.map((link) => (
-            <Link 
-              key={link.name} 
-              href={link.href}
-              className="font-label-md text-label-md text-on-background py-2 border-b border-outline-variant/10"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              {link.name}
-            </Link>
+        <div className="md:hidden absolute top-full left-0 w-full bg-background border-b border-outline-variant/30 px-margin-mobile py-4 shadow-lg flex flex-col space-y-4 max-h-[80vh] overflow-y-auto">
+          {navMenus.map((link) => (
+            <div key={link.name} className="flex flex-col border-b border-outline-variant/10 pb-2">
+              <Link 
+                href={link.href}
+                className="font-label-md text-label-md text-on-background py-2"
+                onClick={() => !link.dropdown && setIsMobileMenuOpen(false)}
+              >
+                {link.name}
+              </Link>
+              {link.dropdown && (
+                <div className="pl-4 flex flex-col gap-2 mt-2 border-l border-outline-variant/30">
+                  {link.dropdown.map((item) => (
+                    <div key={item.name} className="flex flex-col">
+                      <Link 
+                        href={item.href}
+                        className="font-label-md text-sm text-on-surface-variant py-1"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        {item.name}
+                      </Link>
+                      {item.subItems && (
+                        <div className="pl-4 flex flex-col gap-1 mt-1">
+                          {item.subItems.map((sub) => (
+                            <Link 
+                              key={sub.name}
+                              href={sub.href}
+                              className="font-label-md text-xs text-outline-variant py-1"
+                              onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                              {sub.name}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           ))}
         </div>
       )}

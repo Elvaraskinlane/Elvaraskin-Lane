@@ -6,9 +6,13 @@ export const metadata = {
   title: "Shop All - Elvara Skinlane",
 };
 
-export default async function ShopPage() {
+export default async function ShopPage({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
   // Fetch real data from WooCommerce Database
-  const products = await getProducts(24);
+  const products = await getProducts(24, searchParams);
 
   return (
     <div className="flex flex-col w-full animate-fade-in">

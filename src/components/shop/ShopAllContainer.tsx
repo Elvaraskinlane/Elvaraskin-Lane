@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { WCProduct } from "@/types/woocommerce";
 import { addToCart } from "@/lib/cart";
+import ShopFilters from "./ShopFilters";
 
 export default function ShopAllContainer({ initialProducts }: { initialProducts: WCProduct[] }) {
   const [searchQuery, setSearchQuery] = useState("");
@@ -35,18 +36,15 @@ export default function ShopAllContainer({ initialProducts }: { initialProducts:
     });
   };
 
-  // Client-side filter matching for instantaneous UX
+  // Client-side fallback filter matching for instantaneous UX (search/sort)
   const filteredProducts = initialProducts.filter((product) => {
     const desc = product.description || "";
     const name = product.name || "";
     
     const matchesSearch = name.toLowerCase().includes(searchQuery.toLowerCase()) || 
                           desc.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    const matchesCategory = selectedCategories.includes("all") || 
-      (product.categories && product.categories.some(cat => selectedCategories.includes(cat.slug)));
       
-    return matchesSearch && matchesCategory;
+    return matchesSearch;
   });
 
   return (
@@ -69,24 +67,7 @@ export default function ShopAllContainer({ initialProducts }: { initialProducts:
             <span className="material-symbols-outlined absolute right-0 top-2 text-on-surface-variant text-xl">search</span>
           </div>
 
-          <h3 className="font-label-md text-label-md text-primary uppercase tracking-widest mb-4 border-b border-outline-variant pb-2">
-            Product Categories
-          </h3>
-          <ul className="space-y-3 font-body-md text-body-md text-on-surface-variant">
-            {categories.map((cat) => (
-              <li key={cat.slug}>
-                <label className="flex items-center cursor-pointer hover:text-primary transition-colors">
-                  <input 
-                    type="checkbox" 
-                    checked={selectedCategories.includes(cat.slug)}
-                    onChange={() => handleCategoryChange(cat.slug)}
-                    className="form-checkbox rounded-sm text-primary border-outline-variant focus:ring-primary mr-3 w-4 h-4 bg-transparent cursor-pointer" 
-                  />
-                  {cat.name}
-                </label>
-              </li>
-            ))}
-          </ul>
+          <ShopFilters />
         </div>
       </aside>
 
