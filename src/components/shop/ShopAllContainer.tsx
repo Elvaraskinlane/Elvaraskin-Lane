@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { WCProduct } from "@/types/woocommerce";
@@ -67,7 +67,9 @@ export default function ShopAllContainer({ initialProducts }: { initialProducts:
             <span className="material-symbols-outlined absolute right-0 top-2 text-on-surface-variant text-xl">search</span>
           </div>
 
-          <ShopFilters />
+          <Suspense fallback={<div className="font-body-sm text-on-surface-variant py-4">Loading filters...</div>}>
+            <ShopFilters />
+          </Suspense>
         </div>
       </aside>
 
