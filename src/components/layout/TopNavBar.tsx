@@ -111,15 +111,17 @@ export default function TopNavBar() {
             title: "Brand of the Month",
             isCustom: true,
             customContent: (
-              <div className="bg-gray-50 dark:bg-surface-container p-4 rounded-md h-full flex flex-col justify-between">
-                <div>
-                  <div className="aspect-[4/3] bg-gray-200 dark:bg-outline-variant/30 mb-3 flex items-center justify-center rounded-sm overflow-hidden">
-                    <span className="text-gray-400 dark:text-outline-variant text-xs">Featured Brand</span>
-                  </div>
-                  <h4 className="font-semibold text-sm mb-1 text-black dark:text-on-surface">COSRX</h4>
-                  <p className="text-xs text-gray-500 dark:text-on-surface-variant mb-4">Explore the bestselling Snail Mucin collection.</p>
-                </div>
-                <Link href="/shop?brand=cosrx" className="text-xs font-semibold uppercase tracking-wider text-black dark:text-primary hover:underline">
+              <div className="bg-gray-50 dark:bg-surface-container p-4 rounded-md flex flex-col h-full">
+                <Image 
+                  src="https://shop.elvaraskinlane.ng/wp-content/uploads/2026/07/cosrx-centella-cream.jpg" 
+                  alt="COSRX Featured Brand" 
+                  width={300}
+                  height={200}
+                  className="w-full h-48 object-cover rounded-md mb-4"
+                />
+                <h4 className="font-bold text-lg mb-1 text-black dark:text-on-surface">COSRX</h4>
+                <p className="text-sm text-gray-500 dark:text-on-surface-variant mb-4">Explore the bestselling Snail Mucin collection.</p>
+                <Link href="/shop?brand=cosrx" className="mt-auto inline-block font-semibold text-sm hover:underline uppercase tracking-wider text-black dark:text-primary">
                   Shop COSRX
                 </Link>
               </div>
