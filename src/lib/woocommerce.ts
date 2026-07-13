@@ -17,6 +17,19 @@ export async function getProducts(
 
   try {
     if (searchParams) {
+      if (searchParams.page) {
+        url += `&page=${searchParams.page}`;
+      }
+      if (searchParams.search) {
+        url += `&search=${encodeURIComponent(searchParams.search as string)}`;
+      }
+      if (searchParams.orderby) {
+        url += `&orderby=${searchParams.orderby}`;
+      }
+      if (searchParams.order) {
+        url += `&order=${searchParams.order}`;
+      }
+
       // Map category slug to ID
       if (searchParams.category && typeof searchParams.category === "string") {
         const catRes = await fetch(`${WORDPRESS_URL}/wp-json/wc/v3/products/categories?slug=${searchParams.category}`, {

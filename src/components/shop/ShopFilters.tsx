@@ -23,20 +23,71 @@ export default function ShopFilters() {
     { name: "Sunscreen", value: "sunscreen" },
     { name: "Bath & Body", value: "bath-body" },
     { name: "Hair Care", value: "hair-care" },
+    { name: "Babies & Children", value: "babies-children" },
     { name: "Makeup", value: "makeup" },
+    { name: "Oral Care", value: "oral-care" },
+    { name: "Gifts", value: "gifts" },
+    { name: "Fragrance", value: "fragrance" },
+    { name: "Men", value: "men" },
+    { name: "Korean Skincare", value: "korean-skincare" },
+    { name: "Offers", value: "offers" },
+    { name: "Travel Size", value: "travel-size" },
+    { name: "Aesthetician Kits", value: "aesthetician-kits" }
   ];
 
   const brands = [
-    { name: "COSRX", value: "cosrx" },
+    { name: "Advanced Korean Products", value: "advanced-korean-products" },
     { name: "Anua", value: "anua" },
-    { name: "The Ordinary", value: "the-ordinary" },
+    { name: "Aqua Rich", value: "aqua-rich" },
+    { name: "AGE-R", value: "age-r" },
+    { name: "Advanced Clinicals", value: "advanced-clinicals" },
     { name: "Medicube", value: "medicube" },
+    { name: "Baby Secrets", value: "baby-secrets" },
+    { name: "Balance", value: "balance" },
+    { name: "Dove", value: "dove" },
+    { name: "Dr. Meineair", value: "dr-meineair" },
+    { name: "EOS", value: "eos" },
+    { name: "EDEN", value: "eden" },
+    { name: "Celimax", value: "celimax" },
+    { name: "COSRX", value: "cosrx" },
+    { name: "Dr. Teals", value: "dr-teals" },
+    { name: "Skin Aqua", value: "skin-aqua" },
+    { name: "Good Molecules", value: "good-molecules" },
+    { name: "Glow Recipe", value: "glow-recipe" },
+    { name: "Caudalie", value: "caudalie" },
+    { name: "Isntree", value: "isntree" },
+    { name: "MISSHA", value: "missha" },
+    { name: "MARY & MAY", value: "mary-may" },
+    { name: "Lanoline", value: "lanoline" },
+    { name: "LA Roche Posay", value: "la-roche-posay" },
+    { name: "Naturium", value: "naturium" },
+    { name: "Olay", value: "olay" },
+    { name: "PanOxyl", value: "panoxyl" },
+    { name: "TIAM", value: "tiam" },
+    { name: "The Ordinary", value: "the-ordinary" },
+    { name: "Simple", value: "simple" },
+    { name: "VEE BEAUTY", value: "vee-beauty" },
+    { name: "Paula’s Choice", value: "paulas-choice" },
+    { name: "LUSH Hair", value: "lush-hair" },
+    { name: "AVE HAIR", value: "ave-hair" },
+    { name: "IMAGIC", value: "imagic" },
+    { name: "Kiss Beauty", value: "kiss-beauty" },
+    { name: "Hada Labo", value: "hada-labo" }
   ];
 
   const concerns = [
     { name: "Acne & Breakouts", value: "acne-breakouts" },
-    { name: "Dark Spots", value: "dark-spots" },
-    { name: "Dry Skin", value: "dry-skin" },
+    { name: "Dark Spots & Hyperpigmentation", value: "dark-spots-hyperpigmentation" },
+    { name: "Dry & Dehydrated Skin", value: "dry-dehydrated-skin" },
+    { name: "Oily Skin", value: "oily-skin" },
+    { name: "Sensitive Skin", value: "sensitive-skin" },
+    { name: "Damaged Skin Barrier", value: "damaged-skin-barrier" },
+    { name: "Fine Lines & Wrinkles", value: "fine-lines-wrinkles" },
+    { name: "Dull Skin", value: "dull-skin" },
+    { name: "Large Pores & Uneven Texture", value: "large-pores-uneven-texture" },
+    { name: "Body Care Concerns", value: "body-care-concerns" },
+    { name: "Sun Protection", value: "sun-protection" },
+    { name: "Lip & Eye Care", value: "lip-eye-care" }
   ];
 
   const handleFilterChange = (key: string, value: string) => {
@@ -72,11 +123,11 @@ export default function ShopFilters() {
           </span>
         </button>
         {openSection === "categories" && (
-          <div className="p-4 border-t border-outline-variant/30 bg-surface">
+          <div className="p-4 border-t border-outline-variant/30 bg-surface max-h-64 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
             <ul className="space-y-3">
               {categories.map((cat) => (
                 <li key={cat.value}>
-                  <label className="flex items-center cursor-pointer hover:text-primary transition-colors font-body-md text-on-surface-variant">
+                  <label className="flex items-center cursor-pointer hover:text-black transition-colors font-body-md text-gray-600 text-sm">
                     <input 
                       type="checkbox" 
                       checked={activeCategories.includes(cat.value)}
@@ -104,11 +155,11 @@ export default function ShopFilters() {
           </span>
         </button>
         {openSection === "brands" && (
-          <div className="p-4 border-t border-outline-variant/30 bg-surface">
+          <div className="p-4 border-t border-outline-variant/30 bg-surface max-h-64 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
             <ul className="space-y-3">
               {brands.map((brand) => (
                 <li key={brand.value}>
-                  <label className="flex items-center cursor-pointer hover:text-primary transition-colors font-body-md text-on-surface-variant">
+                  <label className="flex items-center cursor-pointer hover:text-black transition-colors font-body-md text-gray-600 text-sm">
                     <input 
                       type="checkbox" 
                       checked={activeBrands.includes(brand.value)}
@@ -136,11 +187,11 @@ export default function ShopFilters() {
           </span>
         </button>
         {openSection === "concerns" && (
-          <div className="p-4 border-t border-outline-variant/30 bg-surface">
+          <div className="p-4 border-t border-outline-variant/30 bg-surface max-h-64 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
             <ul className="space-y-3">
               {concerns.map((concern) => (
                 <li key={concern.value}>
-                  <label className="flex items-center cursor-pointer hover:text-primary transition-colors font-body-md text-on-surface-variant">
+                  <label className="flex items-center cursor-pointer hover:text-black transition-colors font-body-md text-gray-600 text-sm">
                     <input 
                       type="checkbox" 
                       checked={activeConcerns.includes(concern.value)}

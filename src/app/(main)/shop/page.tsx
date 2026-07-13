@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import ShopHero from "@/components/shop/ShopHero";
 import ShopAllContainer from "@/components/shop/ShopAllContainer";
 import { getProducts } from "@/lib/woocommerce";
@@ -18,7 +19,9 @@ export default async function ShopPage({
   return (
     <div className="flex flex-col w-full animate-fade-in">
       <ShopHero />
-      <ShopAllContainer initialProducts={products} />
+      <Suspense fallback={<div className="p-8 text-center">Loading products...</div>}>
+        <ShopAllContainer initialProducts={products} />
+      </Suspense>
     </div>
   );
 }

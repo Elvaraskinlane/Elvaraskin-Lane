@@ -1,51 +1,93 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { WCProduct } from "@/types/woocommerce";
 import { addToCart } from "@/lib/cart";
+import { loadMoreProductsAction } from "@/app/actions/shopActions";
 import ShopFilters from "./ShopFilters";
 
 export default function ShopAllContainer({ initialProducts }: { initialProducts: WCProduct[] }) {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategories, setSelectedCategories] = useState<string[]>(["all"]);
-  const [sortBy, setSortBy] = useState("recommended");
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-  // Hardcoded categories mapping to match WooCommerce slugs
-  const categories = [
-    { name: "All Skincare", slug: "all" },
-    { name: "Cleansers", slug: "cleansers" },
-    { name: "Serums & Oils", slug: "serums-oils" },
-    { name: "Rituals", slug: "rituals" },
-  ];
+  const [visibleProducts, setVisibleProducts] = useState(initialProducts);
+  const [page, setPage] = useState(1);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-  const handleCategoryChange = (slug: string) => {
-    if (slug === "all") {
-      setSelectedCategories(["all"]);
-      return;
-    }
-    
-    setSelectedCategories(prev => {
-      const filtered = prev.filter(item => item !== "all");
-      if (filtered.includes(slug)) {
-        const updated = filtered.filter(item => item !== slug);
-        return updated.length === 0 ? ["all"] : updated;
+  const initialSearch = searchParams.get("search") || "";
+  const [searchQuery, setSearchQuery] = useState(initialSearch);
+
+  const currentOrderBy = searchParams.get("orderby");
+  const currentOrder = searchParams.get("order");
+  let sortValue = "recommended";
+  if (currentOrderBy === "price" && currentOrder === "asc") sortValue = "low-to-high";
+  if (currentOrderBy === "price" && currentOrder === "desc") sortValue = "high-to-low";
+
+  const [sortBy, setSortBy] = useState(sortValue);
+
+  useEffect(() => {
+    setVisibleProducts(initialProducts);
+    setPage(1);
+  }, [initialProducts]);
+
+  const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      const params = new URLSearchParams(searchParams.toString());
+      if (searchQuery.trim()) {
+        params.set("search", searchQuery.trim());
+      } else {
+        params.delete("search");
       }
-      return [...filtered, slug];
-    });
+      params.delete("page");
+      router.push(`/shop?${params.toString()}`, { scroll: false });
+    }
   };
 
-  // Client-side fallback filter matching for instantaneous UX (search/sort)
-  const filteredProducts = initialProducts.filter((product) => {
-    const desc = product.description || "";
-    const name = product.name || "";
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const val = e.target.value;
+    setSortBy(val);
+    const params = new URLSearchParams(searchParams.toString());
     
-    const matchesSearch = name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          desc.toLowerCase().includes(searchQuery.toLowerCase());
-      
-    return matchesSearch;
-  });
+    if (val === "low-to-high") {
+      params.set("orderby", "price");
+      params.set("order", "asc");
+    } else if (val === "high-to-low") {
+      params.set("orderby", "price");
+      params.set("order", "desc");
+    } else {
+      params.delete("orderby");
+      params.delete("order");
+    }
+    params.delete("page");
+    router.push(`/shop?${params.toString()}`, { scroll: false });
+  };
+
+  const handleLoadMore = async () => {
+    setIsLoadingMore(true);
+    const nextPage = page + 1;
+    
+    const paramsObj: { [key: string]: string } = {};
+    searchParams.forEach((value, key) => {
+      paramsObj[key] = value;
+    });
+
+    try {
+      const newProducts = await loadMoreProductsAction(nextPage, paramsObj);
+      if (newProducts && newProducts.length > 0) {
+        setVisibleProducts(prev => [...prev, ...newProducts]);
+        setPage(nextPage);
+      }
+    } catch (error) {
+      console.error("Error loading more products:", error);
+    } finally {
+      setIsLoadingMore(false);
+    }
+  };
+
+
 
   return (
     <div className="w-full max-w-[1280px] mx-auto px-margin-mobile md:px-margin-desktop py-margin-desktop grid grid-cols-1 md:grid-cols-12 gap-gutter">
@@ -59,9 +101,10 @@ export default function ShopAllContainer({ initialProducts }: { initialProducts:
           <div className="relative border-b border-outline-variant/60 focus-within:border-primary mb-8 transition-colors">
             <input 
               type="text" 
-              placeholder="Search products..." 
+              placeholder="Search and press Enter..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={handleSearch}
               className="w-full bg-transparent py-2 pl-0 pr-8 font-body-md text-sm outline-none border-0 focus:ring-0 placeholder:text-outline-variant"
             />
             <span className="material-symbols-outlined absolute right-0 top-2 text-on-surface-variant text-xl">search</span>
@@ -77,11 +120,11 @@ export default function ShopAllContainer({ initialProducts }: { initialProducts:
       <section className="md:col-span-9">
         <div className="flex justify-between items-center mb-6 pb-2 border-b border-outline-variant">
           <span className="font-label-md text-label-md text-on-surface-variant">
-            Showing {filteredProducts.length} of {initialProducts.length} Products
+            Showing {visibleProducts.length} Products
           </span>
           <select 
             value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
+            onChange={handleSortChange}
             className="font-label-md text-label-md text-primary bg-transparent border-none focus:ring-0 cursor-pointer uppercase tracking-widest outline-none"
           >
             <option value="recommended">Sort by Featured</option>
@@ -91,8 +134,8 @@ export default function ShopAllContainer({ initialProducts }: { initialProducts:
         </div>
 
         {/* Dynamic Grid Mapping */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-12">
-          {filteredProducts.map((product) => {
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-12 mb-12">
+          {visibleProducts.map((product) => {
             const imageUrl = product.images?.[0]?.src || "/hero-2-fixed.png";
 
             return (
@@ -131,6 +174,19 @@ export default function ShopAllContainer({ initialProducts }: { initialProducts:
             );
           })}
         </div>
+
+        {/* Load More Button */}
+        {initialProducts.length === 24 && (
+          <div className="flex justify-center items-center mt-12 border-t border-outline-variant pt-12 pb-8">
+            <button
+              onClick={handleLoadMore}
+              disabled={isLoadingMore}
+              className="font-label-lg text-label-lg border border-black dark:border-primary-fixed text-black dark:text-primary-fixed hover:bg-black hover:text-white dark:hover:bg-primary-fixed dark:hover:text-background transition-colors duration-300 py-4 px-12 uppercase tracking-widest disabled:opacity-50"
+            >
+              {isLoadingMore ? "Loading..." : "Load More Products"}
+            </button>
+          </div>
+        )}
       </section>
 
     </div>
