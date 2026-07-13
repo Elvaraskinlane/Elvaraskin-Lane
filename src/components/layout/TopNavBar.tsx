@@ -216,15 +216,17 @@ export default function TopNavBar() {
             <div key={link.name} className="relative group h-full flex items-center py-4">
               <Link 
                 href={link.href}
-                className={`font-label-md text-label-md transition-all duration-300 hover:text-black dark:hover:text-primary-fixed hover:opacity-80 flex items-center gap-1 hover:underline underline-offset-8 decoration-2
+                className={`font-label-md text-label-md transition-all duration-300 hover:text-black dark:hover:text-primary-fixed hover:opacity-80 flex items-center gap-1
                   ${isActive 
-                    ? "text-black dark:text-primary-fixed underline underline-offset-8 decoration-2" 
+                    ? "text-black dark:text-primary-fixed" 
                     : "text-gray-700 dark:text-on-surface-variant"
                   }`}
               >
-                {link.name}
+                <span className={`relative py-1 ${isActive ? "after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-full after:h-[2px] after:bg-black dark:after:bg-primary-fixed" : "after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-black dark:after:bg-primary-fixed after:transition-all after:duration-300 group-hover:after:w-full"}`}>
+                  {link.name}
+                </span>
                 {link.megaMenu && (
-                  <span className="material-symbols-outlined text-[16px]">expand_more</span>
+                  <span className="material-symbols-outlined text-[16px] mb-[-2px]">expand_more</span>
                 )}
               </Link>
 
