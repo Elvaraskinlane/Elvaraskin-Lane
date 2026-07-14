@@ -335,24 +335,22 @@ export async function getAllBrands(): Promise<{ id: number; name: string; slug: 
   if (!WORDPRESS_URL || !CONSUMER_KEY || !CONSUMER_SECRET) return [];
   
   try {
-    const attrRes = await fetch(`${WORDPRESS_URL}/wp-json/wc/v3/products/attributes`, { headers: getAuthHeaders(), next: { revalidate: 3600 } });
-    if (!attrRes.ok) return [];
-    const attributes = await attrRes.json();
-    const brandAttr = attributes.find((a: any) => a.slug === 'pa_brand');
-    
-    if (!brandAttr) return [];
-    
-    const termsRes = await fetch(`${WORDPRESS_URL}/wp-json/wc/v3/products/attributes/${brandAttr.id}/terms?per_page=100`, { headers: getAuthHeaders(), next: { revalidate: 3600 } });
-    if (!termsRes.ok) return [];
-    const brands = await termsRes.json();
+    const brandsRes = await fetch(`${WORDPRESS_URL}/wp-json/wc/v3/products/brands?per_page=100`, { headers: getAuthHeaders(), next: { revalidate: 3600 } });
+    if (!brandsRes.ok) return [];
+    const brands = await brandsRes.json();
     
     // Map thumbnails from products
     const productsRes = await fetch(`${WORDPRESS_URL}/wp-json/wc/v3/products?per_page=100&status=publish`, { headers: getAuthHeaders(), next: { revalidate: 3600 } });
     const rawProducts = await productsRes.json();
     
     return brands.map((brand: any) => {
-      const prod = rawProducts.find((p: any) => p.attributes && p.attributes.some((a: any) => a.id === brandAttr.id && a.options.includes(brand.name)) && p.images?.length > 0);
-      return { id: brand.id, name: brand.name.replace(/&amp;/g, '&'), slug: brand.slug, count: brand.count, image: prod?.images[0]?.src };
+      let image = brand.image?.src || brand.image;
+      // In case the image field is empty or returned as an unexpected object structure
+      if (!image || typeof image === 'object') {
+        const prod = rawProducts.find((p: any) => p.brands && p.brands.some((b: any) => b.id === brand.id) && p.images?.length > 0);
+        image = prod?.images[0]?.src;
+      }
+      return { id: brand.id, name: brand.name.replace(/&amp;/g, '&'), slug: brand.slug, count: brand.count, image };
     });
   } catch (error) {
     console.error("Error fetching WooCommerce brands:", error);
