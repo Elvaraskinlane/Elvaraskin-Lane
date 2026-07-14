@@ -277,36 +277,63 @@ export async function searchProducts(query: string): Promise<WCProduct[]> {
   }
 }
 
-export async function getAllCategories(): Promise<{ id: number; name: string; slug: string; count: number }[]> {
+export async function getAllCategories(): Promise<{ id: number; name: string; slug: string; count: number; image?: string }[]> {
   if (!WORDPRESS_URL || !CONSUMER_KEY || !CONSUMER_SECRET) return [];
   const url = `${WORDPRESS_URL}/wp-json/wc/v3/products/categories?per_page=100`;
   try {
     const response = await fetch(url, { headers: getAuthHeaders(), next: { revalidate: 3600 } });
     if (!response.ok) return [];
-    return (await response.json()) as { id: number; name: string; slug: string; count: number }[];
+    const categories = await response.json();
+    
+    // Fetch products to use as fallback thumbnails
+    const products = await getProducts(100);
+    
+    return categories.map((cat: any) => {
+      let image = cat.image?.src;
+      if (!image) {
+        // Fallback to first product in this category
+        const prod = products.find(p => p.categories.some(c => c.id === cat.id) && p.images?.length > 0);
+        if (prod) image = prod.images[0].src;
+      }
+      return { id: cat.id, name: cat.name, slug: cat.slug, count: cat.count, image };
+    });
   } catch (error) {
     console.error("Error fetching WooCommerce categories:", error);
     return [];
   }
 }
 
-export async function getAllTags(): Promise<{ id: number; name: string; slug: string; count: number }[]> {
+export async function getAllTags(): Promise<{ id: number; name: string; slug: string; count: number; image?: string }[]> {
   if (!WORDPRESS_URL || !CONSUMER_KEY || !CONSUMER_SECRET) return [];
   const url = `${WORDPRESS_URL}/wp-json/wc/v3/products/tags?per_page=100`;
   try {
     const response = await fetch(url, { headers: getAuthHeaders(), next: { revalidate: 3600 } });
     if (!response.ok) return [];
-    return (await response.json()) as { id: number; name: string; slug: string; count: number }[];
+    const tags = await response.json();
+    
+    // Fetch products to map thumbnails
+    // Tags don't come back with products directly in the standard WCProduct response unless custom mapped.
+    // However, since we don't have tags on WCProduct natively in our type, we'll fetch from WC directly.
+    // Wait, Elvara products use tags! 
+    // To make it fully reliable, we can use the tag endpoints, or simply return tags as they are for now,
+    // and rely on a direct tag fetch if we want exact images. 
+    // Let's fetch 100 products from WooCommerce natively and map them.
+    const productsRes = await fetch(`${WORDPRESS_URL}/wp-json/wc/v3/products?per_page=100&status=publish`, { headers: getAuthHeaders(), next: { revalidate: 3600 } });
+    const rawProducts = await productsRes.json();
+    
+    return tags.map((tag: any) => {
+      const prod = rawProducts.find((p: any) => p.tags && p.tags.some((t: any) => t.id === tag.id) && p.images?.length > 0);
+      return { id: tag.id, name: tag.name, slug: tag.slug, count: tag.count, image: prod?.images[0]?.src };
+    });
   } catch (error) {
     console.error("Error fetching WooCommerce tags:", error);
     return [];
   }
 }
 
-export async function getAllBrands(): Promise<{ id: number; name: string; slug: string; count: number }[]> {
+export async function getAllBrands(): Promise<{ id: number; name: string; slug: string; count: number; image?: string }[]> {
   if (!WORDPRESS_URL || !CONSUMER_KEY || !CONSUMER_SECRET) return [];
   
-  // First get the attribute ID for 'pa_brand'
   try {
     const attrRes = await fetch(`${WORDPRESS_URL}/wp-json/wc/v3/products/attributes`, { headers: getAuthHeaders(), next: { revalidate: 3600 } });
     if (!attrRes.ok) return [];
@@ -315,10 +342,18 @@ export async function getAllBrands(): Promise<{ id: number; name: string; slug: 
     
     if (!brandAttr) return [];
     
-    // Fetch terms for that attribute
     const termsRes = await fetch(`${WORDPRESS_URL}/wp-json/wc/v3/products/attributes/${brandAttr.id}/terms?per_page=100`, { headers: getAuthHeaders(), next: { revalidate: 3600 } });
     if (!termsRes.ok) return [];
-    return (await termsRes.json()) as { id: number; name: string; slug: string; count: number }[];
+    const brands = await termsRes.json();
+    
+    // Map thumbnails from products
+    const productsRes = await fetch(`${WORDPRESS_URL}/wp-json/wc/v3/products?per_page=100&status=publish`, { headers: getAuthHeaders(), next: { revalidate: 3600 } });
+    const rawProducts = await productsRes.json();
+    
+    return brands.map((brand: any) => {
+      const prod = rawProducts.find((p: any) => p.attributes && p.attributes.some((a: any) => a.id === brandAttr.id && a.options.includes(brand.name)) && p.images?.length > 0);
+      return { id: brand.id, name: brand.name, slug: brand.slug, count: brand.count, image: prod?.images[0]?.src };
+    });
   } catch (error) {
     console.error("Error fetching WooCommerce brands:", error);
     return [];

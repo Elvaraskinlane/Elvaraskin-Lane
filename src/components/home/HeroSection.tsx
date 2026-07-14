@@ -7,24 +7,24 @@ import Link from "next/link";
 const slides = [
   {
     image: "/hero-slide-1.jpg",
-    title: "Radiance Redefined",
-    subtitle: "Discover potent, natural formulas crafted to illuminate your unique beauty. Experience skincare as a luxurious, restorative ritual.",
-    cta: "Shop the Collection",
-    href: "/shop",
+    title: "Discover Your Favorites",
+    subtitle: "Explore our curated collection of the world's most innovative and effective skincare brands, tailored for your unique beauty.",
+    cta: "Shop by Brands",
+    href: "/brands",
   },
   {
     image: "/hero-slide-2.jpg",
-    title: "Nature's Purest Essence",
-    subtitle: "Sourced from the most pristine environments, our botanicals deliver transformative results you can see and feel immediately.",
-    cta: "Explore Ingredients",
-    href: "/about",
+    title: "Tailored For You",
+    subtitle: "Whether you need a daily cleanser or a potent serum, explore our complete range of skincare categories designed for your routine.",
+    cta: "Shop by Category",
+    href: "/categories",
   },
   {
     image: "/hero-slide-3.jpg",
-    title: "Your Daily Ritual",
-    subtitle: "More than just skincare. Elevate your morning and evening routines into a sacred time dedicated entirely to your wellbeing.",
-    cta: "View Rituals",
-    href: "/rituals",
+    title: "Targeted Solutions",
+    subtitle: "Find targeted skincare solutions carefully curated for your specific skin concerns, from acne to hyperpigmentation.",
+    cta: "Shop by Concern",
+    href: "/concerns",
   }
 ];
 

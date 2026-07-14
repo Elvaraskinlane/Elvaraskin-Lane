@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { getAllTags } from "@/lib/woocommerce";
 
 export const metadata = {
@@ -43,10 +44,20 @@ export default async function ConcernsPage() {
                 href={`/shop?concern=${concern.slug}`}
                 className="group flex flex-col items-center justify-center bg-surface-container-lowest border border-outline-variant/30 rounded-md p-8 text-center hover:border-primary transition-all duration-300 hover:shadow-sm"
               >
-                <div className="w-16 h-16 rounded-full bg-surface-container flex items-center justify-center mb-4 group-hover:bg-primary/10 transition-colors">
-                  <span className="material-symbols-outlined text-[28px] text-on-background group-hover:text-primary transition-colors">
-                    water_drop
-                  </span>
+                <div className="w-20 h-20 rounded-full bg-surface-container flex items-center justify-center mb-4 overflow-hidden shadow-sm group-hover:shadow-md transition-shadow">
+                  {concern.image ? (
+                    <Image
+                      src={concern.image}
+                      alt={concern.name}
+                      width={80}
+                      height={80}
+                      className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                    />
+                  ) : (
+                    <span className="material-symbols-outlined text-[28px] text-on-background group-hover:text-primary transition-colors">
+                      water_drop
+                    </span>
+                  )}
                 </div>
                 <h3 className="font-label-lg text-base md:text-lg text-on-background uppercase tracking-wider mb-2 group-hover:text-primary transition-colors">
                   {concern.name}

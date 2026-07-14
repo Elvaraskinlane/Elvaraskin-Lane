@@ -3,6 +3,7 @@ export interface WCCategory {
   name: string;
   slug: string;
   count: number;
+  image?: string;
 }
 
 export interface WCBrand {
@@ -10,6 +11,7 @@ export interface WCBrand {
   name: string;
   slug: string;
   count: number;
+  image?: string;
 }
 
 export interface WCTag {
@@ -17,6 +19,7 @@ export interface WCTag {
   name: string;
   slug: string;
   count: number;
+  image?: string;
 }
 
 export interface WCProduct {

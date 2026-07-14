@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { getAllBrands } from "@/lib/woocommerce";
 
 export const metadata = {
@@ -41,10 +42,20 @@ export default async function BrandsPage() {
                 href={`/shop?brand=${brand.slug}`}
                 className="group flex flex-col items-center justify-center bg-surface-container-lowest border border-outline-variant/30 rounded-md p-8 text-center hover:border-primary transition-all duration-300 hover:shadow-sm"
               >
-                <div className="w-16 h-16 rounded-full bg-surface-container flex items-center justify-center mb-4 group-hover:bg-primary/10 transition-colors">
-                  <span className="font-headline-md text-xl text-on-background group-hover:text-primary transition-colors">
-                    {brand.name.charAt(0).toUpperCase()}
-                  </span>
+                <div className="w-20 h-20 rounded-full bg-surface-container flex items-center justify-center mb-4 overflow-hidden shadow-sm group-hover:shadow-md transition-shadow">
+                  {brand.image ? (
+                    <Image
+                      src={brand.image}
+                      alt={brand.name}
+                      width={80}
+                      height={80}
+                      className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                    />
+                  ) : (
+                    <span className="font-headline-md text-xl text-on-background group-hover:text-primary transition-colors">
+                      {brand.name.charAt(0).toUpperCase()}
+                    </span>
+                  )}
                 </div>
                 <h3 className="font-label-lg text-base md:text-lg text-on-background uppercase tracking-wider mb-2 group-hover:text-primary transition-colors">
                   {brand.name}
