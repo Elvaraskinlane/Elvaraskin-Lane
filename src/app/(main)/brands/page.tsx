@@ -12,7 +12,7 @@ export default async function BrandsPage() {
 
   // Filter out brands with 0 products if desired, or keep them.
   // We'll keep them for SEO but you could filter with `.filter(b => b.count > 0)`
-  const activeBrands = brands.filter(b => b.count > 0).sort((a, b) => a.name.localeCompare(b.name));
+  const activeBrands = brands.sort((a, b) => a.name.localeCompare(b.name));
 
   return (
     <main className="w-full bg-background animate-fade-in pb-24">

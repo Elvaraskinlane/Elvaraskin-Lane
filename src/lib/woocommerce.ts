@@ -295,7 +295,7 @@ export async function getAllCategories(): Promise<{ id: number; name: string; sl
         const prod = products.find(p => p.categories.some(c => c.id === cat.id) && p.images?.length > 0);
         if (prod) image = prod.images[0].src;
       }
-      return { id: cat.id, name: cat.name, slug: cat.slug, count: cat.count, image };
+      return { id: cat.id, name: cat.name.replace(/&amp;/g, '&'), slug: cat.slug, count: cat.count, image };
     });
   } catch (error) {
     console.error("Error fetching WooCommerce categories:", error);
@@ -323,7 +323,7 @@ export async function getAllTags(): Promise<{ id: number; name: string; slug: st
     
     return tags.map((tag: any) => {
       const prod = rawProducts.find((p: any) => p.tags && p.tags.some((t: any) => t.id === tag.id) && p.images?.length > 0);
-      return { id: tag.id, name: tag.name, slug: tag.slug, count: tag.count, image: prod?.images[0]?.src };
+      return { id: tag.id, name: tag.name.replace(/&amp;/g, '&'), slug: tag.slug, count: tag.count, image: prod?.images[0]?.src };
     });
   } catch (error) {
     console.error("Error fetching WooCommerce tags:", error);
@@ -352,7 +352,7 @@ export async function getAllBrands(): Promise<{ id: number; name: string; slug: 
     
     return brands.map((brand: any) => {
       const prod = rawProducts.find((p: any) => p.attributes && p.attributes.some((a: any) => a.id === brandAttr.id && a.options.includes(brand.name)) && p.images?.length > 0);
-      return { id: brand.id, name: brand.name, slug: brand.slug, count: brand.count, image: prod?.images[0]?.src };
+      return { id: brand.id, name: brand.name.replace(/&amp;/g, '&'), slug: brand.slug, count: brand.count, image: prod?.images[0]?.src };
     });
   } catch (error) {
     console.error("Error fetching WooCommerce brands:", error);
