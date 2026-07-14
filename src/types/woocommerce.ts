@@ -9,6 +9,14 @@ export interface WCBrand {
   id: number;
   name: string;
   slug: string;
+  count: number;
+}
+
+export interface WCTag {
+  id: number;
+  name: string;
+  slug: string;
+  count: number;
 }
 
 export interface WCProduct {

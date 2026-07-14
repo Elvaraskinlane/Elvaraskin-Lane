@@ -58,7 +58,7 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
     },
     {
       name: "BRANDS",
-      href: "/shop",
+      href: "/brands",
       megaMenu: {
         cols: "grid-cols-4",
         sections: [
@@ -140,7 +140,7 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
     },
     {
       name: "CATEGORIES",
-      href: "/shop",
+      href: "/categories",
       megaMenu: {
         cols: "grid-cols-4",
         sections: [
@@ -179,7 +179,7 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
     },
     {
       name: "CONCERNS",
-      href: "/shop",
+      href: "/concerns",
       megaMenu: {
         cols: "grid-cols-4",
         sections: [

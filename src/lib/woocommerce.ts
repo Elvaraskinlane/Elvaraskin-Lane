@@ -276,3 +276,51 @@ export async function searchProducts(query: string): Promise<WCProduct[]> {
     return [];
   }
 }
+
+export async function getAllCategories(): Promise<{ id: number; name: string; slug: string; count: number }[]> {
+  if (!WORDPRESS_URL || !CONSUMER_KEY || !CONSUMER_SECRET) return [];
+  const url = `${WORDPRESS_URL}/wp-json/wc/v3/products/categories?per_page=100`;
+  try {
+    const response = await fetch(url, { headers: getAuthHeaders(), next: { revalidate: 3600 } });
+    if (!response.ok) return [];
+    return (await response.json()) as { id: number; name: string; slug: string; count: number }[];
+  } catch (error) {
+    console.error("Error fetching WooCommerce categories:", error);
+    return [];
+  }
+}
+
+export async function getAllTags(): Promise<{ id: number; name: string; slug: string; count: number }[]> {
+  if (!WORDPRESS_URL || !CONSUMER_KEY || !CONSUMER_SECRET) return [];
+  const url = `${WORDPRESS_URL}/wp-json/wc/v3/products/tags?per_page=100`;
+  try {
+    const response = await fetch(url, { headers: getAuthHeaders(), next: { revalidate: 3600 } });
+    if (!response.ok) return [];
+    return (await response.json()) as { id: number; name: string; slug: string; count: number }[];
+  } catch (error) {
+    console.error("Error fetching WooCommerce tags:", error);
+    return [];
+  }
+}
+
+export async function getAllBrands(): Promise<{ id: number; name: string; slug: string; count: number }[]> {
+  if (!WORDPRESS_URL || !CONSUMER_KEY || !CONSUMER_SECRET) return [];
+  
+  // First get the attribute ID for 'pa_brand'
+  try {
+    const attrRes = await fetch(`${WORDPRESS_URL}/wp-json/wc/v3/products/attributes`, { headers: getAuthHeaders(), next: { revalidate: 3600 } });
+    if (!attrRes.ok) return [];
+    const attributes = await attrRes.json();
+    const brandAttr = attributes.find((a: any) => a.slug === 'pa_brand');
+    
+    if (!brandAttr) return [];
+    
+    // Fetch terms for that attribute
+    const termsRes = await fetch(`${WORDPRESS_URL}/wp-json/wc/v3/products/attributes/${brandAttr.id}/terms?per_page=100`, { headers: getAuthHeaders(), next: { revalidate: 3600 } });
+    if (!termsRes.ok) return [];
+    return (await termsRes.json()) as { id: number; name: string; slug: string; count: number }[];
+  } catch (error) {
+    console.error("Error fetching WooCommerce brands:", error);
+    return [];
+  }
+}
