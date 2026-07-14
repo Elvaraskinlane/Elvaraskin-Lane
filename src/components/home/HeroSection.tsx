@@ -6,21 +6,21 @@ import Link from "next/link";
 
 const slides = [
   {
-    image: "/hero-1.png",
+    image: "/hero-slide-1.jpg",
     title: "Radiance Redefined",
     subtitle: "Discover potent, natural formulas crafted to illuminate your unique beauty. Experience skincare as a luxurious, restorative ritual.",
     cta: "Shop the Collection",
     href: "/shop",
   },
   {
-    image: "/hero-2-fixed.png",
+    image: "/hero-slide-2.jpg",
     title: "Nature's Purest Essence",
     subtitle: "Sourced from the most pristine environments, our botanicals deliver transformative results you can see and feel immediately.",
     cta: "Explore Ingredients",
     href: "/about",
   },
   {
-    image: "/hero-3.png",
+    image: "/hero-slide-3.jpg",
     title: "Your Daily Ritual",
     subtitle: "More than just skincare. Elevate your morning and evening routines into a sacred time dedicated entirely to your wellbeing.",
     cta: "View Rituals",
