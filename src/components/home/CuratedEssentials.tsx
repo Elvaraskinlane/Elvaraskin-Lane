@@ -14,7 +14,7 @@ export default function CuratedEssentials() {
       <div className="grid grid-cols-1 md:grid-cols-12 gap-gutter h-auto md:h-[600px] w-full">
         
         {/* Skincare (Large Left) */}
-        <Link href="/skincare" className="md:col-span-7 relative group overflow-hidden bg-surface-container h-96 md:h-full flex items-end p-8">
+        <Link href="/shop" className="md:col-span-7 relative group overflow-hidden bg-surface-container h-96 md:h-full flex items-end p-8">
           <div className="absolute inset-0">
             <Image 
               src="/hero-1.png" 
@@ -36,7 +36,7 @@ export default function CuratedEssentials() {
         <div className="md:col-span-5 flex flex-col gap-gutter h-full">
           
           {/* Body Care (Top Right) */}
-          <Link href="/body-care" className="relative group overflow-hidden bg-surface-container h-64 md:h-1/2 flex items-end p-8">
+          <Link href="/shop?category=bath-body" className="relative group overflow-hidden bg-surface-container h-64 md:h-1/2 flex items-end p-8">
             <div className="absolute inset-0">
               <Image 
                 src="/hero-2-fixed.png" 
@@ -55,7 +55,7 @@ export default function CuratedEssentials() {
           </Link>
 
           {/* Rituals (Bottom Right) */}
-          <Link href="/rituals" className="relative group overflow-hidden bg-surface-container h-64 md:h-1/2 flex items-end p-8">
+          <Link href="/shop" className="relative group overflow-hidden bg-surface-container h-64 md:h-1/2 flex items-end p-8">
             <div className="absolute inset-0">
               <Image 
                 src="/hero-3.png" 

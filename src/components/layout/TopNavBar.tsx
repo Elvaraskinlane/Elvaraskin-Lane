@@ -64,6 +64,7 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
         sections: [
           {
             title: "A - D",
+            href: "/brands",
             links: [
               { name: "Advanced Clinicals", href: "/shop?brand=advanced-clinicals" },
               { name: "Advanced Korean Products", href: "/shop?brand=advanced-korean-products" },
@@ -83,6 +84,7 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
           },
           {
             title: "E - L",
+            href: "/brands",
             links: [
               { name: "EDEN", href: "/shop?brand=eden" },
               { name: "EOS", href: "/shop?brand=eos" },
@@ -99,6 +101,7 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
           },
           {
             title: "M - Z",
+            href: "/brands",
             links: [
               { name: "MARY & MAY", href: "/shop?brand=mary-may" },
               { name: "Medicube", href: "/shop?brand=medicube" },
@@ -127,7 +130,9 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
                     className="object-cover rounded-md"
                   />
                 </div>
-                <h4 className="font-bold text-lg mb-1 text-black dark:text-on-surface truncate">{featuredTitle}</h4>
+                <Link href={featuredLink} className="hover:text-black dark:hover:text-primary transition-colors">
+                  <h4 className="font-bold text-lg mb-1 text-black dark:text-on-surface truncate">{featuredTitle}</h4>
+                </Link>
                 <p className="text-sm text-gray-500 dark:text-on-surface-variant mb-4 line-clamp-2" title={featuredDesc}>{featuredDesc}</p>
                 <Link href={featuredLink} className="mt-auto inline-block font-semibold text-sm hover:underline uppercase tracking-wider text-black dark:text-primary">
                   SHOP NOW
@@ -146,6 +151,7 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
         sections: [
           {
             title: "Face Care",
+            href: "/shop?category=face-care",
             links: [
               { name: "Cleansers", href: "/category/cleansers" },
               { name: "Toners & Mists", href: "/category/toners-mists" },
@@ -156,6 +162,7 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
           },
           {
             title: "Body & Hair",
+            href: "/shop?category=bath-body",
             links: [
               { name: "Bath & Body", href: "/category/bath-body" },
               { name: "Hair Care", href: "/category/hair-care" },
@@ -165,6 +172,7 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
           },
           {
             title: "Specialized Collections",
+            href: "/shop",
             links: [
               { name: "Babies & Children", href: "/category/babies-children" },
               { name: "Makeup", href: "/category/makeup" },
@@ -185,6 +193,7 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
         sections: [
           {
             title: "Targeted Solutions",
+            href: "/shop",
             links: [
               { name: "Acne & Breakouts", href: "/shop?concern=acne-breakouts" },
               { name: "Dark Spots & Hyperpigmentation", href: "/shop?concern=dark-spots-hyperpigmentation" },
@@ -196,6 +205,7 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
           },
           {
             title: "More Concerns",
+            href: "/shop",
             links: [
               { name: "Fine Lines & Wrinkles", href: "/shop?concern=fine-lines-wrinkles" },
               { name: "Dull Skin", href: "/shop?concern=dull-skin" },
@@ -277,9 +287,15 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
                   <div className={`max-w-[1280px] mx-auto grid ${link.megaMenu.cols} gap-8 p-8`}>
                     {link.megaMenu.sections.map((section) => (
                       <div key={section.title} className="flex flex-col">
-                        <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-outline-variant mb-4">
-                          {section.title}
-                        </h3>
+                        {section.href ? (
+                          <Link href={section.href} className="text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-outline-variant hover:text-black dark:hover:text-primary hover:underline cursor-pointer transition-colors mb-4 block">
+                            {section.title}
+                          </Link>
+                        ) : (
+                          <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-outline-variant mb-4">
+                            {section.title}
+                          </h3>
+                        )}
                         {section.isCustom && section.customContent ? (
                           section.customContent
                         ) : (
