@@ -151,7 +151,7 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
         sections: [
           {
             title: "Face Care",
-            href: "/shop?category=face-care",
+            href: "/shop?category=face",
             links: [
               { name: "Cleansers", href: "/category/cleansers" },
               { name: "Toners & Mists", href: "/category/toners-mists" },
