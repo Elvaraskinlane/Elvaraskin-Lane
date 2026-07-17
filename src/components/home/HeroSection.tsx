@@ -6,23 +6,23 @@ import Link from "next/link";
 
 const slides = [
   {
-    image: "/hero-slide-1.jpg",
-    title: "Discover Your Favorites",
-    subtitle: "Explore our curated collection of the world's most innovative and effective skincare brands, tailored for your unique beauty.",
-    cta: "Shop by Brands",
+    image: "/hero-retail-3.png",
+    title: "Your Premier Beauty Destination",
+    subtitle: "Shop 100+ authentic global skincare, haircare, and makeup brands all in one place. From K-Beauty staples to dermatologist favorites.",
+    cta: "Shop All Brands",
     href: "/brands",
   },
   {
-    image: "/hero-slide-2.jpg",
-    title: "Tailored For You",
-    subtitle: "Whether you need a daily cleanser or a potent serum, explore our complete range of skincare categories designed for your routine.",
-    cta: "Shop by Category",
+    image: "/hero-retail-2.png",
+    title: "Curated For Every Routine",
+    subtitle: "Whether you need a daily cleanser, a potent serum, or luxury hair extensions, we source the highest quality products for your unique needs.",
+    cta: "Explore Categories",
     href: "/categories",
   },
   {
-    image: "/hero-slide-3.jpg",
-    title: "Targeted Solutions",
-    subtitle: "Find targeted skincare solutions carefully curated for your specific skin concerns, from acne to hyperpigmentation.",
+    image: "/hero-retail-1.png",
+    title: "Targeted Skin Solutions",
+    subtitle: "Struggling with acne, hyperpigmentation, or dullness? Discover proven, authentic products formulated to treat your specific concerns.",
     cta: "Shop by Concern",
     href: "/concerns",
   }
