@@ -1,18 +1,36 @@
 "use client";
 
 import { useState } from "react";
+import { Turnstile } from "@marsidev/react-turnstile";
+import { verifyTurnstileToken } from "@/app/actions/turnstile";
 
 export default function ContactForm() {
   const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
+  const [error, setError] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("loading");
-    
-    // Simulate API delay (to be replaced with actual form endpoint)
-    setTimeout(() => {
-      setStatus("success");
-    }, 1200);
+    setError("");
+
+    try {
+      if (!turnstileToken) {
+        throw new Error("Please complete the security check.");
+      }
+      const verifyResult = await verifyTurnstileToken(turnstileToken);
+      if (!verifyResult.success) {
+        throw new Error("Security check failed. Please try again.");
+      }
+      
+      // Simulate API delay (to be replaced with actual form endpoint)
+      setTimeout(() => {
+        setStatus("success");
+      }, 1200);
+    } catch (err: any) {
+      setError(err.message || "An error occurred.");
+      setStatus("idle");
+    }
   };
 
   if (status === "success") {
@@ -32,6 +50,11 @@ export default function ContactForm() {
       <h2 className="font-headline-sm text-headline-sm text-on-surface mb-8">Send a Message</h2>
       
       <form onSubmit={handleSubmit} className="space-y-10">
+        {error && (
+          <div className="bg-error-container text-on-error-container p-3 rounded-md font-body-md text-sm">
+            {error}
+          </div>
+        )}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="flex flex-col">
             <label className="font-label-md text-label-md text-on-surface-variant mb-2" htmlFor="firstName">First Name</label>
@@ -85,6 +108,15 @@ export default function ContactForm() {
             rows={5}
             className="w-full py-2 bg-transparent border-0 border-b border-secondary-fixed-dim focus:ring-0 focus:border-primary transition-colors duration-200 rounded-none font-body-md text-body-md text-on-surface resize-none"
           ></textarea>
+        </div>
+
+        {/* Cloudflare Turnstile */}
+        <div className="cf-turnstile" data-action="turnstile-spin-v2">
+          <Turnstile 
+            siteKey="0x4AAAAAAD7LNMDvUnit7Q_H" 
+            onSuccess={(token) => setTurnstileToken(token)}
+            options={{ action: "turnstile-spin-v2" }}
+          />
         </div>
 
         <button 

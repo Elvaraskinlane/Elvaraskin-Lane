@@ -1,17 +1,37 @@
 "use client";
 
 import { useState } from "react";
+import { Turnstile } from "@marsidev/react-turnstile";
+import { verifyTurnstileToken } from "@/app/actions/turnstile";
 import Link from "next/link";
 
 export default function LoginForm() {
   const [view, setView] = useState<"login" | "register">("login");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // TODO: Wire up NextAuth or Supabase auth here
-    setTimeout(() => setIsLoading(false), 1500);
+    setError("");
+
+    try {
+      if (!turnstileToken) {
+        throw new Error("Please complete the security check.");
+      }
+      const verifyResult = await verifyTurnstileToken(turnstileToken);
+      if (!verifyResult.success) {
+        throw new Error("Security check failed. Please try again.");
+      }
+
+      // TODO: Wire up NextAuth or Supabase auth here
+      setTimeout(() => setIsLoading(false), 1500);
+    } catch (err: any) {
+      setError(err.message || "An error occurred.");
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -48,6 +68,11 @@ export default function LoginForm() {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
+          {error && (
+            <div className="bg-error-container text-on-error-container p-3 rounded-md font-body-md text-sm">
+              {error}
+            </div>
+          )}
           <div className="space-y-2 group">
             <label className="font-label-md text-label-md text-on-surface-variant group-focus-within:text-primary transition-colors" htmlFor="email">
               Email Address
@@ -82,6 +107,15 @@ export default function LoginForm() {
             <button type="button" className="absolute right-0 bottom-3 text-on-surface-variant hover:text-primary transition-colors">
               <span className="material-symbols-outlined text-xl">visibility_off</span>
             </button>
+          </div>
+
+          {/* Cloudflare Turnstile */}
+          <div className="cf-turnstile" data-action="turnstile-spin-v2">
+            <Turnstile 
+              siteKey="0x4AAAAAAD7LNMDvUnit7Q_H" 
+              onSuccess={(token) => setTurnstileToken(token)}
+              options={{ action: "turnstile-spin-v2" }}
+            />
           </div>
 
           <div className="pt-6 space-y-4">

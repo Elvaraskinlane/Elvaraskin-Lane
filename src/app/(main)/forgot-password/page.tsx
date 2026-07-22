@@ -2,12 +2,15 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { Turnstile } from "@marsidev/react-turnstile";
+import { verifyTurnstileToken } from "@/app/actions/turnstile";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,6 +20,14 @@ export default function ForgotPasswordPage() {
     setError("");
 
     try {
+      if (!turnstileToken) {
+        throw new Error("Please complete the security check.");
+      }
+      const verifyResult = await verifyTurnstileToken(turnstileToken);
+      if (!verifyResult.success) {
+        throw new Error("Security check failed. Please try again.");
+      }
+
       const response = await fetch("/api/auth/forgot", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -80,6 +91,15 @@ export default function ForgotPasswordPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
                 className="w-full bg-surface-container-highest border border-outline-variant/50 rounded-md px-4 py-3 focus:ring-1 focus:ring-primary focus:border-primary text-on-background outline-none transition-all placeholder:text-on-surface-variant/40"
+              />
+            </div>
+
+            {/* Cloudflare Turnstile */}
+            <div className="cf-turnstile" data-action="turnstile-spin-v2">
+              <Turnstile 
+                siteKey="0x4AAAAAAD7LNMDvUnit7Q_H" 
+                onSuccess={(token) => setTurnstileToken(token)}
+                options={{ action: "turnstile-spin-v2" }}
               />
             </div>
 

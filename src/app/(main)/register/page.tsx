@@ -6,6 +6,7 @@ import Link from "next/link";
 import { registerCustomer, loginCustomer } from "@/lib/auth";
 import { useAuthStore } from "@/store/useAuthStore";
 import { Turnstile } from "@marsidev/react-turnstile";
+import { verifyTurnstileToken } from "@/app/actions/turnstile";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -17,6 +18,7 @@ export default function RegisterPage() {
   
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState("");
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,6 +26,13 @@ export default function RegisterPage() {
     setError("");
 
     try {
+      if (!turnstileToken) {
+        throw new Error("Please complete the security check.");
+      }
+      const verifyResult = await verifyTurnstileToken(turnstileToken);
+      if (!verifyResult.success) {
+        throw new Error("Security check failed. Please try again.");
+      }
       // 1. Register the customer via proxy
       await registerCustomer(email, password, firstName);
       
@@ -108,8 +117,12 @@ export default function RegisterPage() {
           </div>
 
           {/* Cloudflare Turnstile */}
-          <div className="pt-2">
-            <Turnstile siteKey="1x00000000000000000000AA" />
+          <div className="pt-2 cf-turnstile" data-action="turnstile-spin-v2">
+            <Turnstile 
+              siteKey="0x4AAAAAAD7LNMDvUnit7Q_H" 
+              onSuccess={(token) => setTurnstileToken(token)}
+              options={{ action: "turnstile-spin-v2" }}
+            />
           </div>
           
           <button 

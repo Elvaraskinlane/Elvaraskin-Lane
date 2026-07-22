@@ -7,6 +7,7 @@ import { useWishlistStore } from "@/store/useWishlistStore";
 import { useAuthStore } from "@/store/useAuthStore";
 import { loginCustomer } from "@/lib/auth";
 import { Turnstile } from "@marsidev/react-turnstile";
+import { verifyTurnstileToken } from "@/app/actions/turnstile";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -16,6 +17,7 @@ export default function AuthModal() {
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState("");
   
   // Connect directly to the global store
   const { isAuthModalOpen, closeAuthModal } = useUIStore();
@@ -31,6 +33,14 @@ export default function AuthModal() {
     setError("");
 
     try {
+      if (!turnstileToken) {
+        throw new Error("Please complete the security check.");
+      }
+      const verifyResult = await verifyTurnstileToken(turnstileToken);
+      if (!verifyResult.success) {
+        throw new Error("Security check failed. Please try again.");
+      }
+
       const data = await loginCustomer(username, password);
       login({
         token: data.token,
@@ -153,8 +163,12 @@ export default function AuthModal() {
             </div>
 
             {/* Cloudflare Turnstile */}
-            <div className="mt-4">
-              <Turnstile siteKey="1x00000000000000000000AA" />
+            <div className="mt-4 cf-turnstile" data-action="turnstile-spin-v2">
+              <Turnstile 
+                siteKey="0x4AAAAAAD7LNMDvUnit7Q_H" 
+                onSuccess={(token) => setTurnstileToken(token)}
+                options={{ action: "turnstile-spin-v2" }}
+              />
             </div>
             
             <button 

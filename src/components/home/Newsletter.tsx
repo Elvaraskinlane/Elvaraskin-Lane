@@ -1,21 +1,39 @@
 "use client";
 
 import { useState } from "react";
+import { Turnstile } from "@marsidev/react-turnstile";
+import { verifyTurnstileToken } from "@/app/actions/turnstile";
 
 export default function Newsletter() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
+  const [error, setError] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("loading");
-    
-    // Simulate API call delay
-    setTimeout(() => {
+    setError("");
+
+    try {
+      if (!turnstileToken) {
+        throw new Error("Please complete the security check.");
+      }
+      const verifyResult = await verifyTurnstileToken(turnstileToken);
+      if (!verifyResult.success) {
+        throw new Error("Security check failed. Please try again.");
+      }
+      
+      // Simulate API call delay
+      setTimeout(() => {
       console.log(`Subscribing email: ${email}`);
-      setStatus("success");
-      setEmail("");
-    }, 1000);
+        setStatus("success");
+        setEmail("");
+      }, 1000);
+    } catch (err: any) {
+      setError(err.message || "An error occurred.");
+      setStatus("idle");
+    }
   };
 
   return (
@@ -31,8 +49,14 @@ export default function Newsletter() {
             Welcome to the Inner Circle. Please check your inbox.
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row max-w-md mx-auto gap-4">
-            <div className="relative flex-grow">
+          <form onSubmit={handleSubmit} className="flex flex-col mx-auto gap-4">
+            {error && (
+              <div className="bg-error-container text-on-error-container p-3 rounded-md font-body-md text-sm text-left">
+                {error}
+              </div>
+            )}
+            <div className="flex flex-col sm:flex-row gap-4">
+              <div className="relative flex-grow">
               <label htmlFor="email" className="sr-only">Email Address</label>
               <input 
                 type="email" 
@@ -51,7 +75,17 @@ export default function Newsletter() {
               className="shrink-0 px-8 py-3 bg-primary text-on-primary font-label-md text-label-md uppercase tracking-widest hover:bg-on-background transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {status === "loading" ? "Joining..." : "Subscribe"}
-            </button>
+              </button>
+            </div>
+            
+            {/* Cloudflare Turnstile */}
+            <div className="cf-turnstile self-center" data-action="turnstile-spin-v2">
+              <Turnstile 
+                siteKey="0x4AAAAAAD7LNMDvUnit7Q_H" 
+                onSuccess={(token) => setTurnstileToken(token)}
+                options={{ action: "turnstile-spin-v2" }}
+              />
+            </div>
           </form>
         )}
       </div>

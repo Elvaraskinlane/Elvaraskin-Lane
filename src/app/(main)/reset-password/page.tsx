@@ -4,6 +4,8 @@ import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useUIStore } from "@/store/useUIStore";
+import { Turnstile } from "@marsidev/react-turnstile";
+import { verifyTurnstileToken } from "@/app/actions/turnstile";
 
 function ResetPasswordForm() {
   const searchParams = useSearchParams();
@@ -15,6 +17,7 @@ function ResetPasswordForm() {
   const [loading, setLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState("");
   
   const { openAuthModal } = useUIStore();
 
@@ -51,6 +54,14 @@ function ResetPasswordForm() {
     setError("");
 
     try {
+      if (!turnstileToken) {
+        throw new Error("Please complete the security check.");
+      }
+      const verifyResult = await verifyTurnstileToken(turnstileToken);
+      if (!verifyResult.success) {
+        throw new Error("Security check failed. Please try again.");
+      }
+
       const response = await fetch("/api/auth/reset", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -139,6 +150,15 @@ function ResetPasswordForm() {
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="••••••••"
               className="w-full bg-surface-container-highest border border-outline-variant/50 rounded-md px-4 py-3 focus:ring-1 focus:ring-primary focus:border-primary text-on-background outline-none transition-all placeholder:text-on-surface-variant/40"
+            />
+          </div>
+
+          {/* Cloudflare Turnstile */}
+          <div className="cf-turnstile" data-action="turnstile-spin-v2">
+            <Turnstile 
+              siteKey="0x4AAAAAAD7LNMDvUnit7Q_H" 
+              onSuccess={(token) => setTurnstileToken(token)}
+              options={{ action: "turnstile-spin-v2" }}
             />
           </div>
 
