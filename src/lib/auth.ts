@@ -20,16 +20,30 @@ export async function loginCustomer(username: string, password: string) {
       }),
     });
 
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.message || "Failed to login. Please check your credentials.");
+    // 1. Guard against non-JSON responses (like server crashes or raw HTML dumps)
+    const contentType = response.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+      throw new Error("Invalid email or password");
     }
 
+    // 2. Safely parse the JSON payload
+    const data = await response.json();
+
+    // 3. Catch HTTP error statuses (401 Unauthorized, 403 Forbidden)
+    if (!response.ok) {
+      /* 
+       WordPress sends detailed errors in data.message, but they often contain HTML. 
+       Instead of trying to regex strip the HTML, we force a secure, generic fallback string.
+      */
+      throw new Error("Invalid email or password"); 
+    }
+
+    // 4. Success state
     return data;
   } catch (error: any) {
-    console.error("Login Error:", error);
-    throw error;
+    // 5. The absolute fallback: ensure the UI only ever receives clean text
+    console.error("Login Exception:", error);
+    throw new Error("Invalid email or password");
   }
 }
 
