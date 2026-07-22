@@ -6,6 +6,12 @@ import AddToCartPanel from "@/components/product/AddToCartPanel";
 import BestsellersCarousel from "@/components/home/BestsellersCarousel";
 import ProductShare from "@/components/product/ProductShare";
 
+export const dynamicParams = true; // Allows on-demand generation for new products
+
+export async function generateStaticParams() {
+  return []; // Return an empty array or initial slugs. Next.js will build the rest on demand.
+}
+
 export default async function ProductDetailsPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   
