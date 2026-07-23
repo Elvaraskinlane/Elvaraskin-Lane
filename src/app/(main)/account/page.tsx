@@ -168,23 +168,59 @@ export default function AccountDashboardPage() {
               <p className="font-body-md text-sm text-on-surface-variant">Your wishlist is empty. Start saving your favorite rituals!</p>
             </div>
           ) : (
-            wishlistItems.map((item) => (
-              <div key={item.id} className="group relative bg-surface-container rounded-md overflow-hidden border border-outline-variant/20 hover:border-primary/50 transition-colors flex flex-col">
-                <div className="relative aspect-square bg-surface-container-highest">
-                  {item.image ? (
-                    <Image src={item.image} alt={item.name} fill className="object-cover" />
-                  ) : (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="material-symbols-outlined text-on-surface-variant/30 text-4xl">image</span>
-                    </div>
-                  )}
+            wishlistItems.map((item) => {
+              const CardContent = (
+                <>
+                  <div className="relative aspect-square bg-surface-container-highest">
+                    {item.image ? (
+                      <Image src={item.image} alt={item.name} fill className="object-cover" />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <span className="material-symbols-outlined text-on-surface-variant/30 text-4xl">image</span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-4 flex flex-col flex-grow">
+                    <h4 className="font-body-md text-sm text-on-surface line-clamp-2 mb-2 flex-grow" dangerouslySetInnerHTML={{ __html: item.name }} />
+                    <div className="font-label-md text-on-surface font-medium mb-4" dangerouslySetInnerHTML={{ __html: item.price }} />
+                    
+                    {/* Conversion UX: Quick Add to Cart from Wishlist */}
+                    <button 
+                      onClick={(e) => {
+                        e.preventDefault(); // Prevent navigating to the product page
+                        import("@/store/useCartStore").then(module => {
+                          module.useCartStore.getState().addItem(item.id, 1);
+                          import("@/store/useUIStore").then(uiModule => {
+                            uiModule.useUIStore.getState().openCartDrawer();
+                          });
+                        });
+                      }}
+                      className="w-full py-2.5 bg-surface-container-highest hover:bg-primary hover:text-on-primary text-on-surface text-xs font-label-md uppercase tracking-wider transition-colors rounded-sm flex items-center justify-center gap-2 mt-auto"
+                    >
+                      <span className="material-symbols-outlined text-[16px]">shopping_bag</span>
+                      Add to Cart
+                    </button>
+                  </div>
+                </>
+              );
+
+              return item.slug ? (
+                <Link 
+                  href={`/product/${item.slug}`} 
+                  key={item.id} 
+                  className="group relative bg-surface-container rounded-md overflow-hidden border border-outline-variant/20 hover:border-primary/50 transition-colors flex flex-col cursor-pointer"
+                >
+                  {CardContent}
+                </Link>
+              ) : (
+                <div 
+                  key={item.id} 
+                  className="group relative bg-surface-container rounded-md overflow-hidden border border-outline-variant/20 flex flex-col"
+                >
+                  {CardContent}
                 </div>
-                <div className="p-4 flex flex-col flex-grow">
-                  <h4 className="font-body-md text-sm text-on-surface line-clamp-2 mb-2 flex-grow" dangerouslySetInnerHTML={{ __html: item.name }} />
-                  <div className="font-label-md text-on-surface font-medium" dangerouslySetInnerHTML={{ __html: item.price }} />
-                </div>
-              </div>
-            ))
+              );
+            })
           )}
         </div>
       </section>

@@ -82,12 +82,12 @@ export default function BestsellersCarousel({ initialProducts = [] }: Bestseller
       <div ref={scrollRef} className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar px-margin-mobile md:px-margin-desktop pb-8 space-x-6 md:space-x-8 w-full max-w-[1280px] mx-auto scroll-smooth">
         {initialProducts.map((product) => (
           <Link href={`/product/${product.slug}`} key={product.id} className="flex-none w-[280px] md:w-[320px] snap-start group cursor-pointer block">
-            <div className="relative aspect-[4/5] bg-surface mb-6 overflow-hidden rounded-sm flex items-center justify-center">
+            <div className="relative aspect-[4/5] bg-white mb-6 overflow-hidden rounded-md flex items-center justify-center border border-outline-variant/10 shadow-sm transition-shadow duration-300 group-hover:shadow-md">
               <Image 
                 src={product.images?.[0]?.src || "/hero-2-fixed.png"} 
                 alt={product.name}
                 fill
-                className="object-cover transition-transform duration-700 ease-out group-hover:scale-105 mix-blend-multiply p-4"
+                className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
                 sizes="(max-width: 768px) 280px, 320px"
               />
               
@@ -109,7 +109,7 @@ export default function BestsellersCarousel({ initialProducts = [] }: Bestseller
               </button>
             </div>
             <div className="text-center">
-              <h4 className="font-headline-sm text-[20px] leading-tight text-on-background mb-2">{product.name}</h4>
+              <h4 className="font-headline-sm text-[20px] leading-tight text-on-background mb-2 line-clamp-1">{product.name}</h4>
               <p className="font-body-md text-body-md text-on-surface-variant">{formatPrice(product.price)}</p>
             </div>
           </Link>

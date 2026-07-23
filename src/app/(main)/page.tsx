@@ -7,8 +7,23 @@ import Newsletter from "@/components/home/Newsletter";
 import { getProducts } from "@/lib/woocommerce";
 
 export default async function Home() {
-  // Fetch the top 6 products from WordPress for the carousel
-  const liveProducts = await getProducts(6);
+  // Fetch products from different categories to ensure a diverse, classy mix
+  const [faceProducts, bodyProducts, fragranceProducts, makeupProducts] = await Promise.all([
+    getProducts(4, { category: 'face' }),
+    getProducts(4, { category: 'bath-body' }),
+    getProducts(4, { category: 'fragrance' }),
+    getProducts(4, { category: 'makeup' }),
+  ]);
+
+  // Combine and filter only products that have images
+  const allProducts = [...faceProducts, ...bodyProducts, ...fragranceProducts, ...makeupProducts]
+    .filter(p => p.images && p.images.length > 0);
+
+  // Shuffle the array to make it random but professional
+  const shuffled = allProducts.sort(() => 0.5 - Math.random());
+  
+  // Pick the top 8 for the carousel
+  const carouselProducts = shuffled.slice(0, 8);
 
   return (
     <div className="flex flex-col w-full animate-fade-in">
@@ -16,7 +31,7 @@ export default async function Home() {
       <ValueProps />
       <CuratedEssentials />
       {/* Hydrate the carousel with live database items */}
-      <BestsellersCarousel initialProducts={liveProducts} />
+      <BestsellersCarousel initialProducts={carouselProducts} />
       <BrandStory />
       <Newsletter />
     </div>

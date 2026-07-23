@@ -51,7 +51,7 @@ export default function CartDrawer() {
             <div className="flex justify-center items-center h-full">
               <span className="material-symbols-outlined animate-spin text-primary text-3xl">progress_activity</span>
             </div>
-          ) : !cart || cart.items.length === 0 ? (
+          ) : !cart?.items?.length ? (
             <div className="text-center h-full flex flex-col justify-center items-center">
               <span className="material-symbols-outlined text-5xl text-outline-variant mb-4">shopping_bag</span>
               <p className="font-body-md text-on-surface-variant">Your bag is empty.</p>
@@ -105,7 +105,7 @@ export default function CartDrawer() {
           <div className="flex justify-between items-end mb-8">
             <span className="font-body-md text-on-surface-variant uppercase tracking-widest text-sm">Subtotal</span>
             <span className="font-headline-sm text-2xl text-on-surface tracking-tight">
-              {cart ? formatPrice(cart.totals.total_price) : "₦ 0"}
+              {cart?.totals?.total_price ? formatPrice(cart.totals.total_price) : "₦ 0"}
             </span>
           </div>
           <Link 

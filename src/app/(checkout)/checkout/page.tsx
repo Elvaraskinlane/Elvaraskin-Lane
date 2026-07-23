@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { useCartStore } from "@/store/useCartStore";
+import { useAuthStore } from "@/store/useAuthStore";
 import { processCheckout } from "@/lib/cart";
 
 export default function CheckoutPage() {
@@ -13,6 +14,7 @@ export default function CheckoutPage() {
   const { cart, clearCart, fetchCart } = useCartStore();
   const [isProcessing, setIsProcessing] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const { user, isAuthenticated, logout } = useAuthStore();
 
   // Form State
   const [formData, setFormData] = useState({
@@ -25,6 +27,7 @@ export default function CheckoutPage() {
     state: "",
     country: "NG", // Defaulting to Nigeria
     createAccount: false,
+    password: "",
   });
 
   useEffect(() => {
@@ -32,7 +35,21 @@ export default function CheckoutPage() {
     if (!cart) {
       fetchCart();
     }
-  }, [cart, fetchCart]);
+    
+    // Pre-fill form if user is logged in
+    if (isAuthenticated && user) {
+      setFormData(prev => {
+        // Only update if the form fields are currently empty (prevents overwriting user edits)
+        const nameParts = user.user_display_name ? user.user_display_name.split(' ') : [];
+        return {
+          ...prev,
+          first_name: prev.first_name || nameParts[0] || "",
+          last_name: prev.last_name || nameParts.slice(1).join(' ') || "",
+          email: prev.email || user.user_email || "",
+        };
+      });
+    }
+  }, [cart, fetchCart, isAuthenticated, user]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -75,8 +92,27 @@ export default function CheckoutPage() {
         },
         callback: function (response: any) {
           // Step C: Reconcile and redirect upon successful payment
-          clearCart();
-          router.push(`/order-success?reference=${response.reference}`);
+          (async () => {
+            try {
+              const verifyRes = await fetch('/api/verify-payment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  reference: response.reference,
+                  orderId: orderId,
+                })
+              });
+
+              if (!verifyRes.ok) {
+                console.error("Payment verification failed on the server.");
+              }
+            } catch (err) {
+              console.error("Payment verification request failed:", err);
+            } finally {
+              clearCart();
+              router.push(`/order-success?reference=${response.reference}`);
+            }
+          })();
         },
         onClose: function () {
           setIsProcessing(false);
@@ -120,6 +156,23 @@ export default function CheckoutPage() {
           <h2 className="font-headline-sm text-lg text-on-surface uppercase tracking-widest mb-8 border-b border-outline-variant/30 pb-4">
             Billing Details
           </h2>
+
+          {isAuthenticated && user && (
+            <div className="mb-8 p-4 bg-secondary-container/20 border border-secondary-container rounded-sm flex items-start gap-3">
+              <span className="material-symbols-outlined text-secondary text-[20px] mt-0.5">account_circle</span>
+              <div>
+                <p className="font-body-md text-sm text-on-surface mb-1">
+                  You are checked in as <span className="font-medium">{user.user_email}</span>.
+                </p>
+                <button 
+                  onClick={() => logout()}
+                  className="font-label-md text-xs text-primary uppercase tracking-wider hover:underline"
+                >
+                  Not you? Sign out
+                </button>
+              </div>
+            </div>
+          )}
 
           <form id="checkout-form" onSubmit={handlePayment} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -251,21 +304,40 @@ export default function CheckoutPage() {
               </div>
             </div>
 
-            {/* Create Account Checkbox */}
-            <div className="pt-4 mt-4 border-t border-outline-variant/20 flex items-start gap-3">
-              <input
-                type="checkbox"
-                id="createAccount"
-                name="createAccount"
-                checked={formData.createAccount || false}
-                onChange={(e) => setFormData(prev => ({ ...prev, createAccount: e.target.checked }))}
-                className="mt-1 w-4 h-4 text-primary bg-surface border-outline-variant focus:ring-primary focus:ring-2 cursor-pointer"
-              />
-              <label htmlFor="createAccount" className="font-body-md text-on-surface-variant cursor-pointer select-none">
-                <span className="block font-medium text-on-surface mb-0.5">Create an account?</span>
-                Check this box to automatically create an Elvara account with these details so you can track your order status later.
-              </label>
-            </div>
+            {/* Create Account Checkbox - ONLY SHOW IF NOT LOGGED IN */}
+            {!isAuthenticated && (
+              <>
+                <div className="pt-4 mt-4 border-t border-outline-variant/20 flex items-start gap-3">
+                  <input
+                    type="checkbox"
+                    id="createAccount"
+                    name="createAccount"
+                    checked={formData.createAccount || false}
+                    onChange={(e) => setFormData(prev => ({ ...prev, createAccount: e.target.checked }))}
+                    className="mt-1 w-4 h-4 text-primary bg-surface border-outline-variant focus:ring-primary focus:ring-2 cursor-pointer"
+                  />
+                  <label htmlFor="createAccount" className="font-body-md text-on-surface-variant cursor-pointer select-none">
+                    <span className="block font-medium text-on-surface mb-0.5">Create an account?</span>
+                    Check this box to automatically create an Elvara account with these details so you can track your order status later.
+                  </label>
+                </div>
+
+                {formData.createAccount && (
+                  <div className="space-y-2 animate-fade-in mt-4">
+                    <label className="font-label-md text-xs uppercase tracking-widest text-on-surface-variant">Account Password *</label>
+                    <input
+                      type="password"
+                      name="password"
+                      required={formData.createAccount}
+                      value={formData.password}
+                      onChange={handleInputChange}
+                      className="w-full h-14 bg-surface-container-lowest border border-outline-variant/30 px-4 focus:outline-none focus:border-on-surface transition-colors"
+                      placeholder="Enter a secure password"
+                    />
+                  </div>
+                )}
+              </>
+            )}
           </form>
         </div>
 

@@ -88,6 +88,7 @@ export default async function ProductDetailsPage({ params }: { params: Promise<{
               price={product.price} 
               stockStatus={product.stock_status || "instock"} 
               image={product.images?.[0]?.src || "/hero-2-fixed.png"}
+              slug={product.slug}
             />
             
             <ProductShare productName={product.name} />

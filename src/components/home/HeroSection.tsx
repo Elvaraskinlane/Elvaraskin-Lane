@@ -6,7 +6,7 @@ import Link from "next/link";
 
 const slides = [
   {
-    image: "/hero-retail-3.png",
+    image: "/hero-retail-1.png",
     title: "Your Premier Beauty Destination",
     subtitle: "Shop 100+ authentic global skincare, haircare, and makeup brands all in one place. From K-Beauty staples to dermatologist favorites.",
     cta: "Shop All Brands",
@@ -20,7 +20,7 @@ const slides = [
     href: "/categories",
   },
   {
-    image: "/hero-retail-1.png",
+    image: "/hero-retail-3.png",
     title: "Targeted Skin Solutions",
     subtitle: "Struggling with acne, hyperpigmentation, or dullness? Discover proven, authentic products formulated to treat your specific concerns.",
     cta: "Shop by Concern",

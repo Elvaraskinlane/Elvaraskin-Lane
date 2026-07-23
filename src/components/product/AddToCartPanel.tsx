@@ -11,9 +11,10 @@ interface AddToCartProps {
   stockStatus: string;
   productName: string;
   image?: string;
+  slug?: string;
 }
 
-export default function AddToCartPanel({ productId, price, stockStatus, productName, image = "" }: AddToCartProps) {
+export default function AddToCartPanel({ productId, price, stockStatus, productName, image = "", slug = "" }: AddToCartProps) {
   const [quantity, setQuantity] = useState(1);
   const [isAdding, setIsAdding] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -110,7 +111,7 @@ export default function AddToCartPanel({ productId, price, stockStatus, productN
         
         {/* Wishlist Toggle */}
         <button 
-          onClick={() => toggleItem({ id: productId, name: productName, price, image })}
+          onClick={() => toggleItem({ id: productId, name: productName, price, image, slug })}
           className={`h-14 w-14 flex-shrink-0 border rounded-none flex items-center justify-center transition-all ${
             isWished 
               ? 'border-error text-error bg-error-container/10 hover:bg-error-container/20' 

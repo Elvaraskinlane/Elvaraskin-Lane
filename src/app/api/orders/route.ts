@@ -19,29 +19,28 @@ export async function GET(request: Request) {
     });
 
     if (!verifyToken.ok) {
+      const errorText = await verifyToken.text();
+      console.error("JWT Verification failed:", verifyToken.status, errorText);
       return NextResponse.json({ message: "Invalid token" }, { status: 401 });
     }
 
-    // If token is valid, use Server-Side WooCommerce Consumer Keys to fetch orders by email
-    const wcUrl = `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wc/v3/orders?customer=${encodeURIComponent(email)}`;
-    
-    // We encode credentials for Basic Auth required by WC REST API
+    // If token is valid, use Server-Side WooCommerce Consumer Keys to fetch orders
     const wcKey = process.env.WC_CONSUMER_KEY || "";
     const wcSecret = process.env.WC_CONSUMER_SECRET || "";
-    const base64Credentials = Buffer.from(`${wcKey}:${wcSecret}`).toString('base64');
-
+    
+    // Fetch Orders by Email (this works for both Guest orders and registered Customer orders)
+    const wcUrl = `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wc/v3/orders?search=${encodeURIComponent(email)}&consumer_key=${wcKey}&consumer_secret=${wcSecret}`;
+    
     const ordersResponse = await fetch(wcUrl, {
       method: "GET",
-      headers: {
-        "Authorization": `Basic ${base64Credentials}`,
-        "Content-Type": "application/json"
-      }
+      headers: { "Content-Type": "application/json" }
     });
 
     const ordersData = await ordersResponse.json();
 
     if (!ordersResponse.ok) {
-      return NextResponse.json({ message: "Failed to fetch orders from WooCommerce" }, { status: ordersResponse.status });
+      console.error("WooCommerce Orders API failed:", ordersResponse.status, ordersData);
+      return NextResponse.json({ message: "Failed to fetch orders from WooCommerce", details: ordersData }, { status: ordersResponse.status });
     }
 
     return NextResponse.json({ orders: ordersData }, { status: 200 });

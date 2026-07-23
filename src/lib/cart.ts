@@ -96,7 +96,7 @@ export async function updateCartItem(itemKey: string, quantity: number) {
  */
 export async function processCheckout(checkoutData: any) {
   // Extract custom fields not meant for address data
-  const { createAccount, ...addressDataRaw } = checkoutData;
+  const { createAccount, password, ...addressDataRaw } = checkoutData;
 
   const addressData = {
     ...addressDataRaw,
@@ -108,6 +108,7 @@ export async function processCheckout(checkoutData: any) {
     shipping_address: addressData, // WooCommerce requires a shipping address for physical goods
     payment_method: "paystack",
     create_account: !!createAccount,
+    ...(createAccount && password ? { password, account_password: password } : {}),
   };
 
   const response = await fetch(`${WC_STORE_URL}/checkout`, {

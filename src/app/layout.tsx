@@ -21,6 +21,7 @@ export default function RootLayout({
         />
       </head>
       <body
+        suppressHydrationWarning
         className="bg-background text-on-background font-body-md antialiased selection:bg-secondary-container selection:text-on-secondary-container flex flex-col min-h-screen"
       >
         {children}

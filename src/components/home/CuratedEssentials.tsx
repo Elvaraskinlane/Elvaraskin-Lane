@@ -1,7 +1,19 @@
 import Image from "next/image";
 import Link from "next/link";
+import { getProducts } from "@/lib/woocommerce";
 
-export default function CuratedEssentials() {
+export default async function CuratedEssentials() {
+  // Directly fetch the latest products for each specific category to guarantee an image
+  const [faceProducts, bodyProducts, specialProducts] = await Promise.all([
+    getProducts(10, { category: 'face' }),
+    getProducts(10, { category: 'bath-body,hair-care' }),
+    getProducts(10, { category: 'aesthetician-kits-face,aesthetician-kits,gifts' })
+  ]);
+
+  const faceImg = faceProducts.find(p => p.images?.length > 0)?.images[0]?.src || "/hero-1.png";
+  const bodyImg = bodyProducts.find(p => p.images?.length > 0)?.images[0]?.src || "/hero-2-fixed.png";
+  const specialImg = specialProducts.find(p => p.images?.length > 0)?.images[0]?.src || "/hero-3.png";
+
   return (
     <section className="py-24 md:py-32 px-margin-mobile md:px-margin-desktop w-full max-w-[1280px] mx-auto">
       <div className="text-center mb-16">
@@ -13,20 +25,24 @@ export default function CuratedEssentials() {
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-gutter h-auto md:h-[600px] w-full">
         
-        {/* Skincare (Large Left) */}
-        <Link href="/shop" className="md:col-span-7 relative group overflow-hidden bg-surface-container h-96 md:h-full flex items-end p-8">
-          <div className="absolute inset-0">
+        {/* Face Care (Large Left) */}
+        <Link href="/shop?category=face" className="md:col-span-7 relative group overflow-hidden h-96 md:h-full flex items-end p-8 rounded-xl">
+          <div className="absolute inset-0 bg-white">
             <Image 
-              src="/hero-1.png" 
-              alt="Skincare Collection"
+              src={faceImg} 
+              alt="Face Care Collection"
               fill
-              className="object-cover transition-transform duration-700 group-hover:scale-105"
+              className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
             />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
           </div>
-          <div className="relative z-10">
-            <h3 className="font-headline-sm text-headline-sm text-on-background mb-2">Skincare</h3>
-            <div className="flex items-center text-on-background/80 font-label-md text-label-md group-hover:text-primary transition-colors">
-              <span>Explore Category</span>
+          <div className="relative z-10 w-full">
+            <h3 className="font-headline-sm text-headline-sm text-white mb-2">Face Care</h3>
+            <p className="font-body-md text-white/90 max-w-sm mb-4 text-shadow-sm">
+              Nourish, protect, and revitalize your complexion with our premium facial treatments.
+            </p>
+            <div className="flex items-center text-white/90 font-label-md text-label-md group-hover:text-white transition-colors">
+              <span>Explore Face Care</span>
               <span className="material-symbols-outlined ml-2 text-[18px]">arrow_forward</span>
             </div>
           </div>
@@ -35,39 +51,47 @@ export default function CuratedEssentials() {
         {/* Right Column Stack */}
         <div className="md:col-span-5 flex flex-col gap-gutter h-full">
           
-          {/* Body Care (Top Right) */}
-          <Link href="/shop?category=bath-body" className="relative group overflow-hidden bg-surface-container h-64 md:h-1/2 flex items-end p-8">
-            <div className="absolute inset-0">
+          {/* Body & Hair (Top Right) */}
+          <Link href="/shop?category=bath-body,hair-care" className="relative group overflow-hidden h-64 md:h-1/2 flex items-end p-8 rounded-xl">
+            <div className="absolute inset-0 bg-white">
               <Image 
-                src="/hero-2-fixed.png" 
-                alt="Body Care Collection"
+                src={bodyImg} 
+                alt="Body & Hair Collection"
                 fill
-                className="object-cover transition-transform duration-700 group-hover:scale-105"
+                className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
             </div>
-            <div className="relative z-10">
-              <h3 className="font-headline-sm text-headline-sm text-on-background mb-2">Body Care</h3>
-              <div className="flex items-center text-on-background/80 font-label-md text-label-md group-hover:text-primary transition-colors">
-                <span>Explore Category</span>
+            <div className="relative z-10 w-full">
+              <h3 className="font-headline-sm text-headline-sm text-white mb-2">Body & Hair</h3>
+              <p className="font-body-md text-white/90 max-w-sm mb-4 text-shadow-sm">
+                Luxurious hydration and restorative care from head to toe.
+              </p>
+              <div className="flex items-center text-white/90 font-label-md text-label-md group-hover:text-white transition-colors">
+                <span>Explore Body & Hair</span>
                 <span className="material-symbols-outlined ml-2 text-[18px]">arrow_forward</span>
               </div>
             </div>
           </Link>
 
-          {/* Rituals (Bottom Right) */}
-          <Link href="/shop" className="relative group overflow-hidden bg-surface-container h-64 md:h-1/2 flex items-end p-8">
-            <div className="absolute inset-0">
+          {/* Specialized Collections (Bottom Right) */}
+          <Link href="/shop?category=aesthetician-kits-face,aesthetician-kits" className="relative group overflow-hidden h-64 md:h-1/2 flex items-end p-8 rounded-xl">
+            <div className="absolute inset-0 bg-white">
               <Image 
-                src="/hero-3.png" 
-                alt="Rituals Collection"
+                src={specialImg} 
+                alt="Specialized Collections"
                 fill
-                className="object-cover transition-transform duration-700 group-hover:scale-105"
+                className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
             </div>
-            <div className="relative z-10">
-              <h3 className="font-headline-sm text-headline-sm text-on-background mb-2">Rituals</h3>
-              <div className="flex items-center text-on-background/80 font-label-md text-label-md group-hover:text-primary transition-colors">
-                <span>Explore Category</span>
+            <div className="relative z-10 w-full">
+              <h3 className="font-headline-sm text-headline-sm text-white mb-2">Specialized Collections</h3>
+              <p className="font-body-md text-white/90 max-w-sm mb-4 text-shadow-sm">
+                Targeted solutions and aesthetician-approved kits for specific needs.
+              </p>
+              <div className="flex items-center text-white/90 font-label-md text-label-md group-hover:text-white transition-colors">
+                <span>Explore Collections</span>
                 <span className="material-symbols-outlined ml-2 text-[18px]">arrow_forward</span>
               </div>
             </div>
