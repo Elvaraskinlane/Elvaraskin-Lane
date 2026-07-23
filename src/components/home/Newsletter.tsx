@@ -49,14 +49,14 @@ export default function Newsletter() {
             Welcome to the Inner Circle. Please check your inbox.
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="flex flex-col mx-auto gap-4">
+          <form onSubmit={handleSubmit} className="flex flex-col mx-auto w-full max-w-lg gap-6">
             {error && (
-              <div className="bg-error-container text-on-error-container p-3 rounded-md font-body-md text-sm text-left">
+              <div className="bg-error-container text-on-error-container p-3 rounded-md font-body-md text-sm text-center">
                 {error}
               </div>
             )}
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="relative flex-grow">
+            
+            <div className="relative flex items-center w-full border-b border-outline-variant focus-within:border-primary transition-colors duration-300 group">
               <label htmlFor="email" className="sr-only">Email Address</label>
               <input 
                 type="email" 
@@ -65,25 +65,25 @@ export default function Newsletter() {
                 disabled={status === "loading"}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Your email address" 
-                className="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 px-0 py-3 font-body-md text-body-md text-on-background placeholder:text-on-surface-variant/50 transition-colors disabled:opacity-50 outline-none"
+                placeholder="Enter your email address" 
+                className="w-full bg-transparent border-0 focus:ring-0 px-2 py-4 font-body-md text-body-md text-on-background placeholder:text-on-surface-variant/50 transition-colors disabled:opacity-50 outline-none"
               />
-            </div>
-            <button 
-              type="submit" 
-              disabled={status === "loading"}
-              className="shrink-0 px-8 py-3 bg-primary text-on-primary font-label-md text-label-md uppercase tracking-widest hover:bg-on-background transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {status === "loading" ? "Joining..." : "Subscribe"}
+              <button 
+                type="submit" 
+                disabled={status === "loading"}
+                className="shrink-0 px-4 py-4 text-primary font-label-md text-label-md uppercase tracking-widest hover:text-on-background transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed group-focus-within:text-on-background flex items-center gap-2"
+              >
+                {status === "loading" ? "Joining..." : "Subscribe"}
+                {!status && <span className="material-symbols-outlined text-[18px]">arrow_forward</span>}
               </button>
             </div>
             
-            {/* Cloudflare Turnstile */}
-            <div className="cf-turnstile self-center" data-action="turnstile-spin-v2">
+            {/* Cloudflare Turnstile (Invisible) */}
+            <div className="hidden">
               <Turnstile 
                 siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!} 
                 onSuccess={(token) => setTurnstileToken(token)}
-                options={{ action: "turnstile-spin-v2" }}
+                options={{ action: "turnstile-spin-v2", size: "invisible" }}
               />
             </div>
           </form>
