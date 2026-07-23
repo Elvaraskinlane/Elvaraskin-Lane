@@ -9,9 +9,17 @@ import { useCartStore } from "@/store/useCartStore";
 
 interface BestsellersProps {
   initialProducts?: WCProduct[];
+  title?: string;
+  subtitle?: string;
+  linkText?: string;
 }
 
-export default function BestsellersCarousel({ initialProducts = [] }: BestsellersProps) {
+export default function BestsellersCarousel({ 
+  initialProducts = [],
+  title = "The Bestsellers",
+  subtitle = "Beloved by our community.",
+  linkText = "Shop All Bestsellers"
+}: BestsellersProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const { openCartDrawer } = useUIStore();
   const { addItem } = useCartStore();
@@ -41,7 +49,7 @@ export default function BestsellersCarousel({ initialProducts = [] }: Bestseller
           <span className="material-symbols-outlined text-[48px] text-outline-variant mb-4 font-light">
             auto_awesome
           </span>
-          <h2 className="font-headline-md text-headline-md text-on-background mb-2">The Bestsellers</h2>
+          <h2 className="font-headline-md text-headline-md text-on-background mb-2">{title}</h2>
           <p className="font-body-md text-body-md text-on-surface-variant max-w-md mx-auto">
             Our curated collection is currently being refreshed. Check back soon for our most loved essentials.
           </p>
@@ -54,8 +62,8 @@ export default function BestsellersCarousel({ initialProducts = [] }: Bestseller
     <section className="py-20 bg-surface-container-lowest border-y border-outline-variant/20">
       <div className="px-margin-mobile md:px-margin-desktop w-full max-w-[1280px] mx-auto mb-12 flex justify-between items-end">
         <div>
-          <h2 className="font-headline-md text-headline-md text-on-background mb-2">The Bestsellers</h2>
-          <p className="font-body-md text-body-md text-on-surface-variant">Beloved by our community.</p>
+          <h2 className="font-headline-md text-headline-md text-on-background mb-2">{title}</h2>
+          <p className="font-body-md text-body-md text-on-surface-variant">{subtitle}</p>
         </div>
         <div className="flex items-center gap-6">
           <div className="hidden md:flex gap-2">
@@ -68,10 +76,10 @@ export default function BestsellersCarousel({ initialProducts = [] }: Bestseller
           </div>
           <Link 
             href="/shop" 
-            aria-label="Shop all bestsellers"
+            aria-label={linkText}
             className="hidden md:inline-flex items-center font-label-md text-label-md text-primary hover:text-on-background transition-colors group tracking-widest uppercase text-xs"
           >
-            Shop All Bestsellers 
+            {linkText} 
             <span className="material-symbols-outlined ml-1 text-[18px] group-hover:translate-x-1 transition-transform font-light">
               arrow_forward
             </span>

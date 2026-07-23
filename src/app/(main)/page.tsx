@@ -15,9 +15,12 @@ export default async function Home() {
     getProducts(4, { category: 'makeup' }),
   ]);
 
-  // Combine and filter only products that have images
+  // Combine, deduplicate by ID, and filter only products that have images
   const allProducts = [...faceProducts, ...bodyProducts, ...fragranceProducts, ...makeupProducts]
-    .filter(p => p.images && p.images.length > 0);
+    .filter(p => p.images && p.images.length > 0)
+    .filter((product, index, self) => 
+      index === self.findIndex((t) => t.id === product.id)
+    );
 
   // Shuffle the array to make it random but professional
   const shuffled = allProducts.sort(() => 0.5 - Math.random());

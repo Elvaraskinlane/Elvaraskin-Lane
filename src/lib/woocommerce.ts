@@ -107,7 +107,10 @@ export async function getProducts(
       if (searchParams.order) {
         url += `&order=${searchParams.order}`;
       }
-
+      if (searchParams.include) {
+        url += `&include=${searchParams.include}`;
+      }
+      
       // Map category slug(s) to ID(s)
       if (searchParams.category && typeof searchParams.category === "string") {
         const slugs = searchParams.category.split(',').filter(Boolean);

@@ -165,7 +165,7 @@ export default function AuthModal() {
             {/* Cloudflare Turnstile */}
             <div className="mt-4 cf-turnstile" data-action="turnstile-spin-v2">
               <Turnstile 
-                siteKey="0x4AAAAAAD7LNMDvUnit7Q_H" 
+                siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!} 
                 onSuccess={(token) => setTurnstileToken(token)}
                 options={{ action: "turnstile-spin-v2" }}
               />

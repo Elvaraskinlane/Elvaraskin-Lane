@@ -19,8 +19,25 @@ export default async function ProductDetailsPage({ params }: { params: Promise<{
   const product = await getProductBySlug(slug);
   if (!product) return notFound();
 
-  // Fetch bestsellers for the cross-sell section at the bottom
-  const bestsellers = await getProducts(4);
+  // Fetch related products for the cross-sell section
+  let relatedProducts = [];
+  
+  if (product.related_ids && product.related_ids.length > 0) {
+    relatedProducts = await getProducts(10, { include: product.related_ids.join(',') });
+  }
+  
+  // Fallback: fetch products in the same category
+  if (relatedProducts.length === 0 && product.categories && product.categories.length > 0) {
+    relatedProducts = await getProducts(10, { category: product.categories[0].slug });
+    // Filter out the current product
+    relatedProducts = relatedProducts.filter(p => p.id !== product.id);
+  }
+
+  // Final fallback: just get latest products
+  if (relatedProducts.length === 0) {
+    relatedProducts = await getProducts(10);
+    relatedProducts = relatedProducts.filter(p => p.id !== product.id);
+  }
 
   return (
     <main className="w-full bg-background animate-fade-in">
@@ -98,14 +115,13 @@ export default async function ProductDetailsPage({ params }: { params: Promise<{
 
       </div>
 
-      {/* Frequently Bought Together / Bestsellers Cross-Sell */}
-      <div className="bg-surface pt-12 pb-4">
-        <div className="max-w-[1280px] mx-auto px-margin-mobile md:px-margin-desktop mb-8">
-          <h2 className="font-headline-md text-3xl text-on-background uppercase tracking-wide">Frequently Bought Together</h2>
-          <div className="w-16 h-[2px] bg-primary mt-4"></div>
-        </div>
-        <BestsellersCarousel initialProducts={bestsellers} />
-      </div>
+      {/* Related Products Cross-Sell */}
+      <BestsellersCarousel 
+        initialProducts={relatedProducts} 
+        title="Related Products"
+        subtitle="Perfect matches for your routine."
+        linkText="Shop Collection"
+      />
     </main>
   );
 }
