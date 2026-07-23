@@ -35,6 +35,7 @@ export interface WCProduct {
   categories: WCCategory[];
   brands?: WCBrand[];
   images: WCImage[];
+  related_ids?: number[];
 }
 
 export interface WCImage {

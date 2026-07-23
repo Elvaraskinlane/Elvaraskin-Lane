@@ -20,7 +20,7 @@ export default async function ProductDetailsPage({ params }: { params: Promise<{
   if (!product) return notFound();
 
   // Fetch related products for the cross-sell section
-  let relatedProducts = [];
+  let relatedProducts: any[] = [];
   
   if (product.related_ids && product.related_ids.length > 0) {
     relatedProducts = await getProducts(10, { include: product.related_ids.join(',') });
