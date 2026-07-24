@@ -2,14 +2,14 @@
 
 import { useState } from "react";
 import { Turnstile } from "@marsidev/react-turnstile";
-import { verifyTurnstileToken } from "@/app/actions/turnstile";
+import { submitContactForm } from "@/app/actions/contact";
 
 export default function ContactForm() {
   const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
   const [error, setError] = useState("");
   const [turnstileToken, setTurnstileToken] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStatus("loading");
     setError("");
@@ -18,15 +18,24 @@ export default function ContactForm() {
       if (!turnstileToken) {
         throw new Error("Please complete the security check.");
       }
-      const verifyResult = await verifyTurnstileToken(turnstileToken);
-      if (!verifyResult.success) {
-        throw new Error("Security check failed. Please try again.");
+
+      const formData = new FormData(e.currentTarget);
+      const data = {
+        firstName: formData.get("firstName") as string,
+        lastName: formData.get("lastName") as string,
+        email: formData.get("email") as string,
+        subject: formData.get("subject") as string,
+        message: formData.get("message") as string,
+        turnstileToken,
+      };
+
+      const result = await submitContactForm(data);
+      
+      if (!result.success) {
+        throw new Error(result.error || "Failed to send message. Please try again.");
       }
       
-      // Simulate API delay (to be replaced with actual form endpoint)
-      setTimeout(() => {
-        setStatus("success");
-      }, 1200);
+      setStatus("success");
     } catch (err: any) {
       setError(err.message || "An error occurred.");
       setStatus("idle");
@@ -60,6 +69,7 @@ export default function ContactForm() {
             <label className="font-label-md text-label-md text-on-surface-variant mb-2" htmlFor="firstName">First Name</label>
             <input 
               id="firstName" 
+              name="firstName"
               required 
               type="text" 
               className="w-full py-2 bg-transparent border-0 border-b border-secondary-fixed-dim focus:ring-0 focus:border-primary transition-colors duration-200 rounded-none font-body-md text-body-md text-on-surface"
@@ -69,6 +79,7 @@ export default function ContactForm() {
             <label className="font-label-md text-label-md text-on-surface-variant mb-2" htmlFor="lastName">Last Name</label>
             <input 
               id="lastName" 
+              name="lastName"
               required 
               type="text" 
               className="w-full py-2 bg-transparent border-0 border-b border-secondary-fixed-dim focus:ring-0 focus:border-primary transition-colors duration-200 rounded-none font-body-md text-body-md text-on-surface"
@@ -80,6 +91,7 @@ export default function ContactForm() {
           <label className="font-label-md text-label-md text-on-surface-variant mb-2" htmlFor="email">Email Address</label>
           <input 
             id="email" 
+            name="email"
             required 
             type="email" 
             className="w-full py-2 bg-transparent border-0 border-b border-secondary-fixed-dim focus:ring-0 focus:border-primary transition-colors duration-200 rounded-none font-body-md text-body-md text-on-surface"
@@ -90,6 +102,7 @@ export default function ContactForm() {
           <label className="font-label-md text-label-md text-on-surface-variant mb-2" htmlFor="subject">Subject (Optional)</label>
           <select 
             id="subject" 
+            name="subject"
             className="w-full py-2 bg-transparent border-0 border-b border-secondary-fixed-dim focus:ring-0 focus:border-primary transition-colors duration-200 rounded-none font-body-md text-body-md text-on-surface cursor-pointer appearance-none"
           >
             <option value="">Select an inquiry type</option>
@@ -104,6 +117,7 @@ export default function ContactForm() {
           <label className="font-label-md text-label-md text-on-surface-variant mb-2" htmlFor="message">Message</label>
           <textarea 
             id="message" 
+            name="message"
             required 
             rows={5}
             className="w-full py-2 bg-transparent border-0 border-b border-secondary-fixed-dim focus:ring-0 focus:border-primary transition-colors duration-200 rounded-none font-body-md text-body-md text-on-surface resize-none"

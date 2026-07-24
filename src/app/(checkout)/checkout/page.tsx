@@ -13,6 +13,8 @@ export default function CheckoutPage() {
   const router = useRouter();
   const { cart, clearCart, fetchCart } = useCartStore();
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isStoreDown, setIsStoreDown] = useState(false);
+  const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
   const [mounted, setMounted] = useState(false);
   const { user, isAuthenticated, logout } = useAuthStore();
 
@@ -56,11 +58,18 @@ export default function CheckoutPage() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handlePayment = async (e: React.FormEvent) => {
+  const handlePayment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setHasAttemptedSubmit(true);
+    
+    if (!e.currentTarget.checkValidity()) {
+      return;
+    }
+
     if (!cart || cart.items.length === 0) return;
 
     setIsProcessing(true);
+    setIsStoreDown(false);
 
     try {
       // Step A: Instantiate the order in WooCommerce via the Store API
@@ -124,7 +133,7 @@ export default function CheckoutPage() {
 
     } catch (error: any) {
       console.error("Checkout Error:", error);
-      alert(error.message || "Something went wrong during checkout.");
+      setIsStoreDown(true); // Trigger WhatsApp fallback
       setIsProcessing(false);
     }
   };
@@ -157,7 +166,7 @@ export default function CheckoutPage() {
             Billing Details
           </h2>
 
-          {isAuthenticated && user && (
+          {isAuthenticated && user ? (
             <div className="mb-8 p-4 bg-secondary-container/20 border border-secondary-container rounded-sm flex items-start gap-3">
               <span className="material-symbols-outlined text-secondary text-[20px] mt-0.5">account_circle</span>
               <div>
@@ -172,9 +181,26 @@ export default function CheckoutPage() {
                 </button>
               </div>
             </div>
+          ) : (
+            <div className="mb-8 p-4 bg-surface-container border border-outline-variant/30 rounded-sm flex items-center justify-between">
+              <p className="font-body-md text-sm text-on-surface-variant">
+                Returning customer?
+              </p>
+              <button 
+                type="button"
+                onClick={() => {
+                  import("@/store/useUIStore").then(module => {
+                    module.useUIStore.getState().openAuthModal();
+                  });
+                }}
+                className="font-label-md text-xs text-primary uppercase tracking-wider hover:underline"
+              >
+                Click here to log in
+              </button>
+            </div>
           )}
 
-          <form id="checkout-form" onSubmit={handlePayment} className="space-y-6">
+          <form id="checkout-form" onSubmit={handlePayment} noValidate className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <label className="font-label-md text-xs uppercase tracking-widest text-on-surface-variant">First Name *</label>
@@ -184,7 +210,7 @@ export default function CheckoutPage() {
                   required
                   value={formData.first_name}
                   onChange={handleInputChange}
-                  className="w-full h-14 bg-surface-container-lowest border border-outline-variant/30 px-4 focus:outline-none focus:border-on-surface transition-colors"
+                  className={`w-full h-14 bg-surface-container-lowest border px-4 focus:outline-none focus:border-on-surface transition-colors ${hasAttemptedSubmit && !formData.first_name ? 'border-error' : 'border-outline-variant/30'}`}
                 />
               </div>
               <div className="space-y-2">
@@ -195,7 +221,7 @@ export default function CheckoutPage() {
                   required
                   value={formData.last_name}
                   onChange={handleInputChange}
-                  className="w-full h-14 bg-surface-container-lowest border border-outline-variant/30 px-4 focus:outline-none focus:border-on-surface transition-colors"
+                  className={`w-full h-14 bg-surface-container-lowest border px-4 focus:outline-none focus:border-on-surface transition-colors ${hasAttemptedSubmit && !formData.last_name ? 'border-error' : 'border-outline-variant/30'}`}
                 />
               </div>
             </div>
@@ -208,7 +234,7 @@ export default function CheckoutPage() {
                 required
                 value={formData.email}
                 onChange={handleInputChange}
-                className="w-full h-14 bg-surface-container-lowest border border-outline-variant/30 px-4 focus:outline-none focus:border-on-surface transition-colors"
+                className={`w-full h-14 bg-surface-container-lowest border px-4 focus:outline-none focus:border-on-surface transition-colors ${hasAttemptedSubmit && !formData.email ? 'border-error' : 'border-outline-variant/30'}`}
               />
             </div>
 
@@ -220,7 +246,7 @@ export default function CheckoutPage() {
                 required
                 value={formData.phone}
                 onChange={handleInputChange}
-                className="w-full h-14 bg-surface-container-lowest border border-outline-variant/30 px-4 focus:outline-none focus:border-on-surface transition-colors"
+                className={`w-full h-14 bg-surface-container-lowest border px-4 focus:outline-none focus:border-on-surface transition-colors ${hasAttemptedSubmit && !formData.phone ? 'border-error' : 'border-outline-variant/30'}`}
               />
             </div>
 
@@ -232,7 +258,7 @@ export default function CheckoutPage() {
                 required
                 value={formData.address_1}
                 onChange={handleInputChange}
-                className="w-full h-14 bg-surface-container-lowest border border-outline-variant/30 px-4 focus:outline-none focus:border-on-surface transition-colors"
+                className={`w-full h-14 bg-surface-container-lowest border px-4 focus:outline-none focus:border-on-surface transition-colors ${hasAttemptedSubmit && !formData.address_1 ? 'border-error' : 'border-outline-variant/30'}`}
               />
             </div>
 
@@ -245,7 +271,7 @@ export default function CheckoutPage() {
                   required
                   value={formData.city}
                   onChange={handleInputChange}
-                  className="w-full h-14 bg-surface-container-lowest border border-outline-variant/30 px-4 focus:outline-none focus:border-on-surface transition-colors"
+                  className={`w-full h-14 bg-surface-container-lowest border px-4 focus:outline-none focus:border-on-surface transition-colors ${hasAttemptedSubmit && !formData.city ? 'border-error' : 'border-outline-variant/30'}`}
                 />
               </div>
               <div className="space-y-2">
@@ -256,7 +282,7 @@ export default function CheckoutPage() {
                     required
                     value={formData.state}
                     onChange={(e) => handleInputChange(e as any)}
-                    className="w-full h-14 bg-surface-container-lowest border border-outline-variant/30 px-4 focus:outline-none focus:border-on-surface transition-colors appearance-none cursor-pointer"
+                    className={`w-full h-14 bg-surface-container-lowest border px-4 focus:outline-none focus:border-on-surface transition-colors appearance-none cursor-pointer ${hasAttemptedSubmit && !formData.state ? 'border-error' : 'border-outline-variant/30'}`}
                   >
                     <option value="" disabled>Select a state</option>
                     <option value="AB">Abia</option>
@@ -391,13 +417,26 @@ export default function CheckoutPage() {
                   </div>
                 </div>
 
+                {isStoreDown && (
+                  <div className="bg-error/10 border border-error/20 p-4 rounded-sm mb-4 animate-fade-in">
+                    <p className="font-body-md text-sm text-error">
+                      <span className="font-bold">High traffic alert:</span> We are currently unable to process live payments. Please place your order via WhatsApp below, and our team will process it manually!
+                    </p>
+                  </div>
+                )}
+
                 <button
                   type="submit"
                   form="checkout-form"
-                  disabled={isProcessing || !cart || cart.items.length === 0}
-                  className="w-full h-14 bg-on-background text-background font-label-lg uppercase tracking-[0.2em] text-sm hover:bg-primary hover:text-on-primary transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-md flex items-center justify-center rounded-sm"
+                  disabled={isProcessing || isStoreDown || !cart || cart.items.length === 0}
+                  className="w-full h-14 bg-on-background text-background font-label-lg uppercase tracking-[0.2em] text-sm hover:bg-primary hover:text-on-primary transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-md flex items-center justify-center rounded-sm gap-3"
                 >
-                  {isProcessing ? "Processing..." : "Place Order & Pay"}
+                  {isProcessing ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-background/30 border-t-background rounded-full animate-spin"></div>
+                      Processing...
+                    </>
+                  ) : "Place Order & Pay"}
                 </button>
                 
                 <button
@@ -420,7 +459,7 @@ export default function CheckoutPage() {
                     window.open(`https://wa.me/2348089647342?text=${encodedText}`, '_blank');
                   }}
                   disabled={isProcessing || !cart || cart.items.length === 0}
-                  className="w-full mt-4 h-14 bg-transparent border border-on-background text-on-background font-label-lg uppercase tracking-[0.2em] text-sm hover:bg-surface-container-highest transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center rounded-sm gap-2"
+                  className={`w-full mt-4 h-14 bg-transparent border border-on-background text-on-background font-label-lg uppercase tracking-[0.2em] text-sm hover:bg-surface-container-highest transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center rounded-sm gap-2 ${isStoreDown ? 'animate-pulse ring-2 ring-primary ring-offset-2' : ''}`}
                 >
                   <span className="material-symbols-outlined text-[20px]">forum</span>
                   Network Issues? Order via WhatsApp

@@ -7,17 +7,22 @@ export default function StoreLocator() {
         <span className="material-symbols-outlined text-primary mb-4" style={{ fontSize: '32px', fontVariationSettings: "'wght' 300" }}>
           location_on
         </span>
-        <h2 className="font-headline-sm text-headline-sm text-on-surface mb-4">Visit Our Flagship Boutiques</h2>
-        <p className="font-body-md text-body-md text-on-surface-variant mb-8 max-w-lg mx-auto">
-          Experience Elvara Skinlane firsthand in our serene retail environments located in select cities.
+        <h2 className="font-headline-sm text-headline-sm text-on-surface mb-4">Visit Our Flagship Store</h2>
+        <p className="font-body-md text-body-md text-on-surface-variant mb-2 max-w-lg mx-auto">
+          SUITE A7 DANSARARI PLAZA, NO 5 ZIQUINCHOR STREET, WUSE ZONE 4, ABUJA FCT
         </p>
-        <Link 
-          href="/boutiques" 
+        <p className="font-body-md text-body-md text-on-surface-variant mb-8 max-w-lg mx-auto">
+          Nigeria
+        </p>
+        <a 
+          href="https://maps.app.goo.gl/qYchFivGKiJ7gu6q6" 
+          target="_blank"
+          rel="noopener noreferrer"
           className="inline-flex items-center gap-2 px-6 py-3 border border-secondary-fixed-dim text-on-surface hover:bg-secondary-fixed hover:border-secondary-fixed transition-colors duration-300 font-label-md text-label-md rounded-sm"
         >
-          Find a Store
+          Get Directions
           <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>arrow_forward</span>
-        </Link>
+        </a>
       </div>
     </section>
   );

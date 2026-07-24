@@ -51,14 +51,14 @@ export default function PrivacyPolicyPage() {
               You have the right to access the personal information we hold about you and to ask that your personal information be corrected, updated, or erased. If you would like to exercise this right, please contact us through the contact information below.
             </p>
             <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
-              If you are a resident of the EEA or California, you may have additional rights regarding your data. Please contact us for specific data requests.
+              This policy complies with the Nigeria Data Protection Act (NDPA) and NDPR. As a resident of Nigeria, you have specific rights regarding the collection and processing of your data. Please contact us for any specific data requests.
             </p>
           </section>
 
           <section>
             <h2 className="font-headline-sm text-headline-sm text-on-background mb-4 border-b border-outline-variant/30 pb-2">Contact Us</h2>
             <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
-              For more information about our privacy practices, if you have questions, or if you would like to make a complaint, please contact us by e-mail at <strong>privacy@elvaraskinlane.com</strong> or by mail using the details provided on our Contact page.
+              For more information about our privacy practices, if you have questions, or if you would like to make a complaint, please contact us by e-mail at <strong>elvaraskinlane@gmail.com</strong> or by mail using the details provided on our Contact page.
             </p>
           </section>
 

@@ -13,8 +13,8 @@ export async function POST(request: Request) {
     const base64Credentials = Buffer.from(`${wcKey}:${wcSecret}`).toString('base64');
     const wpUrl = process.env.NEXT_PUBLIC_WORDPRESS_URL;
 
-    // We will build this custom endpoint in the WordPress plugin later
-    const response = await fetch(`${wpUrl}/wp-json/elvara/v1/forgot-password`, {
+    // Hit the reusable Headless WP Auth plugin endpoint
+    const response = await fetch(`${wpUrl}/wp-json/headless-auth/v1/forgot-password`, {
       method: "POST",
       headers: {
         "Authorization": `Basic ${base64Credentials}`,

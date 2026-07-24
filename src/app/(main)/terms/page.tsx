@@ -56,7 +56,14 @@ export default function TermsOfServicePage() {
           </section>
 
           <section>
-            <h2 className="font-headline-sm text-headline-sm text-on-background mb-4 border-b border-outline-variant/30 pb-2">5. Changes to Terms of Service</h2>
+            <h2 className="font-headline-sm text-headline-sm text-on-background mb-4 border-b border-outline-variant/30 pb-2">5. Governing Law</h2>
+            <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed mb-4">
+              These Terms of Service and any separate agreements whereby we provide you Services shall be governed by and construed in accordance with the laws of the Federal Republic of Nigeria, without regard to its conflict of law provisions.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="font-headline-sm text-headline-sm text-on-background mb-4 border-b border-outline-variant/30 pb-2">6. Changes to Terms of Service</h2>
             <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed mb-4">
               You can review the most current version of the Terms of Service at any time at this page. We reserve the right, at our sole discretion, to update, change or replace any part of these Terms of Service by posting updates and changes to our website.
             </p>

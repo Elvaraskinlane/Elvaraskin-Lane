@@ -20,8 +20,8 @@ const footerLinks = {
     { label: "Order History", href: "/account" },
   ],
   connect: [
-    { label: "Instagram", href: "https://instagram.com/elvaraskinlane" },
-    { label: "WhatsApp", href: "https://wa.me/" },
+    { label: "Instagram", href: "https://www.instagram.com/elvaraskinlane" },
+    { label: "WhatsApp", href: "https://wa.me/2347067615908" },
   ],
 };
 

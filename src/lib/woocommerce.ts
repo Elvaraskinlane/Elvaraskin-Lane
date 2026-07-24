@@ -157,14 +157,24 @@ export async function getProducts(
 
     if (!response.ok) {
       console.error("Failed to fetch products from WooCommerce:", response.statusText);
-      return [];
+      try {
+        const fallback = require('./fallback-products.json');
+        return fallback as WCProduct[];
+      } catch (e) {
+        return [];
+      }
     }
 
     const data = await response.json();
     return data as WCProduct[];
   } catch (error) {
     console.error("Error fetching WooCommerce products:", error);
-    return [];
+    try {
+      const fallback = require('./fallback-products.json');
+      return fallback as WCProduct[];
+    } catch (e) {
+      return [];
+    }
   }
 }
 

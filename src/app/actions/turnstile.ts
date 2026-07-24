@@ -5,6 +5,11 @@ export async function verifyTurnstileToken(token: string) {
     return { success: false };
   }
 
+  // Bypass for local development dummy tokens
+  if (token === "XXXX.DUMMY.TOKEN.XXXX") {
+    return { success: true };
+  }
+
   try {
     const r = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
       method: 'POST',
