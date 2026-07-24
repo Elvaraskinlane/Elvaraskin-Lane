@@ -107,16 +107,16 @@ export default function ShopAllContainer({ initialProducts }: { initialProducts:
           <h3 className="font-label-md text-label-md text-primary uppercase tracking-widest mb-4 border-b border-outline-variant pb-2">
             Search Collection
           </h3>
-          <div className="relative border-b border-outline-variant/60 focus-within:border-primary mb-8 transition-colors">
+          <div className="relative mb-8 transition-colors group">
             <input 
               type="text" 
               placeholder="Search and press Enter..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={handleSearch}
-              className="w-full bg-transparent py-2 pl-0 pr-8 font-body-md text-sm outline-none border-0 focus:ring-0 placeholder:text-outline-variant"
+              className="w-full bg-surface-container-low rounded-full py-3.5 pl-5 pr-12 font-body-md text-sm outline-none border border-transparent focus:border-outline-variant/30 focus:bg-surface transition-all placeholder:text-outline-variant/70 shadow-sm"
             />
-            <span className="material-symbols-outlined absolute right-0 top-2 text-on-surface-variant text-xl">search</span>
+            <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant/70 text-[20px] group-focus-within:text-primary transition-colors">search</span>
           </div>
 
           <Suspense fallback={<div className="font-body-sm text-on-surface-variant py-4">Loading filters...</div>}>
@@ -152,39 +152,43 @@ export default function ShopAllContainer({ initialProducts }: { initialProducts:
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-12 mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-16 mb-16">
             {visibleProducts.map((product) => {
               const imageUrl = product.images?.[0]?.src || "/hero-2-fixed.png";
 
               return (
-                <Link href={`/product/${product.slug}`} key={product.id} className="group cursor-pointer flex flex-col block transition-transform duration-300 hover:-translate-y-1">
-                  <div className="relative bg-surface-container-low aspect-[4/5] mb-4 overflow-hidden rounded-sm flex items-center justify-center group-hover:shadow-xl transition-shadow duration-300">
+                <Link href={`/product/${product.slug}`} key={product.id} className="group cursor-pointer flex flex-col block transition-all duration-500">
+                  <div className="relative bg-white aspect-[3/4] mb-6 overflow-hidden rounded-sm flex items-center justify-center border border-outline-variant/15 group-hover:border-outline-variant/30 transition-all duration-500 group-hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)]">
                     <Image 
                       src={imageUrl} 
                       alt={product.name} 
                       fill 
-                      className="object-cover mix-blend-multiply group-hover:scale-105 transition-transform duration-700 ease-out p-4"
+                      className="object-cover mix-blend-multiply group-hover:scale-[1.03] transition-transform duration-700 ease-out p-6"
                       sizes="(max-width: 640px) 100vw, 250px"
                     />
-                    <button 
-                      className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-on-background text-background font-label-md text-label-md py-3 w-11/12 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-primary hover:text-on-primary shadow-sm uppercase tracking-wider"
-                      onClick={async (e) => {
-                        e.preventDefault(); // Prevent navigating to product page
-                        try {
-                          await addToCart(product.id, 1);
-                          alert(`${product.name} added to cart!`);
-                        } catch (err) {
-                          console.error("Cart error:", err);
-                          alert("Failed to add to cart.");
-                        }
-                      }}
-                    >
-                      ADD TO CART
-                    </button>
+                    
+                    {/* Minimalist Floating Pill Button */}
+                    <div className="absolute bottom-6 left-0 w-full px-4 flex justify-center opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-400 ease-out z-10">
+                      <button 
+                        className="bg-black text-white font-label-md text-[11px] py-3.5 px-8 rounded-full shadow-lg hover:bg-primary transition-colors uppercase tracking-[0.15em] flex items-center gap-2"
+                        onClick={async (e) => {
+                          e.preventDefault(); // Prevent navigating to product page
+                          try {
+                            await addToCart(product.id, 1);
+                            alert(`${product.name} added to cart!`);
+                          } catch (err) {
+                            console.error("Cart error:", err);
+                            alert("Failed to add to cart.");
+                          }
+                        }}
+                      >
+                        Add to Cart
+                      </button>
+                    </div>
                   </div>
-                  <div className="text-center">
-                    <h4 className="font-headline-sm text-headline-sm text-primary mb-1">{product.name}</h4>
-                    <p className="font-body-md text-body-md text-on-surface-variant">
+                  <div className="text-center px-2">
+                    <h4 className="font-label-md text-[13px] text-on-surface mb-2 uppercase tracking-widest line-clamp-2 leading-relaxed" dangerouslySetInnerHTML={{ __html: product.name }} />
+                    <p className="font-headline-sm text-[15px] text-on-surface-variant/80">
                       ₦{parseInt(product.price || "0").toLocaleString()}
                     </p>
                   </div>

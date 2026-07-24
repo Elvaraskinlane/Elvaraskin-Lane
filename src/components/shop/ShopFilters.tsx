@@ -128,13 +128,13 @@ export default function ShopFilters() {
       )}
 
       {/* Categories Accordion */}
-      <div className="border-b border-gray-200 overflow-hidden bg-transparent">
+      <div className="border-b border-outline-variant/30 overflow-hidden bg-transparent">
         <button 
           onClick={() => toggleSection("categories")}
-          className="w-full flex justify-between items-center py-5 bg-transparent hover:text-gray-500 transition-colors"
+          className="w-full flex justify-between items-center py-5 bg-transparent hover:text-primary transition-colors group"
         >
-          <span className="font-label-md text-xs text-black uppercase tracking-[0.15em]">Categories</span>
-          <span className="material-symbols-outlined text-gray-400 text-[18px]">
+          <span className="font-label-md text-xs text-on-surface uppercase tracking-[0.2em] group-hover:text-primary transition-colors">Categories</span>
+          <span className="material-symbols-outlined text-on-surface-variant text-[18px] group-hover:text-primary transition-colors">
             {openSection === "categories" ? "remove" : "add"}
           </span>
         </button>
@@ -163,13 +163,13 @@ export default function ShopFilters() {
       </div>
 
       {/* Brands Accordion */}
-      <div className="border-b border-gray-200 overflow-hidden bg-transparent">
+      <div className="border-b border-outline-variant/30 overflow-hidden bg-transparent">
         <button 
           onClick={() => toggleSection("brands")}
-          className="w-full flex justify-between items-center py-5 bg-transparent hover:text-gray-500 transition-colors"
+          className="w-full flex justify-between items-center py-5 bg-transparent hover:text-primary transition-colors group"
         >
-          <span className="font-label-md text-xs text-black uppercase tracking-[0.15em]">Brands</span>
-          <span className="material-symbols-outlined text-gray-400 text-[18px]">
+          <span className="font-label-md text-xs text-on-surface uppercase tracking-[0.2em] group-hover:text-primary transition-colors">Brands</span>
+          <span className="material-symbols-outlined text-on-surface-variant text-[18px] group-hover:text-primary transition-colors">
             {openSection === "brands" ? "remove" : "add"}
           </span>
         </button>
@@ -198,13 +198,13 @@ export default function ShopFilters() {
       </div>
 
       {/* Skin Concerns Accordion */}
-      <div className="border-b border-gray-200 overflow-hidden bg-transparent">
+      <div className="border-b border-outline-variant/30 overflow-hidden bg-transparent">
         <button 
           onClick={() => toggleSection("concerns")}
-          className="w-full flex justify-between items-center py-5 bg-transparent hover:text-gray-500 transition-colors"
+          className="w-full flex justify-between items-center py-5 bg-transparent hover:text-primary transition-colors group"
         >
-          <span className="font-label-md text-xs text-black uppercase tracking-[0.15em]">Skin Concerns</span>
-          <span className="material-symbols-outlined text-gray-400 text-[18px]">
+          <span className="font-label-md text-xs text-on-surface uppercase tracking-[0.2em] group-hover:text-primary transition-colors">Skin Concerns</span>
+          <span className="material-symbols-outlined text-on-surface-variant text-[18px] group-hover:text-primary transition-colors">
             {openSection === "concerns" ? "remove" : "add"}
           </span>
         </button>

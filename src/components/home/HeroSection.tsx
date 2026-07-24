@@ -53,10 +53,12 @@ export default function HeroSection() {
             alt={slide.title}
             fill
             priority={index === 0} // Only prioritize the first image for LCP
-            className="object-cover object-center"
+            className="object-cover object-center opacity-70 mix-blend-overlay"
             sizes="100vw"
           />
-          <div className="absolute inset-0 bg-background/30 backdrop-blur-[1px]"></div>
+          {/* Refined gradient overlays for editorial contrast */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+          <div className="absolute inset-0 bg-black/30"></div>
         </div>
       ))}
 
@@ -64,16 +66,19 @@ export default function HeroSection() {
       <div className="relative z-10 flex flex-col items-center text-center px-margin-mobile md:px-margin-desktop max-w-4xl mx-auto mt-20">
 
         {/* We use a wrapper with a key to trigger animations when the slide changes */}
-        <div key={currentSlide} className="animate-fade-in-up">
-          <h1 className="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-background mb-6 drop-shadow-sm">
+        <div key={currentSlide} className="animate-fade-in-up flex flex-col items-center">
+          <span className="font-label-md text-[10px] uppercase tracking-[0.3em] text-white/80 mb-6 border-b border-white/30 pb-2">
+            The Collection
+          </span>
+          <h1 className="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-white mb-6 drop-shadow-sm tracking-tight">
             {slides[currentSlide].title}
           </h1>
-          <p className="font-body-lg text-body-lg text-on-background max-w-2xl mb-10 drop-shadow-sm mx-auto">
+          <p className="font-body-md md:font-body-lg text-white/90 max-w-2xl mb-12 drop-shadow-sm mx-auto font-light leading-relaxed">
             {slides[currentSlide].subtitle}
           </p>
           <Link
             href={slides[currentSlide].href}
-            className="inline-flex items-center justify-center px-10 py-4 bg-primary text-on-primary font-label-md text-label-md uppercase tracking-widest hover:bg-on-background transition-colors duration-300 shadow-md"
+            className="inline-flex items-center justify-center px-12 py-4 bg-white/10 backdrop-blur-sm border border-white/30 text-white font-label-md text-[11px] uppercase tracking-[0.15em] rounded-full hover:bg-white hover:text-black transition-all duration-300 shadow-md"
           >
             {slides[currentSlide].cta}
           </Link>

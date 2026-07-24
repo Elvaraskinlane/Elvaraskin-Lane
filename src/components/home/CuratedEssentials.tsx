@@ -32,18 +32,20 @@ export default async function CuratedEssentials() {
               src={faceImg} 
               alt="Face Care Collection"
               fill
-              className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+              className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03]"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+            {/* Elegant luxury gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
           </div>
-          <div className="relative z-10 w-full">
+          <div className="relative z-10 w-full flex flex-col justify-end">
+            <span className="font-label-md text-[10px] uppercase tracking-[0.2em] text-white/70 mb-2">Category</span>
             <h3 className="font-headline-sm text-headline-sm text-white mb-2">Face Care</h3>
-            <p className="font-body-md text-white/90 max-w-sm mb-4 text-shadow-sm">
+            <p className="font-body-md text-white/90 max-w-sm mb-6 text-shadow-sm font-light">
               Nourish, protect, and revitalize your complexion with our premium facial treatments.
             </p>
-            <div className="flex items-center text-white/90 font-label-md text-label-md group-hover:text-white transition-colors">
-              <span>Explore Face Care</span>
-              <span className="material-symbols-outlined ml-2 text-[18px]">arrow_forward</span>
+            <div className="flex items-center text-white/90 font-label-md text-xs tracking-widest uppercase group-hover:text-white transition-colors w-max group/link">
+              <span>Explore Collection</span>
+              <span className="material-symbols-outlined ml-2 text-[16px] group-hover/link:translate-x-1 transition-transform">arrow_forward</span>
             </div>
           </div>
         </Link>
@@ -58,18 +60,19 @@ export default async function CuratedEssentials() {
                 src={bodyImg} 
                 alt="Body & Hair Collection"
                 fill
-                className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03]"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
             </div>
-            <div className="relative z-10 w-full">
-              <h3 className="font-headline-sm text-headline-sm text-white mb-2">Body & Hair</h3>
-              <p className="font-body-md text-white/90 max-w-sm mb-4 text-shadow-sm">
+            <div className="relative z-10 w-full flex flex-col justify-end">
+              <span className="font-label-md text-[10px] uppercase tracking-[0.2em] text-white/70 mb-2">Category</span>
+              <h3 className="font-headline-sm text-[20px] text-white mb-2">Body & Hair</h3>
+              <p className="font-body-md text-[14px] text-white/90 max-w-sm mb-4 text-shadow-sm font-light">
                 Luxurious hydration and restorative care from head to toe.
               </p>
-              <div className="flex items-center text-white/90 font-label-md text-label-md group-hover:text-white transition-colors">
-                <span>Explore Body & Hair</span>
-                <span className="material-symbols-outlined ml-2 text-[18px]">arrow_forward</span>
+              <div className="flex items-center text-white/90 font-label-md text-[11px] tracking-widest uppercase group-hover:text-white transition-colors w-max group/link">
+                <span>Explore</span>
+                <span className="material-symbols-outlined ml-2 text-[16px] group-hover/link:translate-x-1 transition-transform">arrow_forward</span>
               </div>
             </div>
           </Link>
@@ -81,18 +84,19 @@ export default async function CuratedEssentials() {
                 src={specialImg} 
                 alt="Specialized Collections"
                 fill
-                className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03]"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
             </div>
-            <div className="relative z-10 w-full">
-              <h3 className="font-headline-sm text-headline-sm text-white mb-2">Specialized Collections</h3>
-              <p className="font-body-md text-white/90 max-w-sm mb-4 text-shadow-sm">
+            <div className="relative z-10 w-full flex flex-col justify-end">
+              <span className="font-label-md text-[10px] uppercase tracking-[0.2em] text-white/70 mb-2">Category</span>
+              <h3 className="font-headline-sm text-[20px] text-white mb-2">Specialized Collections</h3>
+              <p className="font-body-md text-[14px] text-white/90 max-w-sm mb-4 text-shadow-sm font-light">
                 Targeted solutions and aesthetician-approved kits for specific needs.
               </p>
-              <div className="flex items-center text-white/90 font-label-md text-label-md group-hover:text-white transition-colors">
-                <span>Explore Collections</span>
-                <span className="material-symbols-outlined ml-2 text-[18px]">arrow_forward</span>
+              <div className="flex items-center text-white/90 font-label-md text-[11px] tracking-widest uppercase group-hover:text-white transition-colors w-max group/link">
+                <span>Explore</span>
+                <span className="material-symbols-outlined ml-2 text-[16px] group-hover/link:translate-x-1 transition-transform">arrow_forward</span>
               </div>
             </div>
           </Link>

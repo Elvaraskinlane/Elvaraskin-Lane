@@ -87,38 +87,41 @@ export default function BestsellersCarousel({
         </div>
       </div>
 
-      <div ref={scrollRef} className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar px-margin-mobile md:px-margin-desktop pb-8 space-x-6 md:space-x-8 w-full max-w-[1280px] mx-auto scroll-smooth">
+      <div ref={scrollRef} className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar px-margin-mobile md:px-margin-desktop pb-8 space-x-8 md:space-x-10 w-full max-w-[1280px] mx-auto scroll-smooth">
         {initialProducts.map((product) => (
-          <Link href={`/product/${product.slug}`} key={product.id} className="flex-none w-[280px] md:w-[320px] snap-start group cursor-pointer block">
-            <div className="relative aspect-[4/5] bg-white mb-6 overflow-hidden rounded-md flex items-center justify-center border border-outline-variant/10 shadow-sm transition-shadow duration-300 group-hover:shadow-md">
+          <Link href={`/product/${product.slug}`} key={product.id} className="flex-none w-[280px] md:w-[320px] snap-start group cursor-pointer flex flex-col block transition-all duration-500">
+            <div className="relative aspect-[3/4] bg-white mb-6 overflow-hidden rounded-sm flex items-center justify-center border border-outline-variant/15 group-hover:border-outline-variant/30 transition-all duration-500 group-hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)]">
               <Image 
                 src={product.images?.[0]?.src || "/hero-2-fixed.png"} 
                 alt={product.name}
                 fill
-                className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
+                className="object-cover object-top mix-blend-multiply transition-transform duration-700 ease-out group-hover:scale-[1.03] p-6"
                 sizes="(max-width: 768px) 280px, 320px"
               />
               
-              <button 
-                aria-label={`Add ${product.name} to cart`}
-                className="absolute bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] bg-white/90 backdrop-blur-sm text-on-background py-3 font-label-md text-label-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-primary hover:text-on-primary shadow-sm uppercase tracking-wider"
-                onClick={async (e) => {
-                  e.preventDefault(); // Prevent navigating to product page
-                  try {
-                    await addItem(product.id, 1);
-                    openCartDrawer();
-                  } catch (err) {
-                    console.error("Cart error:", err);
-                    alert("Failed to add to cart.");
-                  }
-                }}
-              >
-                Add to Cart
-              </button>
+              {/* Minimalist Floating Pill Button */}
+              <div className="absolute bottom-6 left-0 w-full px-4 flex justify-center opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-400 ease-out z-10">
+                <button 
+                  aria-label={`Add ${product.name} to cart`}
+                  className="bg-black text-white font-label-md text-[11px] py-3.5 px-8 rounded-full shadow-lg hover:bg-primary transition-colors uppercase tracking-[0.15em] flex items-center gap-2"
+                  onClick={async (e) => {
+                    e.preventDefault(); // Prevent navigating to product page
+                    try {
+                      await addItem(product.id, 1);
+                      openCartDrawer();
+                    } catch (err) {
+                      console.error("Cart error:", err);
+                      alert("Failed to add to cart.");
+                    }
+                  }}
+                >
+                  Add to Cart
+                </button>
+              </div>
             </div>
-            <div className="text-center">
-              <h4 className="font-headline-sm text-[20px] leading-tight text-on-background mb-2 line-clamp-1">{product.name}</h4>
-              <p className="font-body-md text-body-md text-on-surface-variant">{formatPrice(product.price)}</p>
+            <div className="text-center px-2">
+              <h4 className="font-label-md text-[13px] text-on-surface mb-2 uppercase tracking-widest line-clamp-2 leading-relaxed" dangerouslySetInnerHTML={{ __html: product.name }} />
+              <p className="font-headline-sm text-[15px] text-on-surface-variant/80">{formatPrice(product.price)}</p>
             </div>
           </Link>
         ))}
