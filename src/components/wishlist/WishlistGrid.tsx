@@ -46,7 +46,7 @@ export default function WishlistGrid() {
       <div className="flex flex-col items-center justify-center py-32 text-center animate-fade-in">
         <span className="material-symbols-outlined text-6xl text-outline-variant mb-6 font-light">favorite</span>
         <h2 className="font-headline-md text-on-surface mb-4">Your wishlist is empty</h2>
-        <p className="font-body-lg text-on-surface-variant max-w-md mx-auto mb-8">Discover our collection of high-performance skincare and save your favorite rituals here.</p>
+        <p className="font-body-lg text-on-surface-variant max-w-md mx-auto mb-8">Discover our collection of high-performance skincare and save your favorite products here.</p>
         <Link href="/shop" className="inline-block border border-on-surface text-on-surface px-8 py-4 font-label-md uppercase tracking-wider hover:bg-on-surface hover:text-on-primary transition-colors">
           Explore Collections
         </Link>
@@ -66,7 +66,7 @@ export default function WishlistGrid() {
             const shareUrl = `${window.location.origin}/wishlist/shared?data=${base64String}`;
             
             navigator.clipboard.writeText(shareUrl).then(() => {
-              alert("Routine link copied to clipboard! Share your curated skincare ritual.");
+              alert("Routine link copied to clipboard! Share your curated skincare routine.");
             });
           }}
           className="bg-transparent border border-outline-variant text-on-surface px-6 py-3 font-label-md tracking-[0.15em] uppercase text-xs hover:bg-surface-container-highest transition-all duration-300 flex items-center gap-2 rounded-sm"

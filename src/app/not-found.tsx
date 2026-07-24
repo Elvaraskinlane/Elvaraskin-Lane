@@ -18,7 +18,7 @@ export default function NotFound() {
             Lost in the glow.
           </h1>
           <p className="font-body-md text-on-surface-variant mb-12">
-            The ritual you are seeking seems to have faded. The page may have been moved or removed as we refine our collections. Let us guide you back to clarity.
+            The page you are seeking seems to have faded. The page may have been moved or removed as we refine our collections. Let us guide you back to clarity.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 w-full justify-center">

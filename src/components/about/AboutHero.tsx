@@ -5,7 +5,7 @@ export default function AboutHero() {
     <section className="w-full max-w-[1280px] mx-auto px-margin-mobile md:px-margin-desktop pt-16 md:pt-32 pb-16">
       <div className="text-center mb-12">
         <h1 className="font-display-lg-mobile text-display-lg-mobile md:font-display-lg md:text-display-lg text-primary mb-6">
-          Return to Ritual
+          Return to Balance
         </h1>
         <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">
           Elvara Skinlane was born from a desire to strip away the unnecessary, focusing entirely on high-performance botanicals and the quiet luxury of daily self-care.

@@ -39,7 +39,7 @@ export default function CartPage() {
         <span className="material-symbols-outlined text-6xl text-outline-variant mb-6 font-light">shopping_bag</span>
         <h1 className="font-headline-md text-3xl text-on-surface mb-4 tracking-tight">Your Bag is Empty</h1>
         <p className="font-body-md text-on-surface-variant mb-8 max-w-md text-center">
-          Discover our collection of curated skincare essentials and rituals to find your next favorite.
+          Discover our collection of curated skincare essentials and products to find your next favorite.
         </p>
         <Link 
           href="/shop" 

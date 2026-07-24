@@ -107,7 +107,7 @@ function SharedWishlistHandler() {
           A Curated Routine For You
         </h1>
         <p className="font-body-lg text-on-surface-variant max-w-2xl mx-auto mb-10 text-lg">
-          Someone has shared their personal skincare ritual with you. Discover the products they love and add them to your own regimen.
+          Someone has shared their personal skincare routine with you. Discover the products they love and add them to your own regimen.
         </p>
         
         <button

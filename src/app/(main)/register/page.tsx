@@ -68,7 +68,7 @@ export default function RegisterPage() {
         <div className="text-center mb-10">
           <h1 className="font-display-md text-3xl text-on-surface mb-4">Create Account</h1>
           <p className="font-body-md text-on-surface-variant">
-            Join Elvara Skinlane to manage your rituals, track orders, and sync your wishlist.
+            Join Elvara Skinlane to manage your account, track orders, and sync your wishlist.
           </p>
         </div>
 

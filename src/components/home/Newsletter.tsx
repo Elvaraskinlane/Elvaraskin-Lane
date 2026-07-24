@@ -41,7 +41,7 @@ export default function Newsletter() {
       <div className="max-w-2xl mx-auto px-margin-mobile text-center">
         <h2 className="font-headline-md text-headline-md text-on-background mb-4">Join the Inner Circle</h2>
         <p className="font-body-md text-body-md text-on-surface-variant mb-10">
-          Subscribe to receive gentle reminders, exclusive access to new rituals, and complimentary shipping on your first order.
+          Subscribe to receive gentle reminders, exclusive access to new products, and complimentary shipping on your first order.
         </p>
         
         {status === "success" ? (

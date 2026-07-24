@@ -72,7 +72,7 @@ export default function AccountDashboardPage() {
         </button>
         <h1 className="font-display-lg-mobile md:font-display-lg text-on-surface">Welcome back, {user?.user_display_name?.split(' ')[0] || "User"}.</h1>
         <p className="font-body-lg text-on-surface-variant max-w-2xl">
-          Your personalized skincare journey continues here. Manage your rituals, track orders, and discover new luminosity.
+          Your personalized skincare journey continues here. Manage your account, track orders, and discover new luminosity.
         </p>
       </header>
 
@@ -165,7 +165,7 @@ export default function AccountDashboardPage() {
           {wishlistItems.length === 0 ? (
             <div className="col-span-full flex flex-col items-center justify-center py-12 text-center opacity-70">
               <span className="material-symbols-outlined text-4xl mb-4 font-light text-on-surface-variant">favorite</span>
-              <p className="font-body-md text-sm text-on-surface-variant">Your wishlist is empty. Start saving your favorite rituals!</p>
+              <p className="font-body-md text-sm text-on-surface-variant">Your wishlist is empty. Start saving your favorite products!</p>
             </div>
           ) : (
             wishlistItems.map((item) => {

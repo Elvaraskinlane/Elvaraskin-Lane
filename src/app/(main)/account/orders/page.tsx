@@ -39,7 +39,7 @@ export default function OrderHistoryPage() {
       <header className="border-b border-outline-variant/30 pb-6">
         <h1 className="font-headline-md text-on-surface">Order History</h1>
         <p className="font-body-md text-on-surface-variant mt-2">
-          View and track your previous rituals and purchases.
+          View and track your previous orders.
         </p>
       </header>
 

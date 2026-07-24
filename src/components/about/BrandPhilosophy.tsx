@@ -17,7 +17,7 @@ export default function BrandPhilosophy() {
             We believe that true beauty is cultivated through intention. In a world of complex routines and fleeting trends, we anchor our approach in minimalism and tactile experiences.
           </p>
           <p className="font-body-md text-body-md text-on-surface-variant">
-            Every formula is a deliberate composition of ethically sourced actives, designed not just to transform the skin, but to elevate the mind through serene, ritualistic application.
+            Every formula is a deliberate composition of ethically sourced actives, designed not just to transform the skin, but to elevate the mind through serene, mindful application.
           </p>
         </div>
 
