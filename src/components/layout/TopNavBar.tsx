@@ -13,6 +13,7 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [expandedMobileMenu, setExpandedMobileMenu] = useState<string | null>(null);
   
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
@@ -34,8 +35,15 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
   // Safely calculate total items by reducing the actual items array
   const totalItems = cart?.items?.reduce((acc, item) => acc + item.quantity, 0) || 0;
   
-  const toggleMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+  const toggleMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+    if (isMobileMenuOpen) setExpandedMobileMenu(null);
+  };
   const toggleProfileDropdown = () => setIsProfileDropdownOpen(!isProfileDropdownOpen);
+
+  const toggleMobileAccordion = (menuName: string) => {
+    setExpandedMobileMenu(prev => prev === menuName ? null : menuName);
+  };
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -434,41 +442,74 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
 
       {/* Mobile Menu Dropdown */}
       {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 w-full bg-background border-b border-outline-variant/30 px-margin-mobile py-4 shadow-lg flex flex-col space-y-4 max-h-[80vh] overflow-y-auto">
-          {navMenus.map((link) => (
-            <div key={link.name} className="flex flex-col border-b border-outline-variant/10 pb-2">
-              <Link 
-                href={link.href}
-                className="font-label-md text-label-md text-on-background py-2"
-                onClick={() => !link.megaMenu && setIsMobileMenuOpen(false)}
-              >
-                {link.name}
-              </Link>
-              {link.megaMenu && (
-                <div className="pl-4 flex flex-col gap-4 mt-2 border-l border-outline-variant/30">
-                  {link.megaMenu.sections.map((section) => (
-                    <div key={section.title} className="flex flex-col">
-                      <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">{section.title}</h4>
-                      {!section.isCustom && section.links && (
-                        <div className="pl-2 flex flex-col gap-2">
-                          {section.links.map((item) => (
-                            <Link 
-                              key={item.name}
-                              href={item.href}
-                              className="font-label-md text-sm text-on-surface-variant"
-                              onClick={() => setIsMobileMenuOpen(false)}
-                            >
-                              {item.name}
-                            </Link>
-                          ))}
+        <div className="md:hidden absolute top-full left-0 w-full bg-background border-b border-outline-variant/30 shadow-2xl flex flex-col max-h-[85vh] overflow-y-auto">
+          <div className="flex flex-col py-2 px-margin-mobile">
+            {navMenus.map((link) => (
+              <div key={link.name} className="flex flex-col border-b border-outline-variant/15 last:border-b-0">
+                {link.megaMenu ? (
+                  <button 
+                    onClick={() => toggleMobileAccordion(link.name)}
+                    className="flex justify-between items-center py-5 w-full text-left"
+                  >
+                    <span className="font-label-md text-[13px] uppercase tracking-widest text-on-background">
+                      {link.name}
+                    </span>
+                    <span className="material-symbols-outlined text-outline-variant font-light text-[20px] transition-transform duration-300" style={{ transform: expandedMobileMenu === link.name ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                      expand_more
+                    </span>
+                  </button>
+                ) : (
+                  <Link 
+                    href={link.href}
+                    className="font-label-md text-[13px] uppercase tracking-widest text-on-background py-5 block"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {link.name}
+                  </Link>
+                )}
+                
+                {/* Accordion Content */}
+                {link.megaMenu && (
+                  <div 
+                    className={`overflow-hidden transition-all duration-300 ease-in-out flex flex-col ${
+                      expandedMobileMenu === link.name ? 'max-h-[2000px] opacity-100 pb-4' : 'max-h-0 opacity-0'
+                    }`}
+                  >
+                    <div className="flex flex-col gap-6 pl-4 border-l border-outline-variant/20 ml-2 mt-2">
+                      {link.megaMenu.sections.map((section) => (
+                        <div key={section.title} className="flex flex-col">
+                          {section.isCustom && section.customContent ? (
+                            <div className="mt-2 pr-4">{section.customContent}</div>
+                          ) : (
+                            <>
+                              <h4 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-outline mb-3">{section.title}</h4>
+                              {section.links && (
+                                <div className="flex flex-col gap-3">
+                                  {section.links.map((item) => (
+                                    <Link 
+                                      key={item.name}
+                                      href={item.href}
+                                      className="font-body-md text-[14px] text-on-surface-variant hover:text-black transition-colors"
+                                      onClick={() => {
+                                        setIsMobileMenuOpen(false);
+                                        setExpandedMobileMenu(null);
+                                      }}
+                                    >
+                                      {item.name}
+                                    </Link>
+                                  ))}
+                                </div>
+                              )}
+                            </>
+                          )}
                         </div>
-                      )}
+                      ))}
                     </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </nav>
