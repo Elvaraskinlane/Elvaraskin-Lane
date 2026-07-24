@@ -47,17 +47,24 @@ export default function AuthModal() {
         throw new Error("Security check failed. Please try again.");
       }
 
-      const data = await loginCustomer(username, password);
+      const result = await loginCustomer(username, password);
+      
+      if (!result.success) {
+        setError(result.error || "Invalid login credentials.");
+        setIsLoading(false);
+        return;
+      }
+
       login({
-        token: data.token,
-        user_email: data.user_email,
-        user_nicename: data.user_nicename,
-        user_display_name: data.user_display_name,
+        token: result.data.token,
+        user_email: result.data.user_email,
+        user_nicename: result.data.user_nicename,
+        user_display_name: result.data.user_display_name,
       });
       closeAuthModal();
       router.push("/account");
     } catch (err: any) {
-      setError(err.message || "Invalid login credentials.");
+      setError(err.message || "An unexpected error occurred.");
     } finally {
       setIsLoading(false);
     }

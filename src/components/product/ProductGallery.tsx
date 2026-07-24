@@ -23,10 +23,10 @@ export default function ProductGallery({ images, fallbackImage }: ProductGallery
           <button 
             key={img.id || idx}
             onClick={() => setActiveIndex(idx)}
-            className={`relative w-20 h-24 md:w-24 md:h-32 flex-shrink-0 bg-surface rounded-sm overflow-hidden border-[1.5px] transition-all duration-300 snap-start shadow-sm ${
+            className={`relative w-20 h-24 md:w-24 md:h-32 flex-shrink-0 bg-white rounded-sm overflow-hidden border transition-all duration-300 snap-start shadow-sm ${
               activeIndex === idx 
-                ? "border-on-background scale-100 opacity-100" 
-                : "border-transparent opacity-60 hover:opacity-100 hover:scale-[1.02]"
+                ? "border-black scale-100 opacity-100" 
+                : "border-outline-variant/15 opacity-60 hover:opacity-100 hover:scale-[1.02]"
             }`}
           >
             <Image 
@@ -41,7 +41,7 @@ export default function ProductGallery({ images, fallbackImage }: ProductGallery
       </div>
 
       {/* Main Feature Image */}
-      <div className="relative w-full aspect-[4/5] md:aspect-[3/4] bg-surface rounded-sm overflow-hidden flex-1 cursor-crosshair group shadow-sm border border-outline-variant/10">
+      <div className="relative w-full aspect-[4/5] md:aspect-[3/4] bg-white rounded-sm overflow-hidden flex-1 cursor-crosshair group shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-outline-variant/15">
         <Image 
           src={activeImage} 
           alt={imageList[activeIndex]?.alt || imageList[activeIndex]?.name || "Main product image"} 

@@ -43,20 +43,24 @@ export default function RegisterPage() {
       await registerCustomer(email, password, firstName);
       
       // 2. Log them in immediately via JWT
-      const loginData = await loginCustomer(email, password);
+      const loginResult = await loginCustomer(email, password);
       
+      if (!loginResult.success) {
+        throw new Error(loginResult.error || "Failed to log in automatically after registration.");
+      }
+
+      // 4. Set auth state
       login({
-        token: loginData.token,
-        user_email: loginData.user_email,
-        user_nicename: loginData.user_nicename,
-        user_display_name: loginData.user_display_name,
+        token: loginResult.data.token,
+        user_email: loginResult.data.user_email,
+        user_nicename: loginResult.data.user_nicename,
+        user_display_name: loginResult.data.user_display_name,
       });
 
-      // 3. Redirect to account
+      // 5. Redirect to account page
       router.push("/account");
-
     } catch (err: any) {
-      setError(err.message || "Failed to register. You might already have an account.");
+      setError(err.message || "An unexpected error occurred during registration.");
     } finally {
       setIsLoading(false);
     }

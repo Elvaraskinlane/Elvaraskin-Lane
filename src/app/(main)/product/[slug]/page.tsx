@@ -44,17 +44,17 @@ export default async function ProductDetailsPage({ params }: { params: Promise<{
       <div className="max-w-[1280px] mx-auto px-margin-mobile md:px-margin-desktop py-8 md:py-16">
         
         {/* Breadcrumbs */}
-        <nav className="flex items-center gap-3 mb-10 font-label-md text-sm text-on-surface-variant uppercase tracking-wider">
+        <nav className="flex items-center gap-2 md:gap-3 mb-10 font-label-md text-[10px] md:text-[11px] text-on-surface-variant uppercase tracking-[0.15em]">
           <Link href="/" className="hover:text-primary transition-colors">Home</Link>
-          <span className="material-symbols-outlined text-[16px] opacity-50">chevron_right</span>
+          <span className="material-symbols-outlined text-[14px] opacity-40">chevron_right</span>
           <Link href="/shop" className="hover:text-primary transition-colors">Shop</Link>
-          <span className="material-symbols-outlined text-[16px] opacity-50">chevron_right</span>
+          <span className="material-symbols-outlined text-[14px] opacity-40">chevron_right</span>
           {product.categories?.[0] && (
             <>
               <Link href={`/category/${product.categories[0].slug}`} className="hover:text-primary transition-colors">
                 {product.categories[0].name}
               </Link>
-              <span className="material-symbols-outlined text-[16px] opacity-50">chevron_right</span>
+              <span className="material-symbols-outlined text-[14px] opacity-40">chevron_right</span>
             </>
           )}
           <span className="text-on-background font-medium truncate max-w-[200px]">{product.name}</span>
@@ -68,21 +68,21 @@ export default async function ProductDetailsPage({ params }: { params: Promise<{
           </div>
 
           {/* Right Column: Product Data */}
-          <div className="lg:col-span-5 flex flex-col pt-2 md:pt-6">
-            <h1 className="font-headline-lg text-4xl md:text-5xl lg:text-[52px] text-on-background mb-6 leading-[1.1] tracking-tight">
+          <div className="lg:col-span-5 flex flex-col pt-2 md:pt-4">
+            <h1 className="font-display-md text-3xl md:text-4xl lg:text-[42px] text-on-background mb-6 leading-[1.2] uppercase tracking-[0.02em]">
               {product.name}
             </h1>
             
             {/* Render raw HTML description safely */}
             <div 
-              className="font-body-md text-lg text-on-surface-variant/90 leading-relaxed prose prose-stone prose-p:mb-6 max-w-none"
+              className="font-body-md text-[15px] md:text-[16px] text-on-surface-variant/80 leading-[1.8] font-light prose prose-stone prose-p:mb-6 max-w-none italic"
               dangerouslySetInnerHTML={{ __html: product.description || product.short_description || "<p>A beautifully crafted product to elevate your routine.</p>" }}
             />
 
             {/* Dynamic Key Benefits */}
-            <div className="mt-8 space-y-4 bg-surface-container-lowest p-6 border border-outline-variant/10 rounded-sm">
-              <h3 className="font-label-md text-sm text-on-background uppercase tracking-[0.2em] mb-4">Key Benefits</h3>
-              <ul className="space-y-4 font-body-md text-on-surface-variant">
+            <div className="mt-8 space-y-4 bg-[#fafafa] p-6 md:p-8 rounded-sm">
+              <h3 className="font-label-md text-[11px] text-on-background uppercase tracking-[0.2em] mb-6">Key Benefits</h3>
+              <ul className="space-y-5 font-body-md text-[14px] text-on-surface-variant/90 leading-relaxed font-light">
                 {(() => {
                   const defaultBenefits = [
                     { icon: "verified", text: "Dermatologically tested and approved for sensitive skin." },
