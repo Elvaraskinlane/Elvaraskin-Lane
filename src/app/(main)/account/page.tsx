@@ -169,7 +169,7 @@ export default function AccountDashboardPage() {
                 <>
                   <div className="relative aspect-[3/4] bg-white border-b border-outline-variant/10">
                     {item.image ? (
-                      <Image src={item.image} alt={item.name} fill className="object-cover object-top mix-blend-multiply p-4" />
+                      <Image src={item.image} alt={item.name} fill sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw" className="object-cover object-top mix-blend-multiply p-4" />
                     ) : (
                       <div className="absolute inset-0 flex items-center justify-center bg-[#fafafa]">
                         <span className="material-symbols-outlined text-on-surface-variant/30 text-4xl">image</span>

@@ -32,6 +32,7 @@ export default async function CuratedEssentials() {
               src={faceImg} 
               alt="Face Care Collection"
               fill
+              sizes="(max-width: 768px) 100vw, 60vw"
               className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03]"
             />
             {/* Elegant luxury gradient overlay */}
@@ -60,6 +61,7 @@ export default async function CuratedEssentials() {
                 src={bodyImg} 
                 alt="Body & Hair Collection"
                 fill
+                sizes="(max-width: 768px) 100vw, 40vw"
                 className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03]"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
@@ -84,6 +86,7 @@ export default async function CuratedEssentials() {
                 src={specialImg} 
                 alt="Specialized Collections"
                 fill
+                sizes="(max-width: 768px) 100vw, 40vw"
                 className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03]"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>

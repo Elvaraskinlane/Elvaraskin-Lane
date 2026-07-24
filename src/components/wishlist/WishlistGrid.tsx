@@ -80,7 +80,7 @@ export default function WishlistGrid() {
         {items.map((item, index) => (
         <div key={item.id} className="group relative flex flex-col animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
           <div className="relative w-full aspect-[4/5] bg-surface-container-low overflow-hidden mb-6 rounded-sm">
-            <Image src={item.image || "/hero-3.png"} alt={item.name} fill className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out p-4 mix-blend-multiply" />
+            <Image src={item.image || "/hero-3.png"} alt={item.name} fill sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out p-4 mix-blend-multiply" />
             
             {/* Action Overlay */}
             <div className="absolute inset-0 bg-on-surface/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-4">
