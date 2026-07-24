@@ -54,10 +54,16 @@ function ResetPasswordForm() {
     setError("");
 
     try {
-      if (!turnstileToken) {
+      let currentToken = turnstileToken;
+      if (!process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY) {
+        currentToken = "XXXX.DUMMY.TOKEN.XXXX";
+      }
+
+      if (!currentToken) {
         throw new Error("Please complete the security check.");
       }
-      const verifyResult = await verifyTurnstileToken(turnstileToken);
+
+      const verifyResult = await verifyTurnstileToken(currentToken);
       if (!verifyResult.success) {
         throw new Error("Security check failed. Please try again.");
       }
@@ -154,15 +160,17 @@ function ResetPasswordForm() {
           </div>
 
           {/* Cloudflare Turnstile */}
-          <div className="cf-turnstile" data-action="turnstile-spin-v2">
-            <Turnstile 
-              siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "1x00000000000000000000AA"} 
-              onSuccess={(token) => setTurnstileToken(token)}
-              onError={() => setTurnstileToken("XXXX.DUMMY.TOKEN.XXXX")}
-              onExpire={() => setTurnstileToken("")}
-              options={{ action: "turnstile-spin-v2" }}
-            />
-          </div>
+          {process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
+            <div className="cf-turnstile" data-action="turnstile-spin-v2">
+              <Turnstile 
+                siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY} 
+                onSuccess={(token) => setTurnstileToken(token)}
+                onError={() => setTurnstileToken("XXXX.DUMMY.TOKEN.XXXX")}
+                onExpire={() => setTurnstileToken("")}
+                options={{ action: "turnstile-spin-v2" }}
+              />
+            </div>
+          )}
 
           <button
             type="submit"
