@@ -128,96 +128,105 @@ export default function ShopFilters() {
       )}
 
       {/* Categories Accordion */}
-      <div className="border border-outline-variant/30 rounded-md overflow-hidden bg-surface">
+      <div className="border-b border-gray-200 overflow-hidden bg-transparent">
         <button 
           onClick={() => toggleSection("categories")}
-          className="w-full flex justify-between items-center p-4 bg-surface-container-lowest hover:bg-surface-container-low transition-colors"
+          className="w-full flex justify-between items-center py-5 bg-transparent hover:text-gray-500 transition-colors"
         >
-          <span className="font-label-md text-label-md text-on-surface uppercase tracking-wider">Categories</span>
-          <span className="material-symbols-outlined text-on-surface-variant">
-            {openSection === "categories" ? "expand_less" : "expand_more"}
+          <span className="font-label-md text-xs text-black uppercase tracking-[0.15em]">Categories</span>
+          <span className="material-symbols-outlined text-gray-400 text-[18px]">
+            {openSection === "categories" ? "remove" : "add"}
           </span>
         </button>
         {openSection === "categories" && (
-          <div className="p-4 border-t border-outline-variant/30 bg-surface max-h-64 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
-            <ul className="space-y-3">
-              {categories.map((cat) => (
-                <li key={cat.value}>
-                  <label className="flex items-center cursor-pointer hover:text-black transition-colors font-body-md text-gray-600 text-sm">
-                    <input 
-                      type="checkbox" 
-                      checked={activeCategories.includes(cat.value)}
-                      onChange={() => handleFilterChange("category", cat.value)}
-                      className="form-checkbox rounded-sm text-primary border-outline-variant focus:ring-primary mr-3 w-4 h-4 bg-transparent cursor-pointer" 
-                    />
-                    {cat.name}
-                  </label>
-                </li>
-              ))}
+          <div className="pb-5 bg-transparent max-h-64 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">
+            <ul className="space-y-4">
+              {categories.map((cat) => {
+                const isActive = activeCategories.includes(cat.value);
+                return (
+                  <li key={cat.value}>
+                    <button 
+                      onClick={() => handleFilterChange("category", cat.value)}
+                      className={`flex items-center text-left w-full cursor-pointer hover:text-black transition-colors font-body-md text-sm ${isActive ? "text-black font-medium" : "text-gray-500"}`}
+                    >
+                      <span className={`w-3 h-3 border rounded-full mr-3 flex flex-shrink-0 items-center justify-center transition-colors ${isActive ? "border-black" : "border-gray-300"}`}>
+                        {isActive && <span className="w-1.5 h-1.5 bg-black rounded-full" />}
+                      </span>
+                      {cat.name}
+                    </button>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         )}
       </div>
 
       {/* Brands Accordion */}
-      <div className="border border-outline-variant/30 rounded-md overflow-hidden bg-surface">
+      <div className="border-b border-gray-200 overflow-hidden bg-transparent">
         <button 
           onClick={() => toggleSection("brands")}
-          className="w-full flex justify-between items-center p-4 bg-surface-container-lowest hover:bg-surface-container-low transition-colors"
+          className="w-full flex justify-between items-center py-5 bg-transparent hover:text-gray-500 transition-colors"
         >
-          <span className="font-label-md text-label-md text-on-surface uppercase tracking-wider">Brands</span>
-          <span className="material-symbols-outlined text-on-surface-variant">
-            {openSection === "brands" ? "expand_less" : "expand_more"}
+          <span className="font-label-md text-xs text-black uppercase tracking-[0.15em]">Brands</span>
+          <span className="material-symbols-outlined text-gray-400 text-[18px]">
+            {openSection === "brands" ? "remove" : "add"}
           </span>
         </button>
         {openSection === "brands" && (
-          <div className="p-4 border-t border-outline-variant/30 bg-surface max-h-64 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
-            <ul className="space-y-3">
-              {brands.map((brand) => (
-                <li key={brand.value}>
-                  <label className="flex items-center cursor-pointer hover:text-black transition-colors font-body-md text-gray-600 text-sm">
-                    <input 
-                      type="checkbox" 
-                      checked={activeBrands.includes(brand.value)}
-                      onChange={() => handleFilterChange("brand", brand.value)}
-                      className="form-checkbox rounded-sm text-primary border-outline-variant focus:ring-primary mr-3 w-4 h-4 bg-transparent cursor-pointer" 
-                    />
-                    {brand.name}
-                  </label>
-                </li>
-              ))}
+          <div className="pb-5 bg-transparent max-h-64 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">
+            <ul className="space-y-4">
+              {brands.map((brand) => {
+                const isActive = activeBrands.includes(brand.value);
+                return (
+                  <li key={brand.value}>
+                    <button 
+                      onClick={() => handleFilterChange("brand", brand.value)}
+                      className={`flex items-center text-left w-full cursor-pointer hover:text-black transition-colors font-body-md text-sm ${isActive ? "text-black font-medium" : "text-gray-500"}`}
+                    >
+                      <span className={`w-3 h-3 border rounded-full mr-3 flex flex-shrink-0 items-center justify-center transition-colors ${isActive ? "border-black" : "border-gray-300"}`}>
+                        {isActive && <span className="w-1.5 h-1.5 bg-black rounded-full" />}
+                      </span>
+                      {brand.name}
+                    </button>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         )}
       </div>
 
       {/* Skin Concerns Accordion */}
-      <div className="border border-outline-variant/30 rounded-md overflow-hidden bg-surface">
+      <div className="border-b border-gray-200 overflow-hidden bg-transparent">
         <button 
           onClick={() => toggleSection("concerns")}
-          className="w-full flex justify-between items-center p-4 bg-surface-container-lowest hover:bg-surface-container-low transition-colors"
+          className="w-full flex justify-between items-center py-5 bg-transparent hover:text-gray-500 transition-colors"
         >
-          <span className="font-label-md text-label-md text-on-surface uppercase tracking-wider">Skin Concerns</span>
-          <span className="material-symbols-outlined text-on-surface-variant">
-            {openSection === "concerns" ? "expand_less" : "expand_more"}
+          <span className="font-label-md text-xs text-black uppercase tracking-[0.15em]">Skin Concerns</span>
+          <span className="material-symbols-outlined text-gray-400 text-[18px]">
+            {openSection === "concerns" ? "remove" : "add"}
           </span>
         </button>
         {openSection === "concerns" && (
-          <div className="p-4 border-t border-outline-variant/30 bg-surface max-h-64 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
-            <ul className="space-y-3">
-              {concerns.map((concern) => (
-                <li key={concern.value}>
-                  <label className="flex items-center cursor-pointer hover:text-black transition-colors font-body-md text-gray-600 text-sm">
-                    <input 
-                      type="checkbox" 
-                      checked={activeConcerns.includes(concern.value)}
-                      onChange={() => handleFilterChange("concern", concern.value)}
-                      className="form-checkbox rounded-sm text-primary border-outline-variant focus:ring-primary mr-3 w-4 h-4 bg-transparent cursor-pointer" 
-                    />
-                    {concern.name}
-                  </label>
-                </li>
-              ))}
+          <div className="pb-5 bg-transparent max-h-64 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">
+            <ul className="space-y-4">
+              {concerns.map((concern) => {
+                const isActive = activeConcerns.includes(concern.value);
+                return (
+                  <li key={concern.value}>
+                    <button 
+                      onClick={() => handleFilterChange("concern", concern.value)}
+                      className={`flex items-center text-left w-full cursor-pointer hover:text-black transition-colors font-body-md text-sm ${isActive ? "text-black font-medium" : "text-gray-500"}`}
+                    >
+                      <span className={`w-3 h-3 border rounded-full mr-3 flex flex-shrink-0 items-center justify-center transition-colors ${isActive ? "border-black" : "border-gray-300"}`}>
+                        {isActive && <span className="w-1.5 h-1.5 bg-black rounded-full" />}
+                      </span>
+                      {concern.name}
+                    </button>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         )}

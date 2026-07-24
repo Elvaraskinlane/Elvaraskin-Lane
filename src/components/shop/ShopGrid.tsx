@@ -40,40 +40,47 @@ export default function ShopGrid({ initialProducts }: { initialProducts: WCProdu
           // Graceful fallback if a product is published without an image
           const imageUrl = product.images?.[0]?.src || "/hero-1.png";
 
+          // Heuristic to split brand name if it exists (e.g. "LUSH HAIR - Product Name")
+          let brandName = "Elvara";
+          let displayName = product.name;
+          if (product.name.includes(" - ")) {
+            const parts = product.name.split(" - ");
+            brandName = parts[0].trim();
+            displayName = parts.slice(1).join(" - ").trim();
+          }
+
           return (
             <div key={product.id} className="group cursor-pointer flex flex-col">
-              <div className="relative bg-surface-container-low aspect-[4/5] mb-4 overflow-hidden rounded-sm flex items-center justify-center">
+              {/* Studio Quality Image Container */}
+              <div className="relative bg-[#FAFAFA] aspect-[4/5] mb-5 overflow-hidden flex items-center justify-center">
                 <Image 
                   src={imageUrl} 
                   alt={product.name} 
                   fill
-                  className="object-cover mix-blend-multiply group-hover:scale-105 transition-transform duration-700 ease-out p-4" 
+                  className="object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-700 ease-out p-6" 
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                 />
-                <button className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-on-background text-background font-label-md text-label-md px-6 py-3 w-11/12 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-secondary">
-                  ADD TO CART
+                {/* Sleek Quick Add Button */}
+                <button className="absolute bottom-0 left-0 w-full bg-black text-white font-label-md text-[11px] uppercase tracking-[0.2em] py-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out">
+                  Quick Add
                 </button>
               </div>
-              <div className="text-center">
-                {/* Dynamically render live product data */}
-                <h4 className="font-headline-sm text-headline-sm text-primary mb-1">{product.name}</h4>
-                <p className="font-body-md text-body-md text-on-surface-variant">
-                  ₦{parseInt(product.price || "0").toLocaleString()}
-                </p>
+              
+              {/* Refined Typography (Left Aligned) */}
+              <div className="text-left px-1">
+                <h4 className="font-label-md text-[10px] tracking-[0.15em] uppercase text-gray-500 mb-1.5 line-clamp-1">{brandName}</h4>
+                <h3 className="font-body-md text-sm text-black mb-2 line-clamp-2 leading-relaxed">{displayName}</h3>
+                <p className="font-body-md text-sm text-black">₦{parseInt(product.price || "0").toLocaleString()}</p>
               </div>
             </div>
           );
         })}
       </div>
 
-      {/* Pagination Container */}
-      <div className="flex justify-center items-center mt-16 space-x-2 font-label-md text-label-md">
-        <button className="w-10 h-10 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors disabled:opacity-50" disabled>
-          <span className="material-symbols-outlined">chevron_left</span>
-        </button>
-        <button className="w-10 h-10 flex items-center justify-center rounded-full bg-primary text-on-primary">1</button>
-        <button className="w-10 h-10 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container hover:text-primary transition-colors">
-          <span className="material-symbols-outlined">chevron_right</span>
+      {/* Sleek Load More Button */}
+      <div className="flex justify-center items-center mt-20">
+        <button className="px-12 py-4 border border-black text-black font-label-md text-[11px] uppercase tracking-[0.2em] hover:bg-black hover:text-white transition-colors duration-500">
+          Load More Products
         </button>
       </div>
     </section>
