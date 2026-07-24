@@ -79,22 +79,47 @@ export default async function ProductDetailsPage({ params }: { params: Promise<{
               dangerouslySetInnerHTML={{ __html: product.description || product.short_description || "<p>A beautifully crafted product to elevate your routine.</p>" }}
             />
 
-            {/* Key Benefits (Static for now, can map from WC Meta later) */}
+            {/* Dynamic Key Benefits */}
             <div className="mt-8 space-y-4 bg-surface-container-lowest p-6 border border-outline-variant/10 rounded-sm">
               <h3 className="font-label-md text-sm text-on-background uppercase tracking-[0.2em] mb-4">Key Benefits</h3>
               <ul className="space-y-4 font-body-md text-on-surface-variant">
-                <li className="flex gap-4 items-start">
-                  <span className="material-symbols-outlined text-[20px] text-primary">verified</span>
-                  Dermatologically tested and approved for sensitive skin.
-                </li>
-                <li className="flex gap-4 items-start">
-                  <span className="material-symbols-outlined text-[20px] text-primary">eco</span>
-                  Sustainably sourced, cruelty-free botanicals.
-                </li>
-                <li className="flex gap-4 items-start">
-                  <span className="material-symbols-outlined text-[20px] text-primary">water_drop</span>
-                  Deep hydration without stripping natural moisture.
-                </li>
+                {(() => {
+                  const defaultBenefits = [
+                    { icon: "verified", text: "Dermatologically tested and approved for sensitive skin." },
+                    { icon: "eco", text: "Sustainably sourced, cruelty-free botanicals." },
+                    { icon: "water_drop", text: "Deep hydration without stripping natural moisture." },
+                  ];
+
+                  const slugs = product.categories?.map((c: any) => c.slug.toLowerCase()) || [];
+                  let benefits = defaultBenefits;
+                  
+                  if (slugs.includes("hair-care") || product.name.toLowerCase().includes("hair")) {
+                    benefits = [
+                      { icon: "star", text: "Premium quality and long-lasting durability." },
+                      { icon: "auto_awesome", text: "Soft, lightweight, and incredibly natural-looking." },
+                      { icon: "thumb_up", text: "Easy to maintain and perfect for everyday styling." },
+                    ];
+                  } else if (slugs.includes("makeup") || product.name.toLowerCase().includes("palette")) {
+                    benefits = [
+                      { icon: "palette", text: "Highly pigmented for vibrant, flawless color." },
+                      { icon: "schedule", text: "Long-lasting wear that stays put all day." },
+                      { icon: "spa", text: "Formulated with skin-loving, non-comedogenic ingredients." },
+                    ];
+                  } else if (slugs.includes("fragrance") || product.name.toLowerCase().includes("perfume")) {
+                    benefits = [
+                      { icon: "air", text: "Long-lasting sillage that leaves a memorable impression." },
+                      { icon: "favorite", text: "Expertly blended with premium aromatic notes." },
+                      { icon: "diamond", text: "Elegant packaging perfect for gifting or display." },
+                    ];
+                  }
+
+                  return benefits.map((benefit, idx) => (
+                    <li key={idx} className="flex gap-4 items-start">
+                      <span className="material-symbols-outlined text-[20px] text-primary">{benefit.icon}</span>
+                      {benefit.text}
+                    </li>
+                  ));
+                })()}
               </ul>
             </div>
 
