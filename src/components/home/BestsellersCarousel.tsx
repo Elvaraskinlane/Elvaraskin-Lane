@@ -105,7 +105,8 @@ export default function BestsellersCarousel({
                   aria-label={`Add ${product.name} to cart`}
                   className="bg-black text-white font-label-md text-[11px] py-3.5 px-8 rounded-full shadow-lg hover:bg-primary transition-colors uppercase tracking-[0.15em] flex items-center gap-2"
                   onClick={async (e) => {
-                    e.preventDefault(); // Prevent navigating to product page
+                    e.preventDefault(); 
+                    e.stopPropagation(); // Prevent navigating to product page
                     try {
                       await addItem(product.id, 1);
                       openCartDrawer();

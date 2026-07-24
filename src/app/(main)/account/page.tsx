@@ -7,16 +7,18 @@ import { useAuthStore } from "@/store/useAuthStore";
 import { fetchCustomerOrders } from "@/lib/auth";
 import { useUIStore } from "@/store/useUIStore";
 import { useWishlistStore } from "@/store/useWishlistStore";
+import { useCartStore } from "@/store/useCartStore";
 
 export default function AccountDashboardPage() {
   const { user, isAuthenticated, logout } = useAuthStore();
-  const { openAuthModal } = useUIStore();
+  const { openAuthModal, openCartDrawer } = useUIStore();
   const { items: wishlistItems } = useWishlistStore();
+  const { addItem, isLoading: isCartLoading } = useCartStore();
   
   const [orders, setOrders] = useState<any[]>([]);
   const [loadingOrders, setLoadingOrders] = useState(true);
 
-  const glassCardClass = "bg-surface/70 backdrop-blur-md border border-outline-variant/20 shadow-[0_4px_30px_rgba(44,44,44,0.04)] rounded-xl p-8";
+  const glassCardClass = "bg-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-outline-variant/15 rounded-md p-8";
 
   useEffect(() => {
     async function loadOrders() {
@@ -62,17 +64,11 @@ export default function AccountDashboardPage() {
   return (
     <>
       {/* Welcome Header */}
-      <header className="flex flex-col gap-2 border-b border-outline-variant/30 pb-8 relative">
-        <button 
-          onClick={logout}
-          className="absolute right-0 top-0 font-label-md text-xs uppercase tracking-widest text-on-surface hover:text-error transition-colors flex items-center gap-2"
-        >
-          <span className="material-symbols-outlined text-sm">logout</span>
-          Sign Out
-        </button>
-        <h1 className="font-display-lg-mobile md:font-display-lg text-on-surface">Welcome back, {user?.user_display_name?.split(' ')[0] || "User"}.</h1>
-        <p className="font-body-lg text-on-surface-variant max-w-2xl">
-          Your personalized skincare journey continues here. Manage your account, track orders, and discover new luminosity.
+      <header className="flex flex-col gap-2 border-b border-outline-variant/15 pb-8 relative">
+        <h1 className="font-headline-md text-on-surface">Welcome back, {user?.user_display_name?.split(' ')[0] || "User"}.</h1>
+        <p className="font-body-md text-on-surface-variant max-w-2xl font-light">
+          Your personalized skincare journey continues here. Manage your account, track orders, 
+          and discover new luminosity.
         </p>
       </header>
 
@@ -81,9 +77,9 @@ export default function AccountDashboardPage() {
         
         {/* Recent Orders */}
         <section className={`${glassCardClass} flex flex-col gap-6 md:col-span-2 lg:col-span-1 min-h-[400px]`}>
-          <div className="flex justify-between items-end border-b border-outline-variant/20 pb-4">
+          <div className="flex justify-between items-end border-b border-outline-variant/15 pb-4">
             <h3 className="font-headline-sm text-on-surface">Live Orders</h3>
-            <Link href="/account/orders" className="font-label-md text-primary hover:underline cursor-pointer">View All</Link>
+            <Link href="/account/orders" className="font-body-sm text-on-surface-variant hover:text-black transition-colors">View All</Link>
           </div>
           
           <div className="flex flex-col gap-6 overflow-y-auto custom-scrollbar pr-2 max-h-[300px]">
@@ -107,24 +103,24 @@ export default function AccountDashboardPage() {
               </div>
             ) : (
               orders.map((order) => (
-                <div key={order.id} className="flex items-center gap-4 group cursor-pointer p-2 hover:bg-surface-container transition-colors rounded-md">
-                  <div className="w-16 h-16 bg-surface-container overflow-hidden rounded-md flex-shrink-0 relative border border-outline-variant/20 flex items-center justify-center">
-                    <span className="material-symbols-outlined text-on-surface-variant/50 text-2xl">local_mall</span>
+                <div key={order.id} className="flex items-center gap-4 p-2 hover:bg-black/5 transition-colors rounded-sm cursor-default">
+                  <div className="w-16 h-16 bg-[#fafafa] rounded-sm flex-shrink-0 flex items-center justify-center">
+                    <span className="material-symbols-outlined text-on-surface-variant/40 text-2xl font-light">shopping_bag</span>
                   </div>
                   <div className="flex-grow flex flex-col gap-1">
                     <div className="flex justify-between items-center">
-                      <span className="font-label-md text-on-surface-variant">Order #{order.id}</span>
-                      <span className={`font-label-md text-xs uppercase tracking-widest px-2 py-0.5 rounded-sm ${
+                      <span className="font-body-md text-on-surface-variant">Order #{order.id}</span>
+                      <span className={`font-label-md text-[10px] uppercase tracking-[0.1em] px-2 py-0.5 rounded-sm ${
                         order.status === 'completed' ? 'bg-primary-container text-on-primary-container' :
                         order.status === 'processing' ? 'bg-tertiary-container text-on-tertiary-container' :
-                        order.status === 'cancelled' ? 'bg-error-container text-on-error-container' :
+                        order.status === 'cancelled' ? 'bg-error/10 text-error' :
                         'bg-secondary-container text-on-secondary-container'
                       }`}>
                         {order.status}
                       </span>
                     </div>
-                    <h4 className="font-body-md text-on-surface font-medium">{order.currency_symbol}{order.total}</h4>
-                    <span className="font-body-md text-on-surface-variant text-xs">
+                    <h4 className="font-headline-sm text-on-surface">{order.currency_symbol}{order.total}</h4>
+                    <span className="font-body-sm text-on-surface-variant text-xs font-light">
                       Placed on {new Date(order.date_created).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
                     </span>
                   </div>
@@ -135,18 +131,18 @@ export default function AccountDashboardPage() {
         </section>
 
         {/* Skin Profile */}
-        <section className="rounded-xl overflow-hidden relative md:col-span-2 lg:col-span-1 h-full min-h-[400px] flex flex-col justify-end bg-surface-container-lowest border border-outline-variant/20 shadow-sm">
-          <div className="relative z-10 p-8 flex flex-col gap-4">
+        <section className={`${glassCardClass} flex flex-col md:col-span-2 lg:col-span-1 min-h-[400px] justify-center`}>
+          <div className="relative z-10 p-4 flex flex-col gap-4">
             <div className="flex items-center gap-2 mb-2">
-              <span className="material-symbols-outlined text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>spa</span>
-              <span className="font-label-md text-primary tracking-widest uppercase">Account Details</span>
+              <span className="material-symbols-outlined text-on-surface-variant font-light text-[20px]">person</span>
+              <span className="font-label-md text-on-surface-variant tracking-[0.2em] uppercase text-[10px]">Account Details</span>
             </div>
-            <h3 className="font-headline-md text-on-surface leading-tight">{user?.user_display_name}</h3>
-            <p className="font-body-md text-on-surface-variant mb-4">{user?.user_email}</p>
-            <div className="flex flex-wrap gap-2 mb-4">
-              <span className="px-4 py-1.5 rounded-full border border-secondary-fixed-dim bg-secondary-fixed/30 font-label-md text-on-surface-variant text-xs">Verified Customer</span>
+            <h3 className="font-headline-sm text-on-surface leading-tight">{user?.user_display_name}</h3>
+            <p className="font-body-md text-on-surface-variant mb-4 font-light">{user?.user_email}</p>
+            <div className="flex flex-wrap gap-2 mb-6">
+              <span className="px-4 py-1.5 rounded-full border border-outline-variant/30 font-label-md text-on-surface-variant text-[10px] uppercase tracking-widest bg-[#fafafa]">Verified Customer</span>
             </div>
-            <button className="w-full md:w-auto px-8 py-4 bg-primary text-on-primary font-label-md rounded-md hover:bg-tertiary transition-colors self-start">
+            <button className="w-full md:w-max px-8 py-3.5 bg-[#5e5e5e] text-white rounded-[4px] hover:bg-black font-label-md text-[11px] tracking-[0.1em] transition-colors mt-2 text-center shadow-sm">
               Edit Profile
             </button>
           </div>
@@ -156,9 +152,9 @@ export default function AccountDashboardPage() {
 
       {/* Wishlist Section */}
       <section className={`${glassCardClass} flex flex-col gap-6 mt-8`}>
-        <div className="flex justify-between items-end border-b border-outline-variant/20 pb-4">
+        <div className="flex justify-between items-end border-b border-outline-variant/15 pb-4">
           <h3 className="font-headline-sm text-on-surface">Your Wishlist</h3>
-          <span className="font-label-md text-on-surface-variant">{wishlistItems.length} items</span>
+          <span className="font-body-sm text-on-surface-variant">{wishlistItems.length} items</span>
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -171,34 +167,36 @@ export default function AccountDashboardPage() {
             wishlistItems.map((item) => {
               const CardContent = (
                 <>
-                  <div className="relative aspect-square bg-surface-container-highest">
+                  <div className="relative aspect-[3/4] bg-white border-b border-outline-variant/10">
                     {item.image ? (
-                      <Image src={item.image} alt={item.name} fill className="object-cover" />
+                      <Image src={item.image} alt={item.name} fill className="object-cover object-top mix-blend-multiply p-4" />
                     ) : (
-                      <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="absolute inset-0 flex items-center justify-center bg-[#fafafa]">
                         <span className="material-symbols-outlined text-on-surface-variant/30 text-4xl">image</span>
                       </div>
                     )}
                   </div>
-                  <div className="p-4 flex flex-col flex-grow">
-                    <h4 className="font-body-md text-sm text-on-surface line-clamp-2 mb-2 flex-grow" dangerouslySetInnerHTML={{ __html: item.name }} />
-                    <div className="font-label-md text-on-surface font-medium mb-4" dangerouslySetInnerHTML={{ __html: item.price }} />
+                  <div className="p-4 flex flex-col flex-grow bg-white">
+                    <h4 className="font-label-md text-[11px] text-on-surface line-clamp-2 mb-2 flex-grow uppercase tracking-wider leading-relaxed" dangerouslySetInnerHTML={{ __html: item.name }} />
+                    <div className="font-headline-sm text-[14px] text-on-surface-variant/90 mb-4" dangerouslySetInnerHTML={{ __html: item.price }} />
                     
-                    {/* Conversion UX: Quick Add to Cart from Wishlist */}
                     <button 
-                      onClick={(e) => {
-                        e.preventDefault(); // Prevent navigating to the product page
-                        import("@/store/useCartStore").then(module => {
-                          module.useCartStore.getState().addItem(item.id, 1);
-                          import("@/store/useUIStore").then(uiModule => {
-                            uiModule.useUIStore.getState().openCartDrawer();
-                          });
-                        });
+                      onClick={async (e) => {
+                        e.preventDefault(); 
+                        e.stopPropagation();
+                        try {
+                          await addItem(item.id, 1);
+                          openCartDrawer();
+                        } catch (err) {
+                          console.error("Failed to add to cart from wishlist", err);
+                          alert("Failed to add to cart.");
+                        }
                       }}
-                      className="w-full py-2.5 bg-surface-container-highest hover:bg-primary hover:text-on-primary text-on-surface text-xs font-label-md uppercase tracking-wider transition-colors rounded-sm flex items-center justify-center gap-2 mt-auto"
+                      disabled={isCartLoading}
+                      className="w-full py-3 bg-black/5 hover:bg-[#e0e0e0] text-black text-[10px] font-label-md uppercase tracking-[0.1em] transition-colors rounded-sm flex items-center justify-center gap-2 mt-auto disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      <span className="material-symbols-outlined text-[16px]">shopping_bag</span>
-                      Add to Cart
+                      <span className="material-symbols-outlined text-[14px] font-light">shopping_bag</span>
+                      {isCartLoading ? "Adding..." : "Add to Cart"}
                     </button>
                   </div>
                 </>
@@ -208,14 +206,14 @@ export default function AccountDashboardPage() {
                 <Link 
                   href={`/product/${item.slug}`} 
                   key={item.id} 
-                  className="group relative bg-surface-container rounded-md overflow-hidden border border-outline-variant/20 hover:border-primary/50 transition-colors flex flex-col cursor-pointer"
+                  className="group relative bg-white rounded-sm overflow-hidden border border-outline-variant/15 hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] transition-all flex flex-col cursor-pointer"
                 >
                   {CardContent}
                 </Link>
               ) : (
                 <div 
                   key={item.id} 
-                  className="group relative bg-surface-container rounded-md overflow-hidden border border-outline-variant/20 flex flex-col"
+                  className="group relative bg-white rounded-sm overflow-hidden border border-outline-variant/15 flex flex-col"
                 >
                   {CardContent}
                 </div>

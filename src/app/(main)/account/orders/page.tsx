@@ -43,7 +43,7 @@ export default function OrderHistoryPage() {
         </p>
       </header>
 
-      <div className="bg-surface/70 backdrop-blur-md border border-outline-variant/20 rounded-xl p-8">
+      <div className="bg-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-outline-variant/15 rounded-md p-8">
         {loadingOrders ? (
           <div className="flex flex-col gap-6">
             {[1, 2, 3].map((i) => (
@@ -68,23 +68,23 @@ export default function OrderHistoryPage() {
         ) : (
           <div className="flex flex-col gap-4">
             {orders.map((order) => (
-              <div key={order.id} className="flex flex-col sm:flex-row gap-6 p-6 bg-surface-container-lowest border border-outline-variant/20 hover:border-outline-variant/50 transition-colors rounded-md group">
-                <div className="w-full sm:w-24 h-24 bg-surface-container overflow-hidden rounded-md flex-shrink-0 relative flex items-center justify-center">
-                  <span className="material-symbols-outlined text-on-surface-variant/40 text-4xl">local_mall</span>
+              <div key={order.id} className="flex flex-col sm:flex-row gap-6 p-6 bg-white border border-outline-variant/15 hover:border-black/20 hover:shadow-[0_4px_20px_rgb(0,0,0,0.03)] transition-all rounded-sm group">
+                <div className="w-full sm:w-24 h-24 bg-[#fafafa] rounded-sm flex-shrink-0 flex items-center justify-center">
+                  <span className="material-symbols-outlined text-on-surface-variant/40 text-4xl font-light">shopping_bag</span>
                 </div>
                 
                 <div className="flex-grow flex flex-col gap-2">
                   <div className="flex justify-between items-start">
                     <div>
                       <h4 className="font-headline-sm text-on-surface">Order #{order.id}</h4>
-                      <span className="font-body-md text-on-surface-variant text-sm">
+                      <span className="font-body-md text-on-surface-variant text-sm font-light">
                         Placed on {new Date(order.date_created).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                       </span>
                     </div>
-                    <span className={`font-label-md text-xs uppercase tracking-widest px-3 py-1 rounded-sm ${
+                    <span className={`font-label-md text-[10px] uppercase tracking-[0.1em] px-3 py-1 rounded-sm ${
                       order.status === 'completed' ? 'bg-primary-container text-on-primary-container' :
                       order.status === 'processing' ? 'bg-tertiary-container text-on-tertiary-container' :
-                      order.status === 'cancelled' ? 'bg-error-container text-on-error-container' :
+                      order.status === 'cancelled' ? 'bg-error/10 text-error' :
                       'bg-secondary-container text-on-secondary-container'
                     }`}>
                       {order.status}

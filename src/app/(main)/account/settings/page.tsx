@@ -143,13 +143,13 @@ export default function AccountSettingsPage() {
         </div>
       )}
 
-      <div className="bg-surface/70 backdrop-blur-md border border-outline-variant/20 rounded-xl p-8">
+      <div className="bg-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-outline-variant/15 rounded-md p-8">
         <form className="space-y-10" onSubmit={handleSubmit}>
           
           {/* Profile Section */}
           <section>
             <h2 className="font-headline-sm text-on-surface mb-6 flex items-center gap-2">
-              <span className="material-symbols-outlined text-primary">person</span>
+              <span className="material-symbols-outlined text-on-surface-variant font-light">person</span>
               Personal Profile
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -160,7 +160,7 @@ export default function AccountSettingsPage() {
                   name="first_name"
                   value={formData.first_name}
                   onChange={handleChange}
-                  className="w-full bg-surface-container border border-outline-variant/50 rounded-md px-4 py-3 focus:ring-1 focus:ring-primary focus:border-primary text-on-background outline-none transition-all" 
+                  className="w-full bg-[#fafafa] border border-outline-variant/30 rounded-sm px-4 py-3 focus:ring-1 focus:ring-black focus:border-black text-on-background outline-none transition-all font-body-md" 
                 />
               </div>
               <div className="flex flex-col">
@@ -170,7 +170,7 @@ export default function AccountSettingsPage() {
                   name="last_name"
                   value={formData.last_name}
                   onChange={handleChange}
-                  className="w-full bg-surface-container border border-outline-variant/50 rounded-md px-4 py-3 focus:ring-1 focus:ring-primary focus:border-primary text-on-background outline-none transition-all" 
+                  className="w-full bg-[#fafafa] border border-outline-variant/30 rounded-sm px-4 py-3 focus:ring-1 focus:ring-black focus:border-black text-on-background outline-none transition-all font-body-md" 
                 />
               </div>
               <div className="flex flex-col md:col-span-2">
@@ -180,7 +180,7 @@ export default function AccountSettingsPage() {
                   name="email"
                   value={formData.email}
                   disabled
-                  className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-md px-4 py-3 text-on-surface-variant/70 cursor-not-allowed outline-none" 
+                  className="w-full bg-[#f5f5f5] border border-outline-variant/30 rounded-sm px-4 py-3 text-on-surface-variant/70 cursor-not-allowed outline-none font-body-md" 
                 />
               </div>
             </div>
@@ -191,7 +191,7 @@ export default function AccountSettingsPage() {
           {/* Security Section */}
           <section>
             <h2 className="font-headline-sm text-on-surface mb-6 flex items-center gap-2">
-              <span className="material-symbols-outlined text-primary">lock</span>
+              <span className="material-symbols-outlined text-on-surface-variant font-light">lock</span>
               Security
             </h2>
             <div className="flex flex-col max-w-md">
@@ -202,7 +202,7 @@ export default function AccountSettingsPage() {
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="••••••••"
-                className="w-full bg-surface-container border border-outline-variant/50 rounded-md px-4 py-3 focus:ring-1 focus:ring-primary focus:border-primary text-on-background outline-none transition-all" 
+                className="w-full bg-[#fafafa] border border-outline-variant/30 rounded-sm px-4 py-3 focus:ring-1 focus:ring-black focus:border-black text-on-background outline-none transition-all font-body-md" 
               />
             </div>
           </section>
@@ -212,7 +212,7 @@ export default function AccountSettingsPage() {
           {/* Billing Address Section */}
           <section>
             <h2 className="font-headline-sm text-on-surface mb-6 flex items-center gap-2">
-              <span className="material-symbols-outlined text-primary">local_shipping</span>
+              <span className="material-symbols-outlined text-on-surface-variant font-light">local_shipping</span>
               Billing & Shipping Details
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -224,7 +224,7 @@ export default function AccountSettingsPage() {
                   value={formData.billing.address_1}
                   onChange={handleChange}
                   placeholder="House number and street name"
-                  className="w-full bg-surface-container border border-outline-variant/50 rounded-md px-4 py-3 focus:ring-1 focus:ring-primary focus:border-primary text-on-background outline-none transition-all mb-3" 
+                  className="w-full bg-[#fafafa] border border-outline-variant/30 rounded-sm px-4 py-3 focus:ring-1 focus:ring-black focus:border-black text-on-background outline-none transition-all mb-3 font-body-md" 
                 />
                 <input 
                   type="text" 
@@ -232,7 +232,7 @@ export default function AccountSettingsPage() {
                   value={formData.billing.address_2}
                   onChange={handleChange}
                   placeholder="Apartment, suite, unit, etc. (optional)"
-                  className="w-full bg-surface-container border border-outline-variant/50 rounded-md px-4 py-3 focus:ring-1 focus:ring-primary focus:border-primary text-on-background outline-none transition-all" 
+                  className="w-full bg-[#fafafa] border border-outline-variant/30 rounded-sm px-4 py-3 focus:ring-1 focus:ring-black focus:border-black text-on-background outline-none transition-all font-body-md" 
                 />
               </div>
               <div className="flex flex-col">
@@ -242,7 +242,7 @@ export default function AccountSettingsPage() {
                   name="billing.city"
                   value={formData.billing.city}
                   onChange={handleChange}
-                  className="w-full bg-surface-container border border-outline-variant/50 rounded-md px-4 py-3 focus:ring-1 focus:ring-primary focus:border-primary text-on-background outline-none transition-all" 
+                  className="w-full bg-[#fafafa] border border-outline-variant/30 rounded-sm px-4 py-3 focus:ring-1 focus:ring-black focus:border-black text-on-background outline-none transition-all font-body-md" 
                 />
               </div>
               <div className="flex flex-col">
@@ -252,7 +252,7 @@ export default function AccountSettingsPage() {
                   name="billing.state"
                   value={formData.billing.state}
                   onChange={handleChange}
-                  className="w-full bg-surface-container border border-outline-variant/50 rounded-md px-4 py-3 focus:ring-1 focus:ring-primary focus:border-primary text-on-background outline-none transition-all" 
+                  className="w-full bg-[#fafafa] border border-outline-variant/30 rounded-sm px-4 py-3 focus:ring-1 focus:ring-black focus:border-black text-on-background outline-none transition-all font-body-md" 
                 />
               </div>
               <div className="flex flex-col">
@@ -262,7 +262,7 @@ export default function AccountSettingsPage() {
                   name="billing.postcode"
                   value={formData.billing.postcode}
                   onChange={handleChange}
-                  className="w-full bg-surface-container border border-outline-variant/50 rounded-md px-4 py-3 focus:ring-1 focus:ring-primary focus:border-primary text-on-background outline-none transition-all" 
+                  className="w-full bg-[#fafafa] border border-outline-variant/30 rounded-sm px-4 py-3 focus:ring-1 focus:ring-black focus:border-black text-on-background outline-none transition-all font-body-md" 
                 />
               </div>
               <div className="flex flex-col">
@@ -272,7 +272,7 @@ export default function AccountSettingsPage() {
                   name="billing.country"
                   value={formData.billing.country}
                   onChange={handleChange}
-                  className="w-full bg-surface-container border border-outline-variant/50 rounded-md px-4 py-3 focus:ring-1 focus:ring-primary focus:border-primary text-on-background outline-none transition-all" 
+                  className="w-full bg-[#fafafa] border border-outline-variant/30 rounded-sm px-4 py-3 focus:ring-1 focus:ring-black focus:border-black text-on-background outline-none transition-all font-body-md" 
                 />
               </div>
               <div className="flex flex-col md:col-span-2">
@@ -282,7 +282,7 @@ export default function AccountSettingsPage() {
                   name="billing.phone"
                   value={formData.billing.phone}
                   onChange={handleChange}
-                  className="w-full bg-surface-container border border-outline-variant/50 rounded-md px-4 py-3 focus:ring-1 focus:ring-primary focus:border-primary text-on-background outline-none transition-all" 
+                  className="w-full bg-[#fafafa] border border-outline-variant/30 rounded-sm px-4 py-3 focus:ring-1 focus:ring-black focus:border-black text-on-background outline-none transition-all font-body-md" 
                 />
               </div>
             </div>
@@ -292,7 +292,7 @@ export default function AccountSettingsPage() {
             <button 
               type="submit"
               disabled={saving}
-              className={`bg-on-surface text-on-primary font-label-md px-10 py-4 rounded-md hover:bg-tertiary transition-colors flex items-center gap-2 ${saving ? 'opacity-70 cursor-not-allowed' : ''}`}
+              className={`bg-black text-white font-label-md px-10 py-4 uppercase tracking-[0.2em] rounded-full hover:bg-primary transition-all shadow-md flex items-center gap-2 ${saving ? 'opacity-70 cursor-not-allowed' : ''}`}
             >
               {saving ? (
                 <>
