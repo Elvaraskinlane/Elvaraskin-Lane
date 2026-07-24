@@ -5,8 +5,8 @@ export default function ShopHero() {
     <header className="w-full relative h-[409px] md:h-[512px] flex items-center justify-center bg-surface-container-low overflow-hidden">
       <div className="absolute inset-0 z-0 opacity-40">
         <Image 
-          src="/hero-1.png" 
-          alt="Abstract minimalist skincare background" 
+          src="/store-sign.jpg" 
+          alt="Elvara Skinlane Store" 
           fill
           priority
           className="object-cover object-center"
