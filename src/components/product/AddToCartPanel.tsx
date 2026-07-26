@@ -45,7 +45,6 @@ export default function AddToCartPanel({ productId, price, stockStatus, productN
       openCartDrawer();
     } catch (err) {
       console.error("Cart error:", err);
-      alert("Failed to add to cart.");
     } finally {
       setIsAdding(false);
     }

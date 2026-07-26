@@ -5,13 +5,16 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { WCProduct } from "@/types/woocommerce";
-import { addToCart } from "@/lib/cart";
+import { useCartStore } from "@/store/useCartStore";
+import { useUIStore } from "@/store/useUIStore";
 import { loadMoreProductsAction } from "@/app/actions/shopActions";
 import ShopFilters from "./ShopFilters";
 
 export default function ShopAllContainer({ initialProducts }: { initialProducts: WCProduct[] }) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { addItem } = useCartStore();
+  const { openCartDrawer } = useUIStore();
 
   const [visibleProducts, setVisibleProducts] = useState(initialProducts);
   const [page, setPage] = useState(1);
@@ -174,11 +177,10 @@ export default function ShopAllContainer({ initialProducts }: { initialProducts:
                         onClick={async (e) => {
                           e.preventDefault(); // Prevent navigating to product page
                           try {
-                            await addToCart(product.id, 1);
-                            alert(`${product.name} added to cart!`);
+                            await addItem(product.id, 1);
+                            openCartDrawer();
                           } catch (err) {
                             console.error("Cart error:", err);
-                            alert("Failed to add to cart.");
                           }
                         }}
                       >

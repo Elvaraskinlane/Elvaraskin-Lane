@@ -102,6 +102,7 @@ export default function AuthModal() {
                       src={item.image || "/hero-3.png"} 
                       alt={item.name} 
                       fill 
+                      sizes="80px"
                       className="object-cover mix-blend-multiply p-1" 
                     />
                   </div>

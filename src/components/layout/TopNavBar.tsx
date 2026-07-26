@@ -135,6 +135,7 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
                     src={featuredImage} 
                     alt="Featured Brand" 
                     fill
+                    sizes="(max-width: 1024px) 100vw, 30vw"
                     className="object-cover rounded-md"
                   />
                 </div>
@@ -442,7 +443,16 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
 
       {/* Mobile Menu Dropdown */}
       {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 w-full bg-background border-b border-outline-variant/30 shadow-2xl flex flex-col max-h-[85vh] overflow-y-auto">
+        <>
+          <div 
+            className="md:hidden fixed inset-0 top-[72px] bg-black/40 z-40"
+            onClick={() => {
+              setIsMobileMenuOpen(false);
+              setExpandedMobileMenu(null);
+            }}
+            aria-hidden="true"
+          />
+          <div className="md:hidden absolute top-full left-0 w-full bg-background border-b border-outline-variant/30 shadow-2xl flex flex-col max-h-[85vh] overflow-y-auto z-50">
           <div className="flex flex-col py-2 px-margin-mobile">
             {navMenus.map((link) => (
               <div key={link.name} className="flex flex-col border-b border-outline-variant/15 last:border-b-0">
@@ -511,6 +521,7 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
             ))}
           </div>
         </div>
+        </>
       )}
     </nav>
   );

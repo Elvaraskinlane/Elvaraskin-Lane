@@ -1,19 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { addToCart } from "@/lib/cart";
+import { useCartStore } from "@/store/useCartStore";
+import { useUIStore } from "@/store/useUIStore";
 
 export default function AddToCartButton({ productId, productName }: { productId: number, productName: string }) {
   const [loading, setLoading] = useState(false);
+  const { addItem } = useCartStore();
+  const { openCartDrawer } = useUIStore();
 
   const handleAdd = async () => {
     setLoading(true);
     try {
-      await addToCart(productId, 1);
-      alert(`${productName} added to cart!`);
+      await addItem(productId, 1);
+      openCartDrawer();
     } catch(err) {
       console.error(err);
-      alert('Failed to add to cart.');
     } finally {
       setLoading(false);
     }

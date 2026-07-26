@@ -188,8 +188,7 @@ export default function AccountDashboardPage() {
                           await addItem(item.id, 1);
                           openCartDrawer();
                         } catch (err) {
-                          console.error("Failed to add to cart from wishlist", err);
-                          alert("Failed to add to cart.");
+                          console.error("Cart error:", err);
                         }
                       }}
                       disabled={isCartLoading}

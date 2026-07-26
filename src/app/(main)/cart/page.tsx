@@ -69,6 +69,7 @@ export default function CartPage() {
                     src={item.images?.[0]?.src || "/hero-2-fixed.png"} 
                     alt={item.name} 
                     fill 
+                    sizes="(max-width: 768px) 120px, 160px"
                     className="object-cover mix-blend-multiply p-2 transition-transform duration-500 group-hover:scale-105" 
                   />
                 </Link>

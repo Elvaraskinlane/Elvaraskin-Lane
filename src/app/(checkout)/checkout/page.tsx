@@ -386,6 +386,7 @@ export default function CheckoutPage() {
                           src={item.images[0]?.src || "/hero-3.png"}
                           alt={item.name}
                           fill
+                          sizes="64px"
                           className="object-cover mix-blend-multiply p-1"
                         />
                       </div>

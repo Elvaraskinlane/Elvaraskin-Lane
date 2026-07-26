@@ -65,6 +65,7 @@ export default function CartDrawer() {
                     src={item.images?.[0]?.src || "/hero-2-fixed.png"} 
                     alt={item.name} 
                     fill 
+                    sizes="100px"
                     className="object-cover mix-blend-multiply p-2" 
                   />
                 </div>

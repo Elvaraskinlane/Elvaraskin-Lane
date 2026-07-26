@@ -112,7 +112,6 @@ export default function BestsellersCarousel({
                       openCartDrawer();
                     } catch (err) {
                       console.error("Cart error:", err);
-                      alert("Failed to add to cart.");
                     }
                   }}
                 >
