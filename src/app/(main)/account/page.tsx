@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useAuthStore } from "@/store/useAuthStore";
+import { toast } from "sonner";
 import { fetchCustomerOrders } from "@/lib/auth";
 import { useUIStore } from "@/store/useUIStore";
 import { useWishlistStore } from "@/store/useWishlistStore";
@@ -189,6 +190,7 @@ export default function AccountDashboardPage() {
                           openCartDrawer();
                         } catch (err) {
                           console.error("Cart error:", err);
+                          toast.error("Failed to add to cart. Item might be out of stock.");
                         }
                       }}
                       disabled={isCartLoading}

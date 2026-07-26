@@ -7,6 +7,7 @@ import Link from "next/link";
 import { WCProduct } from "@/types/woocommerce";
 import { useCartStore } from "@/store/useCartStore";
 import { useUIStore } from "@/store/useUIStore";
+import { toast } from "sonner";
 import { loadMoreProductsAction } from "@/app/actions/shopActions";
 import ShopFilters from "./ShopFilters";
 
@@ -181,6 +182,7 @@ export default function ShopAllContainer({ initialProducts }: { initialProducts:
                             openCartDrawer();
                           } catch (err) {
                             console.error("Cart error:", err);
+                            toast.error("Failed to add to cart. Item might be out of stock.");
                           }
                         }}
                       >

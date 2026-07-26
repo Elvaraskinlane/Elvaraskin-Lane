@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Bodoni_Moda, Plus_Jakarta_Sans } from "next/font/google";
+import { Toaster } from "sonner";
 import "./globals.css";
 
 const bodoni = Bodoni_Moda({
@@ -41,6 +42,22 @@ export default function RootLayout({
         className="bg-background text-on-background font-body-md antialiased selection:bg-secondary-container selection:text-on-secondary-container flex flex-col min-h-screen"
       >
         {children}
+        <Toaster 
+          position="bottom-center"
+          toastOptions={{
+            style: {
+              background: '#1A1A1A',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '0',
+              padding: '16px 24px',
+              fontFamily: 'var(--font-plus-jakarta)',
+              fontSize: '13px',
+              letterSpacing: '0.05em',
+              textTransform: 'uppercase',
+            },
+          }}
+        />
       </body>
     </html>
   );

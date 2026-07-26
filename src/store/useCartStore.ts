@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { getCart, addToCart, removeFromCart, updateCartItem } from '@/lib/cart';
+import { toast } from 'sonner';
 
 // Define the basic shape of the WooCommerce Store API cart
 export interface CartItem {
@@ -41,7 +42,8 @@ export const useCartStore = create<CartState>((set) => ({
   isLoading: false,
 
   fetchCart: async () => {
-    set({ isLoading: true });
+    // Only set loading on initial fetch
+    if (!useCartStore.getState().cart) set({ isLoading: true });
     try {
       const data = await getCart();
       set({ cart: data, isLoading: false });
@@ -52,36 +54,50 @@ export const useCartStore = create<CartState>((set) => ({
   },
 
   addItem: async (productId: number, quantity: number = 1) => {
-    set({ isLoading: true });
     try {
       const data = await addToCart(productId, quantity);
-      set({ cart: data, isLoading: false });
+      set({ cart: data });
     } catch (error) {
       console.error('Error adding item to cart:', error);
-      set({ isLoading: false });
       throw error;
     }
   },
 
   removeItem: async (itemKey: string) => {
-    set({ isLoading: true });
+    const previousCart = useCartStore.getState().cart;
+    if (previousCart) {
+      // Optimistic remove
+      const newItems = previousCart.items.filter((item) => item.key !== itemKey);
+      set({ cart: { ...previousCart, items: newItems } });
+    }
+    
     try {
       const data = await removeFromCart(itemKey);
-      set({ cart: data, isLoading: false });
+      set({ cart: data });
     } catch (error) {
       console.error('Error removing item from cart:', error);
-      set({ isLoading: false });
+      if (previousCart) set({ cart: previousCart });
+      toast.error('Failed to remove item. Please try again.');
     }
   },
 
   updateItemQuantity: async (itemKey: string, quantity: number) => {
-    set({ isLoading: true });
+    const previousCart = useCartStore.getState().cart;
+    if (previousCart) {
+      // Optimistic update
+      const newItems = previousCart.items.map((item) =>
+        item.key === itemKey ? { ...item, quantity } : item
+      );
+      set({ cart: { ...previousCart, items: newItems } });
+    }
+
     try {
       const data = await updateCartItem(itemKey, quantity);
-      set({ cart: data, isLoading: false });
+      set({ cart: data });
     } catch (error) {
       console.error('Error updating item quantity:', error);
-      set({ isLoading: false });
+      if (previousCart) set({ cart: previousCart });
+      toast.error('Failed to update quantity. Stock might be limited.');
     }
   },
 

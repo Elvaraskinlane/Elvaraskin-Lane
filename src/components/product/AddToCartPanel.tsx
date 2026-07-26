@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useCartStore } from "@/store/useCartStore";
 import { useUIStore } from "@/store/useUIStore";
 import { useWishlistStore } from "@/store/useWishlistStore";
+import { toast } from "sonner";
 
 interface AddToCartProps {
   productId: number;
@@ -45,6 +46,7 @@ export default function AddToCartPanel({ productId, price, stockStatus, productN
       openCartDrawer();
     } catch (err) {
       console.error("Cart error:", err);
+      toast.error("Failed to add to cart. Item might be out of stock.");
     } finally {
       setIsAdding(false);
     }

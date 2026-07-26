@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useCartStore } from "@/store/useCartStore";
 import { useUIStore } from "@/store/useUIStore";
+import { toast } from "sonner";
 
 export default function AddToCartButton({ productId, productName }: { productId: number, productName: string }) {
   const [loading, setLoading] = useState(false);
@@ -16,6 +17,7 @@ export default function AddToCartButton({ productId, productName }: { productId:
       openCartDrawer();
     } catch(err) {
       console.error(err);
+      toast.error("Failed to add to cart. Item might be out of stock.");
     } finally {
       setLoading(false);
     }

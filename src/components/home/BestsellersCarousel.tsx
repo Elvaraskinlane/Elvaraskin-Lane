@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { toast } from "sonner";
 import { WCProduct } from "@/types/woocommerce";
 import { useUIStore } from "@/store/useUIStore";
 import { useCartStore } from "@/store/useCartStore";
@@ -112,6 +113,7 @@ export default function BestsellersCarousel({
                       openCartDrawer();
                     } catch (err) {
                       console.error("Cart error:", err);
+                      toast.error("Failed to add to cart. Item might be out of stock.");
                     }
                   }}
                 >
