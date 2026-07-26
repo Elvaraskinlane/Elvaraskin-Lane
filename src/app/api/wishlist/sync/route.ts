@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 export async function POST(request: Request) {
   try {
     const authHeader = request.headers.get("Authorization");
-    const { items } = await request.json();
+    const { items, slug, isPublic } = await request.json();
 
     if (!authHeader) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
@@ -35,6 +35,27 @@ export async function POST(request: Request) {
     const wcSecret = process.env.WC_CONSUMER_SECRET || "";
     const base64Credentials = Buffer.from(`${wcKey}:${wcSecret}`).toString('base64');
 
+    const metaDataPayload: any[] = [
+      {
+        key: "_elvara_wishlist",
+        value: JSON.stringify(items) // Store as JSON string inside meta
+      }
+    ];
+
+    if (slug !== undefined) {
+      metaDataPayload.push({
+        key: "_elvara_wishlist_slug",
+        value: slug
+      });
+    }
+
+    if (isPublic !== undefined) {
+      metaDataPayload.push({
+        key: "_elvara_wishlist_public",
+        value: isPublic ? "true" : "false"
+      });
+    }
+
     const updateResponse = await fetch(wcUrl, {
       method: "PUT",
       headers: {
@@ -42,12 +63,7 @@ export async function POST(request: Request) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        meta_data: [
-          {
-            key: "_elvara_wishlist",
-            value: JSON.stringify(items) // Store as JSON string inside meta
-          }
-        ]
+        meta_data: metaDataPayload
       })
     });
 
@@ -117,7 +133,12 @@ export async function GET(request: Request) {
     
     // Find the wishlist meta
     const wishlistMeta = customerData.meta_data?.find((meta: any) => meta.key === "_elvara_wishlist");
+    const slugMeta = customerData.meta_data?.find((meta: any) => meta.key === "_elvara_wishlist_slug");
+    const publicMeta = customerData.meta_data?.find((meta: any) => meta.key === "_elvara_wishlist_public");
+    
     let items = [];
+    let slug = slugMeta ? slugMeta.value : null;
+    let isPublic = publicMeta ? publicMeta.value === "true" : false;
     
     if (wishlistMeta && wishlistMeta.value) {
       try {
@@ -127,7 +148,7 @@ export async function GET(request: Request) {
       }
     }
 
-    return NextResponse.json({ items }, { status: 200 });
+    return NextResponse.json({ items, slug, isPublic }, { status: 200 });
 
   } catch (error: any) {
     console.error("API Wishlist Fetch Error:", error);

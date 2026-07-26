@@ -13,11 +13,15 @@ import { useCartStore } from "@/store/useCartStore";
 export default function AccountDashboardPage() {
   const { user, isAuthenticated, logout } = useAuthStore();
   const { openAuthModal, openCartDrawer } = useUIStore();
-  const { items: wishlistItems } = useWishlistStore();
+  const { items: wishlistItems, slug: initialSlug, isPublic: initialIsPublic, setSettings } = useWishlistStore();
   const { addItem, isLoading: isCartLoading } = useCartStore();
   
   const [orders, setOrders] = useState<any[]>([]);
   const [loadingOrders, setLoadingOrders] = useState(true);
+  
+  const [wishlistSlug, setWishlistSlug] = useState(initialSlug || "");
+  const [isWishlistPublic, setIsWishlistPublic] = useState(initialIsPublic);
+  const [isSavingSettings, setIsSavingSettings] = useState(false);
 
   const glassCardClass = "bg-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-outline-variant/15 rounded-md p-8";
 
@@ -43,6 +47,36 @@ export default function AccountDashboardPage() {
     }
     loadOrders();
   }, [user]);
+
+  const saveWishlistSettings = async () => {
+    setIsSavingSettings(true);
+    try {
+      const response = await fetch("/api/wishlist/sync", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${user?.token}`
+        },
+        body: JSON.stringify({
+          items: wishlistItems,
+          slug: wishlistSlug,
+          isPublic: isWishlistPublic
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to save settings");
+      }
+
+      setSettings(wishlistSlug, isWishlistPublic);
+      toast.success("Wishlist settings saved!");
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to save wishlist settings.");
+    } finally {
+      setIsSavingSettings(false);
+    }
+  };
 
   if (!isAuthenticated) {
     return (
@@ -150,6 +184,81 @@ export default function AccountDashboardPage() {
         </section>
 
       </div>
+
+      {/* Wishlist Settings */}
+      <section className={`${glassCardClass} flex flex-col gap-6 mt-8`}>
+        <div className="flex justify-between items-end border-b border-outline-variant/15 pb-4">
+          <h3 className="font-headline-sm text-on-surface">Wishlist Settings</h3>
+        </div>
+        <div className="flex flex-col md:flex-row gap-8 items-start">
+          <div className="flex-1 space-y-4">
+            <div>
+              <label className="block font-label-md text-on-surface-variant mb-2">Custom Username (Slug)</label>
+              <div className="flex items-center gap-2">
+                <span className="font-body-md text-on-surface-variant/70">elvaraskinlane.ng/wishlist/</span>
+                <input 
+                  type="text" 
+                  value={wishlistSlug}
+                  onChange={(e) => setWishlistSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-'))}
+                  placeholder="your-name"
+                  className="flex-1 border border-outline-variant/30 px-3 py-2 rounded-sm focus:outline-none focus:border-primary font-body-md"
+                />
+              </div>
+              <p className="text-xs text-on-surface-variant mt-2">Only lowercase letters, numbers, and hyphens.</p>
+            </div>
+            
+            <div className="flex items-center gap-3 mt-4">
+              <input 
+                type="checkbox" 
+                id="isPublic"
+                checked={isWishlistPublic}
+                onChange={(e) => setIsWishlistPublic(e.target.checked)}
+                className="w-4 h-4 rounded-sm border-outline-variant/30 text-primary focus:ring-primary"
+              />
+              <label htmlFor="isPublic" className="font-body-md text-on-surface select-none">
+                Make my wishlist public
+              </label>
+            </div>
+            
+            <button 
+              onClick={saveWishlistSettings}
+              disabled={isSavingSettings}
+              className="mt-6 px-6 py-2.5 bg-primary text-on-primary font-label-md uppercase tracking-[0.1em] hover:bg-black transition-colors rounded-sm disabled:opacity-50"
+            >
+              {isSavingSettings ? "Saving..." : "Save Settings"}
+            </button>
+          </div>
+          
+          <div className="flex-1 bg-surface-container-low p-6 rounded-sm border border-outline-variant/10">
+            <div className="flex items-center gap-3 mb-3">
+              <span className="material-symbols-outlined text-primary">share</span>
+              <h4 className="font-headline-sm">Share Your Routine</h4>
+            </div>
+            <p className="font-body-sm text-on-surface-variant mb-4">
+              Once your wishlist is public and you have a custom username, you can share this link with friends so they can view and buy items from your routine!
+            </p>
+            {isWishlistPublic && wishlistSlug ? (
+              <div className="flex items-center gap-2">
+                <code className="text-xs bg-white p-2 rounded border border-outline-variant/20 flex-1 overflow-x-auto">
+                  {`${window.location.origin}/wishlist/${wishlistSlug}`}
+                </code>
+                <button 
+                  onClick={() => {
+                    navigator.clipboard.writeText(`${window.location.origin}/wishlist/${wishlistSlug}`);
+                    toast.success("Link copied!");
+                  }}
+                  className="p-2 border border-outline-variant/30 hover:bg-white rounded-sm text-on-surface-variant transition-colors"
+                  title="Copy Link"
+                >
+                  <span className="material-symbols-outlined text-[18px]">content_copy</span>
+                </button>
+              </div>
+            ) : (
+              <p className="text-xs text-error/80 italic">Please set a username and make your wishlist public to share it.</p>
+            )}
+          </div>
+        </div>
+      </section>
 
       {/* Wishlist Section */}
       <section className={`${glassCardClass} flex flex-col gap-6 mt-8`}>
