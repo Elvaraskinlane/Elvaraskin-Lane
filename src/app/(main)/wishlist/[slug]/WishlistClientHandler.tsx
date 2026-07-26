@@ -29,7 +29,7 @@ export default function WishlistClientHandler({ products, productId }: WishlistC
       toast.success("Routine added to cart!");
     } catch (err) {
       console.error("Error importing routine:", err);
-      toast.error("There was an issue adding some items to your cart.");
+      toast.error(err instanceof Error ? err.message : "There was an issue adding some items to your cart.");
     } finally {
       setIsImporting(false);
     }
@@ -44,7 +44,7 @@ export default function WishlistClientHandler({ products, productId }: WishlistC
       openCartDrawer();
     } catch (err) {
       console.error("Cart error:", err);
-      toast.error("Failed to add to cart. Item might be out of stock.");
+      toast.error(err instanceof Error ? err.message : "Failed to add to cart. Item might be out of stock.");
     } finally {
       setAddingId(null);
     }

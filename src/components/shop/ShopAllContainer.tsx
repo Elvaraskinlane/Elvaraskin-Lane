@@ -173,21 +173,31 @@ export default function ShopAllContainer({ initialProducts }: { initialProducts:
                     
                     {/* Minimalist Floating Pill Button */}
                     <div className="absolute bottom-6 left-0 w-full px-4 flex justify-center opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-400 ease-out z-10">
-                      <button 
-                        className="bg-black text-white font-label-md text-[11px] py-3.5 px-8 rounded-full shadow-lg hover:bg-primary transition-colors uppercase tracking-[0.15em] flex items-center gap-2"
-                        onClick={async (e) => {
-                          e.preventDefault(); // Prevent navigating to product page
-                          try {
-                            await addItem(product.id, 1);
-                            openCartDrawer();
-                          } catch (err) {
-                            console.error("Cart error:", err);
-                            toast.error(err instanceof Error ? err.message : "Failed to add to cart. Item might be out of stock.");
-                          }
-                        }}
-                      >
-                        Add to Cart
-                      </button>
+                      {product.is_in_stock ? (
+                        <button 
+                          className="bg-black text-white font-label-md text-[11px] py-3.5 px-8 rounded-full shadow-lg hover:bg-primary transition-colors uppercase tracking-[0.15em] flex items-center gap-2"
+                          onClick={async (e) => {
+                            e.preventDefault(); // Prevent navigating to product page
+                            try {
+                              await addItem(product.id, 1);
+                              openCartDrawer();
+                            } catch (err) {
+                              console.error("Cart error:", err);
+                              toast.error(err instanceof Error ? err.message : "Failed to add to cart. Item might be out of stock.");
+                            }
+                          }}
+                        >
+                          Add to Cart
+                        </button>
+                      ) : (
+                        <button 
+                          disabled
+                          className="bg-surface-container-high text-on-surface-variant font-label-md text-[11px] py-3.5 px-8 rounded-full shadow-sm uppercase tracking-[0.15em] flex items-center gap-2 opacity-80 cursor-not-allowed"
+                          onClick={(e) => e.preventDefault()}
+                        >
+                          Out of Stock
+                        </button>
+                      )}
                     </div>
                   </div>
                   <div className="text-center px-2">

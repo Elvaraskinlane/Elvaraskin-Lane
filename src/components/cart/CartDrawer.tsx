@@ -109,13 +109,15 @@ export default function CartDrawer() {
               {cart?.totals?.total_price ? formatPrice(cart.totals.total_price) : "₦ 0"}
             </span>
           </div>
-          <Link 
-            href="/checkout"
-            onClick={closeCartDrawer} 
-            className="w-full bg-on-background text-background py-5 font-label-lg tracking-[0.2em] uppercase text-sm hover:bg-primary hover:text-on-primary transition-all duration-300 flex justify-center items-center shadow-md mb-4"
-          >
-            PROCEED TO CHECKOUT
-          </Link>
+          {cart && cart.items && cart.items.length > 0 && (
+            <Link 
+              href="/checkout"
+              onClick={closeCartDrawer} 
+              className="w-full bg-on-background text-background py-5 font-label-lg tracking-[0.2em] uppercase text-sm hover:bg-primary hover:text-on-primary transition-all duration-300 flex justify-center items-center shadow-md mb-4"
+            >
+              PROCEED TO CHECKOUT
+            </Link>
+          )}
           <Link 
             href="/cart"
             onClick={closeCartDrawer} 

@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useCartStore } from "@/store/useCartStore";
 import { useAuthStore } from "@/store/useAuthStore";
 import { processCheckout } from "@/lib/cart";
+import { toast } from "sonner";
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -155,8 +156,16 @@ export default function CheckoutPage() {
 
     } catch (error: any) {
       console.error("Checkout Error:", error);
-      setIsStoreDown(true); // Trigger WhatsApp fallback
       setIsProcessing(false);
+      
+      const errorMessage = error?.message?.toLowerCase() || "";
+      // If it's a clear network failure or 500 error, show the store down banner
+      if (errorMessage.includes("failed to fetch") || errorMessage.includes("network error")) {
+        setIsStoreDown(true); // Trigger WhatsApp fallback
+      } else {
+        // Otherwise it's likely a validation or business logic error from WooCommerce (e.g., out of stock, invalid zip)
+        toast.error(error.message || "An unexpected error occurred during checkout.");
+      }
     }
   };
 
