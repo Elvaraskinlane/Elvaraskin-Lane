@@ -72,6 +72,28 @@ export default function CheckoutPage() {
     setIsStoreDown(false);
 
     try {
+      // Pre-Step: Create user account BEFORE processing checkout if explicitly requested
+      if (formData.createAccount && !isAuthenticated) {
+        try {
+          const { registerCustomer, loginCustomer } = await import("@/lib/auth");
+          await registerCustomer(formData.email, formData.password, formData.first_name);
+          
+          // Log them in immediately so Store API associates the order with their ID
+          const loginResult = await loginCustomer(formData.email, formData.password);
+          if (loginResult.success) {
+            const { useAuthStore } = await import("@/store/useAuthStore");
+            useAuthStore.getState().login({
+              token: loginResult.data.token,
+              user_email: loginResult.data.user_email,
+              user_nicename: loginResult.data.user_nicename,
+              user_display_name: loginResult.data.user_display_name,
+            });
+          }
+        } catch (err: any) {
+          throw new Error("Failed to create your account. This email might already be registered. Please uncheck 'Create Account' or log in first.");
+        }
+      }
+
       // Step A: Instantiate the order in WooCommerce via the Store API
       const checkoutResponse = await processCheckout(formData);
       

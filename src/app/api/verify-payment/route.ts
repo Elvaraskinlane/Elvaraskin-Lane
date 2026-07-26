@@ -31,14 +31,15 @@ export async function POST(request: Request) {
     // 2. Update WooCommerce order status
     const wcKey = process.env.WC_CONSUMER_KEY || "";
     const wcSecret = process.env.WC_CONSUMER_SECRET || "";
+    const base64Credentials = Buffer.from(`${wcKey}:${wcSecret}`).toString("base64");
     
-    // Using query parameters for WooCommerce Auth avoids Apache/LiteSpeed stripping the Authorization header
-    const wcUrl = `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wc/v3/orders/${orderId}?consumer_key=${wcKey}&consumer_secret=${wcSecret}`;
+    const wcUrl = `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wc/v3/orders/${orderId}`;
 
     const wcRes = await fetch(wcUrl, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Basic ${base64Credentials}`,
       },
       body: JSON.stringify({
         status: "processing", // Assuming successful payment means processing
