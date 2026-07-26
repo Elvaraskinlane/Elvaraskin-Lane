@@ -1,9 +1,11 @@
+import dynamic from "next/dynamic";
 import HeroSection from "@/components/home/HeroSection";
-import ValueProps from "@/components/home/ValueProps";
-import CuratedEssentials from "@/components/home/CuratedEssentials";
-import BestsellersCarousel from "@/components/home/BestsellersCarousel";
-import BrandStory from "@/components/home/BrandStory";
-import Newsletter from "@/components/home/Newsletter";
+
+const ValueProps = dynamic(() => import("@/components/home/ValueProps"));
+const CuratedEssentials = dynamic(() => import("@/components/home/CuratedEssentials"));
+const BestsellersCarousel = dynamic(() => import("@/components/home/BestsellersCarousel"));
+const BrandStory = dynamic(() => import("@/components/home/BrandStory"));
+const Newsletter = dynamic(() => import("@/components/home/Newsletter"));
 import { getProducts } from "@/lib/woocommerce";
 
 export default async function Home() {
