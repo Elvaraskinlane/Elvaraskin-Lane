@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Bodoni_Moda, Plus_Jakarta_Sans } from "next/font/google";
 import { Toaster } from "sonner";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
 const bodoni = Bodoni_Moda({
@@ -53,6 +54,7 @@ export default function RootLayout({
             },
           }}
         />
+        <SpeedInsights />
       </body>
     </html>
   );
