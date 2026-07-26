@@ -6,21 +6,21 @@ import Link from "next/link";
 
 const slides = [
   {
-    image: "/hero-retail-1.png",
+    image: "/hero-retail-1.webp",
     title: "Your Premier Beauty Destination",
     subtitle: "Shop 100+ authentic global skincare, haircare, and makeup brands all in one place. From K-Beauty staples to dermatologist favorites.",
     cta: "Shop All Brands",
     href: "/brands",
   },
   {
-    image: "/hero-retail-2.png",
+    image: "/hero-retail-2.webp",
     title: "Curated For Every Routine",
     subtitle: "Whether you need a daily cleanser, a potent serum, or luxury hair extensions, we source the highest quality products for your unique needs.",
     cta: "Explore Categories",
     href: "/categories",
   },
   {
-    image: "/hero-retail-3.png",
+    image: "/hero-retail-3.webp",
     title: "Targeted Skin Solutions",
     subtitle: "Struggling with acne, hyperpigmentation, or dullness? Discover proven, authentic products formulated to treat your specific concerns.",
     cta: "Shop by Concern",
@@ -53,6 +53,7 @@ export default function HeroSection() {
             alt={slide.title}
             fill
             priority={index === 0} // Only prioritize the first image for LCP
+            unoptimized // Bypass Next.js proxy for instant TTFB since it's already a tiny WebP
             className="object-cover object-center opacity-70 mix-blend-overlay"
             sizes="100vw"
           />

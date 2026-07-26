@@ -151,7 +151,7 @@ export async function getProducts(
     const response = await fetch(url, {
       headers: getAuthHeaders(),
       next: {
-        revalidate: 60, // Revalidate every minute
+        revalidate: 3600, // Revalidate every 1 hour to prevent cold TTFB spikes
       },
     });
 
