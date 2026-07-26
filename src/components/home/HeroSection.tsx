@@ -30,13 +30,21 @@ const slides = [
 
 export default function HeroSection() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   // Auto-advance carousel
   useEffect(() => {
+    // Remove initial load flag shortly after hydration to allow subsequent animations
+    const initTimer = setTimeout(() => setIsInitialLoad(false), 100);
+    
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
     }, 6000); // 6 seconds per slide
-    return () => clearInterval(timer);
+    
+    return () => {
+      clearTimeout(initTimer);
+      clearInterval(timer);
+    };
   }, []);
 
   return (
@@ -67,7 +75,7 @@ export default function HeroSection() {
       <div className="relative z-10 flex flex-col items-center text-center px-margin-mobile md:px-margin-desktop max-w-4xl mx-auto mt-20">
 
         {/* We use a wrapper with a key to trigger animations when the slide changes */}
-        <div key={currentSlide} className="animate-fade-in-up flex flex-col items-center">
+        <div key={currentSlide} className={`${isInitialLoad && currentSlide === 0 ? '' : 'animate-fade-in-up'} flex flex-col items-center`}>
           <span className="font-label-md text-[10px] uppercase tracking-[0.3em] text-white/80 mb-6 border-b border-white/30 pb-2">
             The Collection
           </span>

@@ -31,7 +31,7 @@ export default async function Home() {
   const carouselProducts = shuffled.slice(0, 8);
 
   return (
-    <div className="flex flex-col w-full animate-fade-in">
+    <div className="flex flex-col w-full">
       <HeroSection />
       <ValueProps />
       <CuratedEssentials />
