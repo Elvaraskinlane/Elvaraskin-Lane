@@ -102,7 +102,7 @@ export default function BestsellersCarousel({
               
               {/* Minimalist Floating Pill Button */}
               <div className="absolute bottom-6 left-0 w-full px-4 flex justify-center opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-400 ease-out z-10">
-                {product.is_in_stock ? (
+                {product.stock_status === "instock" ? (
                   <button 
                     aria-label={`Add ${product.name} to cart`}
                     className="bg-black text-white font-label-md text-[11px] py-3.5 px-8 rounded-full shadow-lg hover:bg-primary transition-colors uppercase tracking-[0.15em] flex items-center gap-2"
