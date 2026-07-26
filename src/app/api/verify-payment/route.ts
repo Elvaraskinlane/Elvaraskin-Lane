@@ -49,8 +49,27 @@ export async function POST(request: Request) {
 
     if (!wcRes.ok) {
       console.error("Failed to update WooCommerce order:", wcData);
+      
+      // Attempt to add a failure note
+      try {
+        await fetch(`${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wc/v3/orders/${orderId}/notes?consumer_key=${wcKey}&consumer_secret=${wcSecret}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ note: `Next.js verify-payment endpoint failed to update order status. Error: ${JSON.stringify(wcData)}` })
+        });
+      } catch(e) {}
+      
       return NextResponse.json({ message: "Failed to update order status" }, { status: 500 });
     }
+
+    // Add a success note
+    try {
+      await fetch(`${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wc/v3/orders/${orderId}/notes?consumer_key=${wcKey}&consumer_secret=${wcSecret}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ note: `Next.js verify-payment endpoint successfully verified Paystack payment (${reference}) and updated order to processing.` })
+      });
+    } catch(e) {}
 
     return NextResponse.json({ message: "Payment verified and order updated successfully" }, { status: 200 });
   } catch (error: any) {

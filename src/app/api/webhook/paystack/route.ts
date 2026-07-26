@@ -54,11 +54,29 @@ export async function POST(request: Request) {
         }),
       });
 
+      const wcData = await wcRes.json();
+
       if (!wcRes.ok) {
-        const wcData = await wcRes.json();
         console.error(`Failed to update WooCommerce order ${orderId} via webhook:`, wcData);
+        // Attempt to add a failure note
+        try {
+          await fetch(`${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wc/v3/orders/${orderId}/notes?consumer_key=${wcKey}&consumer_secret=${wcSecret}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ note: `Paystack Webhook received but failed to update order status. Error: ${JSON.stringify(wcData)}` })
+          });
+        } catch(e) {}
         return NextResponse.json({ message: "Failed to update order" }, { status: 500 });
       }
+
+      // Add a success note
+      try {
+        await fetch(`${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wc/v3/orders/${orderId}/notes?consumer_key=${wcKey}&consumer_secret=${wcSecret}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ note: `Paystack Webhook successfully triggered and updated order to processing.` })
+        });
+      } catch(e) {}
 
       console.log(`Successfully updated order ${orderId} to processing via Paystack webhook.`);
     }
