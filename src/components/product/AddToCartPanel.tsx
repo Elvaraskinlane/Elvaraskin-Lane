@@ -126,8 +126,10 @@ export default function AddToCartPanel({ productId, price, stockStatus, productN
               : 'border-outline-variant/30 text-on-surface-variant hover:text-error hover:border-error/30 hover:bg-error/5'
           }`}
         >
-          {/* Note: 'heart_check' or using filled styles can indicate liked state */}
-          <span className={`material-symbols-outlined text-[20px] ${isWished ? 'font-solid text-error fill-error' : 'font-light'}`}>
+          <span 
+            className={`material-symbols-outlined text-[20px] ${isWished ? 'text-error' : 'font-light'}`}
+            style={{ fontVariationSettings: isWished ? "'FILL' 1" : "'FILL' 0" }}
+          >
             favorite
           </span>
         </button>

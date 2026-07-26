@@ -64,6 +64,12 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Close mobile menu on navigation
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+    setExpandedMobileMenu(null);
+  }, [pathname, searchParams]);
+
   const navMenus = [
     {
       name: "SHOP",
