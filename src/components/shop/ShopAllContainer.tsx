@@ -182,7 +182,7 @@ export default function ShopAllContainer({ initialProducts }: { initialProducts:
                             openCartDrawer();
                           } catch (err) {
                             console.error("Cart error:", err);
-                            toast.error("Failed to add to cart. Item might be out of stock.");
+                            toast.error(err instanceof Error ? err.message : "Failed to add to cart. Item might be out of stock.");
                           }
                         }}
                       >

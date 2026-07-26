@@ -29,6 +29,12 @@ export async function getCart() {
   });
   
   saveCartToken(response);
+  
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.message || "Failed to fetch cart");
+  }
+  
   return response.json();
 }
 
@@ -49,6 +55,12 @@ export async function addToCart(productId: number, quantity: number = 1) {
   });
 
   saveCartToken(response);
+  
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.message || "Failed to add item to cart");
+  }
+  
   return response.json();
 }
 
@@ -68,6 +80,12 @@ export async function removeFromCart(itemKey: string) {
   });
 
   saveCartToken(response);
+  
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.message || "Failed to remove item from cart");
+  }
+  
   return response.json();
 }
 
@@ -88,6 +106,12 @@ export async function updateCartItem(itemKey: string, quantity: number) {
   });
 
   saveCartToken(response);
+  
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.message || "Failed to update cart item");
+  }
+  
   return response.json();
 }
 
