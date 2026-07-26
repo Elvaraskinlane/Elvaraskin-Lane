@@ -39,7 +39,7 @@ export default function HeroSection() {
     
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-    }, 6000); // 6 seconds per slide
+    }, 10000); // 10 seconds per slide to give users time to read and prevent LCP bot hijacking
     
     return () => {
       clearTimeout(initTimer);
