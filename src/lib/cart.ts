@@ -135,11 +135,24 @@ export async function processCheckout(checkoutData: any) {
     ...(createAccount && password ? { password, account_password: password } : {}),
   };
 
+  // Get user auth token if logged in, so order is linked to their account
+  let authHeader = {};
+  try {
+    const { useAuthStore } = require("@/store/useAuthStore");
+    const token = useAuthStore.getState().token;
+    if (token) {
+      authHeader = { "Authorization": `Bearer ${token}` };
+    }
+  } catch (e) {
+    console.error("Failed to get auth token for checkout");
+  }
+
   const response = await fetch(`${WC_STORE_URL}/checkout`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       "Cart-Token": getCartToken(),
+      ...authHeader,
     },
     body: JSON.stringify(payload),
   });
