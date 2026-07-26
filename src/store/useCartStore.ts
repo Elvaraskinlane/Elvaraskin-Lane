@@ -54,11 +54,32 @@ export const useCartStore = create<CartState>((set) => ({
   },
 
   addItem: async (productId: number, quantity: number = 1) => {
+    const previousCart = useCartStore.getState().cart;
+    if (previousCart) {
+      // Optimistic update
+      const tempItem: CartItem = {
+        key: `temp-${Date.now()}`,
+        id: productId,
+        name: "Updating...",
+        quantity: quantity,
+        prices: { price: "0" },
+        images: [{ src: "/hero-3.png", alt: "Loading..." }]
+      };
+      set({ 
+        cart: { 
+          ...previousCart, 
+          items: [...previousCart.items, tempItem],
+          item_count: previousCart.item_count + quantity
+        } 
+      });
+    }
+
     try {
       const data = await addToCart(productId, quantity);
       set({ cart: data });
     } catch (error) {
       console.error('Error adding item to cart:', error);
+      if (previousCart) set({ cart: previousCart });
       throw error;
     }
   },

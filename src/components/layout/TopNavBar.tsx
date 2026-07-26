@@ -29,11 +29,16 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
   const searchParams = useSearchParams();
 
   const { openAuthModal, openCartDrawer } = useUIStore();
-  const { cart } = useCartStore();
+  const { cart, fetchCart } = useCartStore();
   const { isAuthenticated, user, logout } = useAuthStore();
   
   // Safely calculate total items by reducing the actual items array
   const totalItems = cart?.items?.reduce((acc, item) => acc + item.quantity, 0) || 0;
+  
+  // Hydrate cart on initial load
+  useEffect(() => {
+    fetchCart();
+  }, [fetchCart]);
   
   const toggleMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);

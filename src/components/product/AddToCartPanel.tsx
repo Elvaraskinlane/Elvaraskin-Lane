@@ -112,7 +112,14 @@ export default function AddToCartPanel({ productId, price, stockStatus, productN
         
         {/* Wishlist Toggle */}
         <button 
-          onClick={() => toggleItem({ id: productId, name: productName, price, image, slug })}
+          onClick={() => {
+            toggleItem({ id: productId, name: productName, price, image, slug });
+            if (isWished) {
+              toast.info("Removed from wishlist.");
+            } else {
+              toast.success("Added to wishlist!");
+            }
+          }}
           className={`h-[52px] w-[52px] flex-shrink-0 border rounded-full flex items-center justify-center transition-all ${
             isWished 
               ? 'border-error/30 text-error bg-error/5 hover:bg-error/10' 

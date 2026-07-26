@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useWishlistStore } from "@/store/useWishlistStore";
 import { useCartStore } from "@/store/useCartStore";
 import { useUIStore } from "@/store/useUIStore";
+import { toast } from "sonner";
 
 export default function WishlistGrid() {
   const { items, toggleItem } = useWishlistStore();
@@ -25,7 +26,8 @@ export default function WishlistGrid() {
       await addItem(id, 1);
       openCartDrawer();
     } catch (err) {
-      console.error(err);
+      console.error("Cart error:", err);
+      toast.error("Failed to add to cart. Item might be out of stock.");
     } finally {
       setAddingId(null);
     }
@@ -66,7 +68,7 @@ export default function WishlistGrid() {
             const shareUrl = `${window.location.origin}/wishlist/shared?data=${base64String}`;
             
             navigator.clipboard.writeText(shareUrl).then(() => {
-              alert("Routine link copied to clipboard! Share your curated skincare routine.");
+              toast.success("Routine link copied to clipboard! Share your curated skincare routine.");
             });
           }}
           className="bg-transparent border border-outline-variant text-on-surface px-6 py-3 font-label-md tracking-[0.15em] uppercase text-xs hover:bg-surface-container-highest transition-all duration-300 flex items-center gap-2 rounded-sm"
@@ -86,7 +88,10 @@ export default function WishlistGrid() {
             <div className="absolute inset-0 bg-on-surface/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-4">
               <div className="flex justify-end">
                 <button 
-                  onClick={() => toggleItem(item)}
+                  onClick={() => {
+                    toggleItem(item);
+                    toast.info(`Removed from wishlist.`);
+                  }}
                   aria-label="Remove" 
                   className="w-10 h-10 rounded-full bg-surface/90 backdrop-blur flex items-center justify-center text-on-surface hover:bg-surface hover:text-error transition-colors shadow-sm"
                 >
