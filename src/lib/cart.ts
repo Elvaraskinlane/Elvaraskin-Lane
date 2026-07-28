@@ -118,7 +118,7 @@ export async function updateCartItem(itemKey: string, quantity: number) {
 /**
  * Process the checkout form and generate an order
  */
-export async function processCheckout(checkoutData: any) {
+export async function processCheckout(checkoutData: any, authToken?: string) {
   // Extract custom fields not meant for address data
   const { createAccount, password, ...addressDataRaw } = checkoutData;
 
@@ -137,14 +137,8 @@ export async function processCheckout(checkoutData: any) {
 
   // Get user auth token if logged in, so order is linked to their account
   let authHeader = {};
-  try {
-    const { useAuthStore } = require("@/store/useAuthStore");
-    const token = useAuthStore.getState().token;
-    if (token) {
-      authHeader = { "Authorization": `Bearer ${token}` };
-    }
-  } catch (e) {
-    console.error("Failed to get auth token for checkout");
+  if (authToken) {
+    authHeader = { "Authorization": `Bearer ${authToken}` };
   }
 
   const response = await fetch(`${WC_STORE_URL}/checkout`, {

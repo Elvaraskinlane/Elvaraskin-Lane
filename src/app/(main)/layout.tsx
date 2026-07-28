@@ -3,6 +3,7 @@ import TopNavBar from "@/components/layout/TopNavBar";
 import Footer from "@/components/layout/Footer";
 import AuthModal from "@/components/auth/AuthModal";
 import CartDrawer from "@/components/cart/CartDrawer";
+import StoreAssistant from "@/components/assistant/StoreAssistant";
 import { getProducts } from "@/lib/woocommerce";
 
 export default async function MainLayout({
@@ -24,6 +25,7 @@ export default async function MainLayout({
       <main className="flex-grow w-full">
         {children}
       </main>
+      <StoreAssistant />
       <Footer />
     </>
   );

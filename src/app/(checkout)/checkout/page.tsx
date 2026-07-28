@@ -96,7 +96,13 @@ export default function CheckoutPage() {
       }
 
       // Step A: Instantiate the order in WooCommerce via the Store API
-      const checkoutResponse = await processCheckout(formData);
+      let currentToken = undefined;
+      try {
+        const { useAuthStore: localAuthStore } = await import("@/store/useAuthStore");
+        currentToken = localAuthStore.getState().user?.token;
+      } catch(e) {}
+      
+      const checkoutResponse = await processCheckout(formData, currentToken);
       
       // Step B: Extract order details and setup Paystack Inline Script
       const orderId = checkoutResponse.order_id || checkoutResponse.id; // WC Store API uses order_id
