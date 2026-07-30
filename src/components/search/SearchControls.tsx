@@ -1,4 +1,5 @@
 "use client";
+import { Tune, KeyboardArrowDown } from '@material-symbols-svg/react';
 
 export default function SearchControls({ resultCount }: { resultCount: number }) {
   return (
@@ -7,12 +8,12 @@ export default function SearchControls({ resultCount }: { resultCount: number })
         <p className="font-body-md text-on-surface-variant hidden md:block">{resultCount} results found</p>
         <div className="flex items-center gap-6 w-full md:w-auto justify-between md:justify-end">
           <button className="flex items-center gap-2 text-primary font-label-md hover:opacity-70 transition-opacity">
-            <span className="material-symbols-outlined text-[20px]">tune</span>
+            <Tune className="text-[20px]" />
             Filter
           </button>
           <div className="relative group cursor-pointer flex items-center gap-2 text-primary font-label-md hover:opacity-70 transition-opacity">
             <span>Sort by: Recommended</span>
-            <span className="material-symbols-outlined text-[20px]">expand_more</span>
+            <KeyboardArrowDown className="text-[20px]" />
           </div>
         </div>
       </div>

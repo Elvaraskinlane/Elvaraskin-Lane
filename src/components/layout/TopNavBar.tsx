@@ -7,6 +7,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useUIStore } from "@/store/useUIStore";
 import { useCartStore } from "@/store/useCartStore";
 import { useAuthStore } from "@/store/useAuthStore";
+import { Menu, Close, ShoppingBag, Search, ArrowForward, Person, Dashboard, Settings, Logout, KeyboardArrowDown } from '@material-symbols-svg/react';
 
 export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -297,7 +298,7 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
                   {link.name}
                 </span>
                 {link.megaMenu && (
-                  <span className="material-symbols-outlined text-[16px] mb-[-2px]">expand_more</span>
+                  <KeyboardArrowDown className="text-[16px] mb-[-2px]" />
                 )}
               </Link>
 
@@ -365,7 +366,7 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
               onClick={() => setIsSearchOpen(!isSearchOpen)}
               className="hover:opacity-80 transition-opacity flex items-center"
             >
-              <span className="material-symbols-outlined text-2xl">search</span>
+              <Search className="text-2xl" />
             </button>
 
             {/* Inline Search Dropdown */}
@@ -381,7 +382,7 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
                     className="w-full bg-surface-container-lowest border border-outline-variant/50 rounded-sm py-2 px-3 pr-10 text-on-surface focus:outline-none focus:border-primary text-sm font-body-md"
                   />
                   <button type="submit" className="absolute right-2 text-on-surface-variant hover:text-primary transition-colors flex items-center">
-                    <span className="material-symbols-outlined text-lg">arrow_forward</span>
+                    <ArrowForward className="text-lg" />
                   </button>
                 </form>
               </div>
@@ -395,7 +396,7 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
                 aria-label="Account Menu" 
                 className={`hover:opacity-80 transition-opacity flex items-center ${isProfileDropdownOpen ? "text-primary" : ""}`}
               >
-                <span className="material-symbols-outlined text-2xl">person</span>
+                <Person className="text-2xl" />
               </button>
               
               {/* Profile Dropdown */}
@@ -411,7 +412,7 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
                       className="px-4 py-2 font-body-md text-on-surface hover:bg-surface-container transition-colors flex items-center gap-2"
                       onClick={() => setIsProfileDropdownOpen(false)}
                     >
-                      <span className="material-symbols-outlined text-[18px]">dashboard</span>
+                      <Dashboard className="text-[18px]" />
                       Dashboard
                     </Link>
                     <Link 
@@ -419,7 +420,7 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
                       className="px-4 py-2 font-body-md text-on-surface hover:bg-surface-container transition-colors flex items-center gap-2"
                       onClick={() => setIsProfileDropdownOpen(false)}
                     >
-                      <span className="material-symbols-outlined text-[18px]">settings</span>
+                      <Settings className="text-[18px]" />
                       Account Settings
                     </Link>
                   </div>
@@ -428,7 +429,7 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
                       onClick={handleLogout}
                       className="w-full text-left px-4 py-2 font-body-md text-error hover:bg-error-container hover:text-on-error-container transition-colors flex items-center gap-2"
                     >
-                      <span className="material-symbols-outlined text-[18px]">logout</span>
+                      <Logout className="text-[18px]" />
                       Sign Out
                     </button>
                   </div>
@@ -437,12 +438,12 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
             </div>
           ) : (
             <button onClick={openAuthModal} aria-label="Login" className="hover:opacity-80 transition-opacity flex items-center">
-              <span className="material-symbols-outlined text-2xl">person</span>
+              <Person className="text-2xl" />
             </button>
           )}
           
           <button onClick={openCartDrawer} aria-label="Shopping Bag" className="hover:opacity-80 transition-opacity relative flex items-center">
-            <span className="material-symbols-outlined text-2xl">shopping_bag</span>
+            <ShoppingBag className="text-2xl" />
             {totalItems > 0 && (
               <span className="absolute -top-1 -right-2 bg-primary text-on-primary text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full animate-fade-in">
                 {totalItems}
@@ -475,9 +476,7 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
                     <span className="font-label-md text-[13px] uppercase tracking-widest text-on-background">
                       {link.name}
                     </span>
-                    <span className="material-symbols-outlined text-outline-variant font-light text-[20px] transition-transform duration-300" style={{ transform: expandedMobileMenu === link.name ? 'rotate(180deg)' : 'rotate(0deg)' }}>
-                      expand_more
-                    </span>
+                    <KeyboardArrowDown className="text-outline-variant font-light text-[20px] transition-transform duration-300" style={{ transform: expandedMobileMenu === link.name ? 'rotate(180deg)' : 'rotate(0deg)' }} />
                   </button>
                 ) : (
                   <Link 

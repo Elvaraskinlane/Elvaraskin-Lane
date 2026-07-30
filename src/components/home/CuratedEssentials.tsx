@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getProducts } from "@/lib/woocommerce";
+import { ArrowForward } from '@material-symbols-svg/react';
 
 export default async function CuratedEssentials() {
   // Directly fetch the latest products for each specific category to guarantee an image
@@ -46,7 +47,7 @@ export default async function CuratedEssentials() {
             </p>
             <div className="flex items-center text-white/90 font-label-md text-xs tracking-widest uppercase group-hover:text-white transition-colors w-max group/link">
               <span>Explore Collection</span>
-              <span className="material-symbols-outlined ml-2 text-[16px] group-hover/link:translate-x-1 transition-transform">arrow_forward</span>
+              <ArrowForward className="ml-2 text-[16px] group-hover/link:translate-x-1 transition-transform" />
             </div>
           </div>
         </Link>
@@ -74,7 +75,7 @@ export default async function CuratedEssentials() {
               </p>
               <div className="flex items-center text-white/90 font-label-md text-[11px] tracking-widest uppercase group-hover:text-white transition-colors w-max group/link">
                 <span>Explore</span>
-                <span className="material-symbols-outlined ml-2 text-[16px] group-hover/link:translate-x-1 transition-transform">arrow_forward</span>
+                <ArrowForward className="ml-2 text-[16px] group-hover/link:translate-x-1 transition-transform" />
               </div>
             </div>
           </Link>
@@ -99,7 +100,7 @@ export default async function CuratedEssentials() {
               </p>
               <div className="flex items-center text-white/90 font-label-md text-[11px] tracking-widest uppercase group-hover:text-white transition-colors w-max group/link">
                 <span>Explore</span>
-                <span className="material-symbols-outlined ml-2 text-[16px] group-hover/link:translate-x-1 transition-transform">arrow_forward</span>
+                <ArrowForward className="ml-2 text-[16px] group-hover/link:translate-x-1 transition-transform" />
               </div>
             </div>
           </Link>

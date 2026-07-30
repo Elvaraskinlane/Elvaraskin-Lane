@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { WCProduct } from "@/types/woocommerce";
 import { useUIStore } from "@/store/useUIStore";
 import { useCartStore } from "@/store/useCartStore";
+import { Stars, ChevronLeft, ChevronRight, ArrowForward } from '@material-symbols-svg/react';
 
 interface BestsellersProps {
   initialProducts?: WCProduct[];
@@ -47,9 +48,7 @@ export default function BestsellersCarousel({
     return (
       <section className="py-20 bg-surface-container-lowest border-y border-outline-variant/20">
         <div className="px-margin-mobile md:px-margin-desktop w-full max-w-[1280px] mx-auto text-center flex flex-col items-center justify-center">
-          <span className="material-symbols-outlined text-[48px] text-outline-variant mb-4 font-light">
-            auto_awesome
-          </span>
+          <Stars className="text-[48px] text-outline-variant mb-4 font-light" />
           <h2 className="font-headline-md text-headline-md text-on-background mb-2">{title}</h2>
           <p className="font-body-md text-body-md text-on-surface-variant max-w-md mx-auto">
             Our curated collection is currently being refreshed. Check back soon for our most loved essentials.
@@ -69,10 +68,10 @@ export default function BestsellersCarousel({
         <div className="flex items-center gap-6">
           <div className="hidden md:flex gap-2">
             <button onClick={scrollLeft} className="w-10 h-10 border border-outline-variant flex items-center justify-center rounded-full hover:border-primary hover:text-primary transition-colors">
-              <span className="material-symbols-outlined text-[20px] font-light">chevron_left</span>
+              <ChevronLeft className="text-[20px] font-light" />
             </button>
             <button onClick={scrollRight} className="w-10 h-10 border border-outline-variant flex items-center justify-center rounded-full hover:border-primary hover:text-primary transition-colors">
-              <span className="material-symbols-outlined text-[20px] font-light">chevron_right</span>
+              <ChevronRight className="text-[20px] font-light" />
             </button>
           </div>
           <Link 
@@ -81,9 +80,7 @@ export default function BestsellersCarousel({
             className="hidden md:inline-flex items-center font-label-md text-label-md text-primary hover:text-on-background transition-colors group tracking-widest uppercase text-xs"
           >
             {linkText} 
-            <span className="material-symbols-outlined ml-1 text-[18px] group-hover:translate-x-1 transition-transform font-light">
-              arrow_forward
-            </span>
+            <ArrowForward className="ml-1 text-[18px] group-hover:translate-x-1 transition-transform font-light" />
           </Link>
         </div>
       </div>

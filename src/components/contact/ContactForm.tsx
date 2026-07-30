@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { submitContactForm } from "@/app/actions/contact";
+import { MarkEmailRead } from '@material-symbols-svg/react';
 
 export default function ContactForm() {
   const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
@@ -50,7 +51,7 @@ export default function ContactForm() {
   if (status === "success") {
     return (
       <div className="lg:col-span-7 bg-surface-container-lowest p-8 md:p-12 border border-surface-variant rounded shadow-[0_30px_60px_rgba(44,44,44,0.04)] flex flex-col items-center justify-center text-center min-h-[500px]">
-        <span className="material-symbols-outlined text-primary text-5xl mb-4">mark_email_read</span>
+        <MarkEmailRead className="text-primary text-5xl mb-4" />
         <h2 className="font-headline-sm text-headline-sm text-on-surface mb-2">Message Sent</h2>
         <p className="font-body-md text-body-md text-on-surface-variant">
           Thank you for reaching out. A member of the Elvara Skinlane concierge team will be in touch shortly.

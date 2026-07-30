@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { ArrowForward } from '@material-symbols-svg/react';
 
 export default function NotFound() {
   return (
@@ -33,7 +34,7 @@ export default function NotFound() {
               className="px-8 py-3 border border-outline-variant text-on-surface font-label-md rounded-md hover:border-primary transition-colors flex items-center justify-center gap-2 group"
             >
               Shop All
-              <span className="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+              <ArrowForward className="text-[18px] group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
         </div>

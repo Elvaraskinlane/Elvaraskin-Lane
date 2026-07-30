@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useState } from "react";
+import { FilterAltOff } from '@material-symbols-svg/react';
 
 export default function ShopFilters() {
   const router = useRouter();
@@ -122,7 +123,7 @@ export default function ShopFilters() {
           onClick={handleResetFilters}
           className="w-full py-3 mb-2 flex items-center justify-center gap-2 border border-black dark:border-primary-fixed text-black dark:text-primary-fixed hover:bg-black hover:text-white dark:hover:bg-primary-fixed dark:hover:text-background transition-colors duration-300 font-label-md uppercase tracking-wider"
         >
-          <span className="material-symbols-outlined text-[18px]">filter_alt_off</span>
+          <FilterAltOff className="text-[18px]" />
           Reset Filters
         </button>
       )}

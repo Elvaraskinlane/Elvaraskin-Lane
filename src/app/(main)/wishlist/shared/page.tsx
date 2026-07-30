@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCartStore } from "@/store/useCartStore";
 import { WCProduct } from "@/types/woocommerce";
+import { Sync, Error as ErrorIcon, Stars, ShoppingBag } from '@material-symbols-svg/react';
 
 function SharedWishlistHandler() {
   const searchParams = useSearchParams();
@@ -78,7 +79,7 @@ function SharedWishlistHandler() {
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] gap-4">
-        <span className="material-symbols-outlined animate-spin text-4xl text-primary">sync</span>
+        <Sync className="animate-spin text-4xl text-primary" />
         <span className="font-label-md text-on-surface-variant uppercase tracking-widest">Loading Routine...</span>
       </div>
     );
@@ -87,7 +88,7 @@ function SharedWishlistHandler() {
   if (error) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] px-4 text-center">
-        <span className="material-symbols-outlined text-error text-5xl mb-6">error</span>
+        <ErrorIcon className="text-error text-5xl mb-6" />
         <h3 className="font-headline-md text-on-surface mb-4 tracking-tight">Invalid Link</h3>
         <p className="font-body-lg text-on-surface-variant max-w-md mx-auto mb-8">
           {error}
@@ -102,7 +103,7 @@ function SharedWishlistHandler() {
   return (
     <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-16 md:py-24">
       <div className="text-center mb-16 animate-fade-in">
-        <span className="material-symbols-outlined text-primary text-5xl mb-6 font-light">auto_awesome</span>
+        <Stars className="text-[48px] text-primary mb-6 font-light" />
         <h1 className="font-headline-md text-3xl md:text-5xl text-on-surface mb-6 tracking-tight">
           A Curated Routine For You
         </h1>
@@ -117,12 +118,12 @@ function SharedWishlistHandler() {
         >
           {isImporting ? (
             <>
-              <span className="material-symbols-outlined animate-spin text-[20px]">sync</span>
+              <Sync className="animate-spin text-[20px]" />
               Adding Routine...
             </>
           ) : (
             <>
-              <span className="material-symbols-outlined text-[20px]">shopping_bag</span>
+              <ShoppingBag className="text-[20px]" />
               Add Routine to Cart
             </>
           )}
@@ -160,7 +161,7 @@ export default function SharedWishlistPage() {
   return (
     <Suspense fallback={
       <div className="flex flex-col items-center justify-center min-h-[70vh] gap-4">
-        <span className="material-symbols-outlined animate-spin text-4xl text-primary">sync</span>
+        <Sync className="animate-spin text-4xl text-primary" />
         <span className="font-label-md text-on-surface-variant uppercase tracking-widest">Loading...</span>
       </div>
     }>

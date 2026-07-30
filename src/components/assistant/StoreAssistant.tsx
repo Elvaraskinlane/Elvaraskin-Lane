@@ -4,6 +4,8 @@ import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { useState, useRef, useEffect } from "react";
 import ReactMarkdown from 'react-markdown';
+import Link from 'next/link';
+import { Forum, Close, ArrowForward } from '@material-symbols-svg/react';
 
 export default function StoreAssistant() {
   const [isOpen, setIsOpen] = useState(false);
@@ -94,9 +96,7 @@ export default function StoreAssistant() {
         className="fixed bottom-6 right-6 w-14 h-14 bg-on-background text-background rounded-full shadow-lg flex items-center justify-center hover:scale-105 transition-transform z-50 group"
         aria-label="Toggle Shopping Assistant"
       >
-        <span className="material-symbols-outlined text-[24px]">
-          {isOpen ? "close" : "forum"}
-        </span>
+        {isOpen ? <Close className="text-[24px]" /> : <Forum className="text-[24px]" />}
       </button>
 
       {/* Chat Window */}
@@ -145,19 +145,34 @@ export default function StoreAssistant() {
                 className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
               >
                 <span
-                  className={`inline-block p-3 rounded-2xl text-sm max-w-[85%] leading-relaxed ${
+                  className={`inline-block p-4 rounded-2xl text-sm max-w-[85%] leading-relaxed ${
                     m.role === "user"
-                      ? "bg-on-background text-background rounded-tr-sm"
-                      : "bg-surface-container-low text-on-surface border border-outline-variant/10 rounded-tl-sm shadow-sm"
+                      ? "bg-primary text-on-primary rounded-tr-sm shadow-sm"
+                      : "bg-surface text-on-surface border border-primary/10 rounded-tl-sm shadow-md"
                   }`}
                 >
                   <ReactMarkdown
                     components={{
-                      p: ({ node, ...props }) => <p className="mb-2 last:mb-0" {...props} />,
-                      ul: ({ node, ...props }) => <ul className="list-disc pl-4 mb-2 space-y-1" {...props} />,
-                      li: ({ node, ...props }) => <li className="mb-1" {...props} />,
-                      a: ({ node, ...props }) => <a className="text-primary underline font-medium hover:text-primary/80 transition-colors" target="_blank" rel="noopener noreferrer" {...props} />,
-                      strong: ({ node, ...props }) => <strong className="font-semibold text-primary" {...props} />
+                      p: ({ node, ...props }) => <p className="mb-3 text-sm leading-relaxed" {...props} />,
+                      ul: ({ node, ...props }) => <ul className="list-disc pl-5 mb-4 space-y-2 text-on-surface-variant" {...props} />,
+                      ol: ({ node, ...props }) => <ol className="list-decimal pl-5 mb-4 space-y-2 text-on-surface-variant" {...props} />,
+                      li: ({ node, ...props }) => <li className="text-sm" {...props} />,
+                      h3: ({ node, ...props }) => <h3 className="font-headline-sm text-base mb-2 mt-4 text-on-surface" {...props} />,
+                      strong: ({ node, ...props }) => <strong className="font-semibold text-primary" {...props} />,
+                      a: ({ node, href, children, ...props }) => {
+                        const isInternal = href?.startsWith('/');
+                        return (
+                          <Link
+                            href={href || "#"}
+                            className="inline-flex items-center gap-1.5 bg-primary text-on-primary px-4 py-2 rounded-full text-[11px] font-label-md uppercase tracking-wider hover:bg-primary/90 hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all shadow-sm my-2 group no-underline"
+                            onClick={() => setIsOpen(false)}
+                            {...(isInternal ? {} : { target: "_blank", rel: "noopener noreferrer" })}
+                          >
+                            <span>{children}</span>
+                            <ArrowForward className="text-[16px] group-hover:translate-x-0.5 transition-transform" />
+                          </Link>
+                        );
+                      }
                     }}
                   >
                     {m.parts?.map((p: any) => p.type === "text" ? p.text : "").join("") || m.content || ""}

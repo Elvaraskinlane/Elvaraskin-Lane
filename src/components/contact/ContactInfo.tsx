@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { PhotoCamera, Chat } from '@material-symbols-svg/react';
 
 export default function ContactInfo() {
   return (
@@ -23,10 +24,10 @@ export default function ContactInfo() {
           <h3 className="font-label-md text-label-md text-on-surface mb-2 uppercase tracking-widest">Connect</h3>
           <div className="flex gap-4 mt-2">
             <a href="https://www.instagram.com/elvaraskinlane" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="text-on-surface-variant hover:text-tertiary transition-colors">
-              <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>photo_camera</span>
+              <PhotoCamera style={{ fontVariationSettings: "'FILL' 1" }} />
             </a>
             <a href="https://wa.me/2347067615908" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="text-on-surface-variant hover:text-tertiary transition-colors">
-              <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>chat</span>
+              <Chat style={{ fontVariationSettings: "'FILL' 1" }} />
             </a>
           </div>
         </div>

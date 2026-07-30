@@ -10,6 +10,7 @@ import { Turnstile } from "@marsidev/react-turnstile";
 import { verifyTurnstileToken } from "@/app/actions/turnstile";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Close, Favorite } from '@material-symbols-svg/react';
 
 export default function AuthModal() {
   const [username, setUsername] = useState("");
@@ -80,7 +81,7 @@ export default function AuthModal() {
           onClick={closeAuthModal}
           className="absolute top-4 right-4 text-on-surface-variant hover:text-error transition-colors z-20 bg-surface/50 rounded-full p-1 md:bg-transparent"
         >
-          <span className="material-symbols-outlined font-light text-2xl">close</span>
+          <Close className="font-light text-2xl" />
         </button>
 
         {/* Left Column (The Teaser) */}
@@ -91,7 +92,7 @@ export default function AuthModal() {
           <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 space-y-6">
             {items.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full text-center opacity-70">
-                <span className="material-symbols-outlined text-4xl mb-4 font-light text-on-surface-variant">favorite</span>
+                <Favorite className="text-4xl mb-4 font-light text-on-surface-variant" />
                 <p className="font-body-md text-sm text-on-surface-variant">Your wishlist is currently empty.</p>
               </div>
             ) : (

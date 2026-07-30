@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowForward } from '@material-symbols-svg/react';
 
 export default function BrandStory() {
   return (
@@ -48,7 +49,7 @@ export default function BrandStory() {
             className="inline-flex items-center text-primary font-label-md text-[11px] uppercase tracking-[0.15em] border-b border-primary/50 pb-2 w-max hover:text-black hover:border-black transition-colors duration-300 group"
           >
             Shop The Collection
-            <span className="material-symbols-outlined ml-2 text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+            <ArrowForward className="ml-2 text-[16px] group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
       </div>

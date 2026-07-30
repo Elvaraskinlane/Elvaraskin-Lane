@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useUIStore } from "@/store/useUIStore";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { verifyTurnstileToken } from "@/app/actions/turnstile";
+import { Error as ErrorIcon, LockReset, CheckCircle, Sync } from '@material-symbols-svg/react';
 
 function ResetPasswordForm() {
   const searchParams = useSearchParams();
@@ -24,7 +25,7 @@ function ResetPasswordForm() {
   if (!resetKey || !userLogin) {
     return (
       <div className="bg-error-container/20 border border-error/30 p-8 rounded-xl text-center max-w-md w-full mx-auto shadow-md backdrop-blur-md">
-        <span className="material-symbols-outlined text-error text-4xl mb-4">error</span>
+        <ErrorIcon className="text-error text-4xl mb-4" />
         <h3 className="font-headline-sm text-on-surface mb-2">Invalid Reset Link</h3>
         <p className="font-body-md text-on-surface-variant text-sm mb-6">
           The password reset link is invalid or missing required parameters. Please request a new link.
@@ -97,7 +98,7 @@ function ResetPasswordForm() {
       
       {/* Header */}
       <div className="text-center">
-        <span className="material-symbols-outlined text-4xl text-on-surface-variant mb-4">lock_reset</span>
+        <LockReset className="text-4xl text-on-surface-variant mb-4" />
         <h1 className="font-headline-md text-on-surface mb-2">Create New Password</h1>
         <p className="font-body-md text-on-surface-variant">
           Please enter your new password below to regain access to your account.
@@ -106,7 +107,7 @@ function ResetPasswordForm() {
 
       {isSuccess ? (
         <div className="bg-primary-container/30 border border-primary/20 p-6 rounded-xl text-center">
-          <span className="material-symbols-outlined text-primary text-3xl mb-3">check_circle</span>
+          <CheckCircle className="text-primary text-3xl mb-3" />
           <h3 className="font-headline-sm text-on-surface mb-2">Password Reset Successful</h3>
           <p className="font-body-md text-on-surface-variant text-sm mb-6">
             Your password has been successfully updated. You can now use your new password to log in.
@@ -179,7 +180,7 @@ function ResetPasswordForm() {
           >
             {loading ? (
               <>
-                <span className="material-symbols-outlined animate-spin text-[18px]">sync</span>
+                <Sync className="animate-spin text-[18px]" />
                 Resetting...
               </>
             ) : "Reset Password"}
@@ -196,7 +197,7 @@ export default function ResetPasswordPage() {
     <div className="min-h-[70vh] flex flex-col items-center justify-center px-margin-mobile md:px-margin-desktop py-12">
       <Suspense fallback={
         <div className="flex flex-col items-center justify-center h-64 gap-4">
-          <span className="material-symbols-outlined animate-spin text-4xl text-primary">sync</span>
+          <Sync className="animate-spin text-4xl text-primary" />
           <span className="font-label-md text-on-surface-variant">Verifying link...</span>
         </div>
       }>

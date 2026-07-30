@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { verifyTurnstileToken } from "@/app/actions/turnstile";
+import { ArrowForward } from '@material-symbols-svg/react';
 
 export default function Newsletter() {
   const [email, setEmail] = useState("");
@@ -74,7 +75,7 @@ export default function Newsletter() {
                 className="shrink-0 px-4 py-4 text-primary font-label-md text-label-md uppercase tracking-widest hover:text-on-background transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed group-focus-within:text-on-background flex items-center gap-2"
               >
                 {status === "loading" ? "Joining..." : "Subscribe"}
-                {!status && <span className="material-symbols-outlined text-[18px]">arrow_forward</span>}
+                {!status && <ArrowForward className="text-[18px]" />}
               </button>
             </div>
             

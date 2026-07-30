@@ -5,6 +5,7 @@ import { useCartStore } from "@/store/useCartStore";
 import { useUIStore } from "@/store/useUIStore";
 import { useWishlistStore } from "@/store/useWishlistStore";
 import { toast } from "sonner";
+import { Chat, Remove, Add } from '@material-symbols-svg/react';
 
 interface AddToCartProps {
   productId: number;
@@ -77,7 +78,7 @@ export default function AddToCartPanel({ productId, price, stockStatus, productN
             rel="noopener noreferrer"
             className="flex-grow h-[52px] w-full bg-[#25D366] text-white font-label-lg text-sm uppercase tracking-[0.1em] sm:tracking-[0.2em] hover:bg-[#128C7E] transition-all duration-300 flex items-center justify-center gap-2 shadow-md rounded-full px-4"
           >
-            <span className="material-symbols-outlined text-[18px]">chat</span>
+            <Chat className="text-[18px]" />
             Contact for Restock
           </a>
         ) : (
@@ -88,14 +89,14 @@ export default function AddToCartPanel({ productId, price, stockStatus, productN
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
                 className="flex-1 h-full text-on-surface-variant hover:text-black hover:bg-black/5 transition-colors flex items-center justify-center disabled:opacity-50"
               >
-                <span className="material-symbols-outlined text-[18px]">remove</span>
+                <Remove className="text-[18px]" />
               </button>
               <span className="font-label-md text-[13px] text-on-background text-center w-10">{quantity}</span>
               <button 
                 onClick={() => setQuantity(quantity + 1)}
                 className="flex-1 h-full text-on-surface-variant hover:text-black hover:bg-black/5 transition-colors flex items-center justify-center disabled:opacity-50"
               >
-                <span className="material-symbols-outlined text-[18px]">add</span>
+                <Add className="text-[18px]" />
               </button>
             </div>
 

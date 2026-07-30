@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import { WCProduct } from "@/types/woocommerce"; // Import the type we defined
+import { Inventory2 } from '@material-symbols-svg/react';
 
 export default function ShopGrid({ initialProducts }: { initialProducts: WCProduct[] }) {
   // Store products in state so we can filter/sort them client-side later
@@ -12,7 +13,7 @@ export default function ShopGrid({ initialProducts }: { initialProducts: WCProdu
   if (!products || products.length === 0) {
     return (
       <section className="md:col-span-9 flex flex-col items-center justify-center py-24 text-center">
-        <span className="material-symbols-outlined text-6xl text-outline-variant mb-6 font-light">inventory_2</span>
+        <Inventory2 className="text-6xl text-outline-variant mb-6 font-light" />
         <h3 className="font-headline-md text-headline-md text-on-surface mb-2">Your Catalog is Empty</h3>
         <p className="font-body-md text-body-md text-on-surface-variant max-w-md mx-auto">
           Add products to your Truehost WooCommerce dashboard to see them appear here instantly.

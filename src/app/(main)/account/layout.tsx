@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuthStore } from "@/store/useAuthStore";
+import { Logout } from '@material-symbols-svg/react';
 
 export default function AccountLayout({
   children,
@@ -44,7 +45,7 @@ export default function AccountLayout({
               className="flex items-center gap-3 font-body-md text-on-surface-variant hover:text-black hover:translate-x-1 transition-all w-full text-left py-3 px-4 rounded-sm"
             >
               Sign Out
-              <span className="material-symbols-outlined text-[16px] ml-auto">logout</span>
+              <Logout className="text-[16px] ml-auto" />
             </button>
           </div>
         </div>

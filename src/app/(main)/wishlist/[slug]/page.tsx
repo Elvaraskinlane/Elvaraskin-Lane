@@ -4,6 +4,7 @@ import Link from "next/link";
 import { getProductsByIds } from "@/lib/woocommerce";
 import { notFound } from "next/navigation";
 import WishlistClientHandler from "./WishlistClientHandler";
+import { Stars, Favorite } from '@material-symbols-svg/react';
 
 interface PageProps {
   params: { slug: string };
@@ -51,7 +52,7 @@ export default async function PublicWishlistPage({ params }: PageProps) {
   return (
     <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-16 md:py-24">
       <div className="text-center mb-16 animate-fade-in">
-        <span className="material-symbols-outlined text-primary text-5xl mb-6 font-light">auto_awesome</span>
+        <Stars className="text-primary text-5xl mb-6 font-light" />
         <h1 className="font-headline-md text-3xl md:text-5xl text-on-surface mb-6 tracking-tight">
           {name}&apos;s Skincare Routine
         </h1>
@@ -66,7 +67,7 @@ export default async function PublicWishlistPage({ params }: PageProps) {
 
       {products.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-32 text-center opacity-70">
-          <span className="material-symbols-outlined text-4xl mb-4 font-light text-on-surface-variant">favorite</span>
+          <Favorite className="text-4xl mb-4 font-light text-on-surface-variant" />
           <p className="font-body-md text-sm text-on-surface-variant">This routine is currently empty.</p>
         </div>
       ) : (

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useCartStore } from "@/store/useCartStore";
 import { useUIStore } from "@/store/useUIStore";
 import { toast } from "sonner";
+import { Sync, ShoppingBag } from '@material-symbols-svg/react';
 
 interface WishlistClientHandlerProps {
   products?: any[]; // Full list of products for "Add Routine to Cart"
@@ -59,12 +60,12 @@ export default function WishlistClientHandler({ products, productId }: WishlistC
       >
         {isImporting ? (
           <>
-            <span className="material-symbols-outlined animate-spin text-[20px]">sync</span>
+            <Sync className="animate-spin text-[20px]" />
             Adding Routine...
           </>
         ) : (
           <>
-            <span className="material-symbols-outlined text-[20px]">shopping_bag</span>
+            <ShoppingBag className="text-[20px]" />
             Add Routine to Cart
           </>
         )}

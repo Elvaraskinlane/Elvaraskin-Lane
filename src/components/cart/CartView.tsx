@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { Close, Remove, Add, ArrowForward } from '@material-symbols-svg/react';
 
 // Mock data typed for WooCommerce parity later
 interface CartItem {
@@ -81,17 +82,17 @@ export default function CartView() {
                     <p className="font-body-md text-body-md text-on-surface-variant mt-1">{item.details}</p>
                   </div>
                   <button onClick={() => removeItem(item.id)} aria-label="Remove item" className="text-on-surface-variant hover:text-error transition-colors p-1">
-                    <span className="material-symbols-outlined text-[20px]">close</span>
+                    <Close className="text-[20px]" />
                   </button>
                 </div>
                 <div className="flex justify-between items-end mt-4">
                   <div className="flex items-center border border-outline-variant rounded-full overflow-hidden">
                     <button onClick={() => updateQuantity(item.id, -1)} aria-label="Decrease quantity" className="px-3 py-1 text-on-surface-variant hover:bg-surface-variant transition-colors">
-                      <span className="material-symbols-outlined text-[16px] leading-none">remove</span>
+                      <Remove className="text-[16px] leading-none" />
                     </button>
                     <span className="font-label-md text-label-md w-8 text-center">{item.quantity}</span>
                     <button onClick={() => updateQuantity(item.id, 1)} aria-label="Increase quantity" className="px-3 py-1 text-on-surface-variant hover:bg-surface-variant transition-colors">
-                      <span className="material-symbols-outlined text-[16px] leading-none">add</span>
+                      <Add className="text-[16px] leading-none" />
                     </button>
                   </div>
                   <span className="font-body-lg text-body-lg font-medium text-on-background">{formatPrice(item.price)}</span>
@@ -125,7 +126,7 @@ export default function CartView() {
             className="w-full bg-primary text-on-primary font-label-md text-label-md py-4 rounded hover:bg-tertiary transition-colors duration-300 flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Proceed to Checkout
-            <span className="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform duration-300">arrow_forward</span>
+            <ArrowForward className="text-[18px] group-hover:translate-x-1 transition-transform duration-300" />
           </button>
           <p className="font-body-md text-body-md text-on-surface-variant text-center mt-4 text-sm opacity-70">
             Secure checkout. Taxes included where applicable.

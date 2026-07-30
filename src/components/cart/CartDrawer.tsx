@@ -5,6 +5,7 @@ import { useUIStore } from "@/store/useUIStore";
 import { useCartStore } from "@/store/useCartStore";
 import Image from "next/image";
 import Link from "next/link";
+import { Close, ProgressActivity, ShoppingBag, Delete, Remove, Add } from '@material-symbols-svg/react';
 
 export default function CartDrawer() {
   const { isCartDrawerOpen, closeCartDrawer } = useUIStore();
@@ -41,7 +42,7 @@ export default function CartDrawer() {
             Shopping Bag ({cart?.items?.reduce((acc, item) => acc + item.quantity, 0) || 0})
           </h2>
           <button onClick={closeCartDrawer} className="text-on-surface-variant hover:text-error transition-colors p-2 -mr-2">
-            <span className="material-symbols-outlined font-light text-3xl">close</span>
+            <Close className="font-light text-3xl" />
           </button>
         </div>
 
@@ -49,11 +50,11 @@ export default function CartDrawer() {
         <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
           {isLoading && !cart ? (
             <div className="flex justify-center items-center h-full">
-              <span className="material-symbols-outlined animate-spin text-primary text-3xl">progress_activity</span>
+              <ProgressActivity className="animate-spin text-primary text-3xl" />
             </div>
           ) : !cart?.items?.length ? (
             <div className="text-center h-full flex flex-col justify-center items-center">
-              <span className="material-symbols-outlined text-5xl text-outline-variant mb-4">shopping_bag</span>
+              <ShoppingBag className="text-5xl text-outline-variant mb-4" />
               <p className="font-body-md text-on-surface-variant">Your bag is empty.</p>
               <button onClick={closeCartDrawer} className="mt-6 font-label-md text-primary underline underline-offset-4">Continue Shopping</button>
             </div>
@@ -73,7 +74,7 @@ export default function CartDrawer() {
                   <div className="flex justify-between items-start gap-2 mb-2">
                     <h3 className="font-headline-sm text-lg text-on-surface leading-tight" dangerouslySetInnerHTML={{ __html: item.name }} />
                     <button onClick={() => removeItem(item.key)} className="text-on-surface-variant hover:text-error transition-colors" aria-label="Remove item">
-                      <span className="material-symbols-outlined text-[20px]">delete</span>
+                      <Delete className="text-[20px]" />
                     </button>
                   </div>
                   <p className="font-body-md text-sm text-on-surface-variant/80 uppercase tracking-widest mb-6">{formatPrice(item.prices.price)}</p>
@@ -84,7 +85,7 @@ export default function CartDrawer() {
                       disabled={isLoading || item.quantity <= 1}
                       className="w-10 h-full flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors disabled:opacity-50"
                     >
-                      <span className="material-symbols-outlined text-[16px]">remove</span>
+                      <Remove className="text-[16px]" />
                     </button>
                     <span className="font-label-md text-sm w-8 text-center text-on-surface">{item.quantity}</span>
                     <button 
@@ -92,7 +93,7 @@ export default function CartDrawer() {
                       disabled={isLoading}
                       className="w-10 h-full flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors disabled:opacity-50"
                     >
-                      <span className="material-symbols-outlined text-[16px]">add</span>
+                      <Add className="text-[16px]" />
                     </button>
                   </div>
                 </div>

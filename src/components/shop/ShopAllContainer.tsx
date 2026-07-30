@@ -10,6 +10,7 @@ import { useUIStore } from "@/store/useUIStore";
 import { toast } from "sonner";
 import { loadMoreProductsAction } from "@/app/actions/shopActions";
 import ShopFilters from "./ShopFilters";
+import { Search, SearchOff } from '@material-symbols-svg/react';
 
 export default function ShopAllContainer({ initialProducts }: { initialProducts: WCProduct[] }) {
   const router = useRouter();
@@ -120,7 +121,7 @@ export default function ShopAllContainer({ initialProducts }: { initialProducts:
               onKeyDown={handleSearch}
               className="w-full bg-surface-container-low rounded-full py-3.5 pl-5 pr-12 font-body-md text-sm outline-none border border-transparent focus:border-outline-variant/30 focus:bg-surface transition-all placeholder:text-outline-variant/70 shadow-sm"
             />
-            <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant/70 text-[20px] group-focus-within:text-primary transition-colors">search</span>
+            <Search className="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant/70 text-[20px] group-focus-within:text-primary transition-colors" />
           </div>
 
           <Suspense fallback={<div className="font-body-sm text-on-surface-variant py-4">Loading filters...</div>}>
@@ -149,7 +150,7 @@ export default function ShopAllContainer({ initialProducts }: { initialProducts:
         {/* Dynamic Grid Mapping */}
         {visibleProducts.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-24 text-center border-t border-outline-variant">
-            <span className="material-symbols-outlined text-6xl text-outline-variant mb-6 font-light">search_off</span>
+            <SearchOff className="text-6xl text-outline-variant mb-6 font-light" />
             <h3 className="font-headline-md text-headline-md text-on-surface mb-2">No Products Found</h3>
             <p className="font-body-md text-body-md text-on-surface-variant max-w-md mx-auto">
               We couldn't find any products matching your current filters. Try adjusting your search or clearing the active filters.

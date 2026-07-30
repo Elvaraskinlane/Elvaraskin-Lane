@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useCartStore } from "@/store/useCartStore";
+import { ProgressActivity, ShoppingBag, Remove, Add, Share, Lock } from '@material-symbols-svg/react';
 
 export default function CartPage() {
   const { cart, isLoading, fetchCart, addItem, removeItem } = useCartStore();
@@ -28,7 +29,7 @@ export default function CartPage() {
   if (isLoading && !cart) {
     return (
       <div className="min-h-screen flex items-center justify-center pt-24">
-        <span className="material-symbols-outlined animate-spin text-primary text-4xl">progress_activity</span>
+        <ProgressActivity className="animate-spin text-primary text-4xl" />
       </div>
     );
   }
@@ -36,7 +37,7 @@ export default function CartPage() {
   if (!cart || cart.items.length === 0) {
     return (
       <div className="min-h-[70vh] flex flex-col items-center justify-center px-4 pt-24">
-        <span className="material-symbols-outlined text-6xl text-outline-variant mb-6 font-light">shopping_bag</span>
+        <ShoppingBag className="text-6xl text-outline-variant mb-6 font-light" />
         <h1 className="font-headline-md text-3xl text-on-surface mb-4 tracking-tight">Your Bag is Empty</h1>
         <p className="font-body-md text-on-surface-variant mb-8 max-w-md text-center">
           Discover our collection of curated skincare essentials and products to find your next favorite.
@@ -90,7 +91,7 @@ export default function CartPage() {
                         className="w-12 h-full flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors disabled:opacity-50"
                         disabled={item.quantity <= 1 || isLoading}
                       >
-                        <span className="material-symbols-outlined text-[18px] font-light">remove</span>
+                        <Remove className="text-[18px] font-light" />
                       </button>
                       <span className="font-label-md text-sm w-10 text-center text-on-surface">{item.quantity}</span>
                       <button 
@@ -98,7 +99,7 @@ export default function CartPage() {
                         className="w-12 h-full flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors disabled:opacity-50"
                         disabled={isLoading}
                       >
-                        <span className="material-symbols-outlined text-[18px] font-light">add</span>
+                        <Add className="text-[18px] font-light" />
                       </button>
                     </div>
                     
@@ -159,12 +160,12 @@ export default function CartPage() {
               }}
               className="w-full bg-transparent border border-outline-variant text-on-surface py-5 font-label-lg tracking-[0.2em] uppercase text-sm hover:bg-surface-container-highest transition-all duration-300 flex justify-center items-center mb-4 gap-2"
             >
-              <span className="material-symbols-outlined text-[18px]">share</span>
+              <Share className="text-[18px]" />
               SHARE CART
             </button>
             
             <div className="mt-6 flex items-center justify-center gap-2 text-on-surface-variant">
-              <span className="material-symbols-outlined text-lg">lock</span>
+              <Lock className="text-lg" />
               <span className="text-xs uppercase tracking-widest font-label-md">Secure Checkout</span>
             </div>
           </div>

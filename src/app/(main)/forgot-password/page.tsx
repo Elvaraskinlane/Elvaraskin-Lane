@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { verifyTurnstileToken } from "@/app/actions/turnstile";
+import { VpnKey, MarkEmailRead, Sync } from '@material-symbols-svg/react';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -60,7 +61,7 @@ export default function ForgotPasswordPage() {
         
         {/* Header */}
         <div className="text-center">
-          <span className="material-symbols-outlined text-4xl text-on-surface-variant mb-4">vpn_key</span>
+          <VpnKey className="text-4xl text-on-surface-variant mb-4" />
           <h1 className="font-headline-md text-on-surface mb-2">Reset Password</h1>
           <p className="font-body-md text-on-surface-variant">
             Enter the email address associated with your account, and we'll send you a link to reset your password.
@@ -69,7 +70,7 @@ export default function ForgotPasswordPage() {
 
         {isSuccess ? (
           <div className="bg-primary-container/30 border border-primary/20 p-6 rounded-xl text-center">
-            <span className="material-symbols-outlined text-primary text-3xl mb-3">mark_email_read</span>
+            <MarkEmailRead className="text-primary text-3xl mb-3" />
             <h3 className="font-headline-sm text-on-surface mb-2">Check Your Email</h3>
             <p className="font-body-md text-on-surface-variant text-sm">
               If an account exists with that email address, a password reset link has been sent to it. Please check your inbox (and spam folder).
@@ -120,7 +121,7 @@ export default function ForgotPasswordPage() {
             >
               {loading ? (
                 <>
-                  <span className="material-symbols-outlined animate-spin text-[18px]">sync</span>
+                  <Sync className="animate-spin text-[18px]" />
                   Sending...
                 </>
               ) : "Send Reset Link"}

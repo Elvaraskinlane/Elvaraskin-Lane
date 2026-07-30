@@ -5,6 +5,7 @@ import ProductGallery from "@/components/product/ProductGallery";
 import AddToCartPanel from "@/components/product/AddToCartPanel";
 import BestsellersCarousel from "@/components/home/BestsellersCarousel";
 import ProductShare from "@/components/product/ProductShare";
+import { ChevronRight, Verified, Eco, WaterDrop, Star, Stars, ThumbUp, Palette, Schedule, Spa, Air, Favorite, Diamond } from '@material-symbols-svg/react';
 
 export const dynamicParams = true; // Allows on-demand generation for new products
 
@@ -46,15 +47,15 @@ export default async function ProductDetailsPage({ params }: { params: Promise<{
         {/* Breadcrumbs */}
         <nav className="flex items-center gap-2 md:gap-3 mb-10 font-label-md text-[10px] md:text-[11px] text-on-surface-variant uppercase tracking-[0.15em]">
           <Link href="/" className="hover:text-primary transition-colors">Home</Link>
-          <span className="material-symbols-outlined text-[14px] opacity-40">chevron_right</span>
+          <ChevronRight className="text-[14px] opacity-40" />
           <Link href="/shop" className="hover:text-primary transition-colors">Shop</Link>
-          <span className="material-symbols-outlined text-[14px] opacity-40">chevron_right</span>
+          <ChevronRight className="text-[14px] opacity-40" />
           {product.categories?.[0] && (
             <>
               <Link href={`/category/${product.categories[0].slug}`} className="hover:text-primary transition-colors">
                 {product.categories[0].name}
               </Link>
-              <span className="material-symbols-outlined text-[14px] opacity-40">chevron_right</span>
+              <ChevronRight className="text-[14px] opacity-40" />
             </>
           )}
           <span className="text-on-background font-medium truncate max-w-[200px]">{product.name}</span>
@@ -85,9 +86,9 @@ export default async function ProductDetailsPage({ params }: { params: Promise<{
               <ul className="space-y-5 font-body-md text-[14px] text-on-surface-variant/90 leading-relaxed font-light">
                 {(() => {
                   const defaultBenefits = [
-                    { icon: "verified", text: "Dermatologically tested and approved for sensitive skin." },
-                    { icon: "eco", text: "Sustainably sourced, cruelty-free botanicals." },
-                    { icon: "water_drop", text: "Deep hydration without stripping natural moisture." },
+                    { icon: <Verified />, text: "Dermatologically tested and approved for sensitive skin." },
+                    { icon: <Eco />, text: "Sustainably sourced, cruelty-free botanicals." },
+                    { icon: <WaterDrop />, text: "Deep hydration without stripping natural moisture." },
                   ];
 
                   const slugs = product.categories?.map((c: any) => c.slug.toLowerCase()) || [];
@@ -95,27 +96,27 @@ export default async function ProductDetailsPage({ params }: { params: Promise<{
                   
                   if (slugs.includes("hair-care") || product.name.toLowerCase().includes("hair")) {
                     benefits = [
-                      { icon: "star", text: "Premium quality and long-lasting durability." },
-                      { icon: "auto_awesome", text: "Soft, lightweight, and incredibly natural-looking." },
-                      { icon: "thumb_up", text: "Easy to maintain and perfect for everyday styling." },
+                      { icon: <Star />, text: "Premium quality and long-lasting durability." },
+                      { icon: <Stars />, text: "Soft, lightweight, and incredibly natural-looking." },
+                      { icon: <ThumbUp />, text: "Easy to maintain and perfect for everyday styling." },
                     ];
                   } else if (slugs.includes("makeup") || product.name.toLowerCase().includes("palette")) {
                     benefits = [
-                      { icon: "palette", text: "Highly pigmented for vibrant, flawless color." },
-                      { icon: "schedule", text: "Long-lasting wear that stays put all day." },
-                      { icon: "spa", text: "Formulated with skin-loving, non-comedogenic ingredients." },
+                      { icon: <Palette />, text: "Highly pigmented for vibrant, flawless color." },
+                      { icon: <Schedule />, text: "Long-lasting wear that stays put all day." },
+                      { icon: <Spa />, text: "Formulated with skin-loving, non-comedogenic ingredients." },
                     ];
                   } else if (slugs.includes("fragrance") || product.name.toLowerCase().includes("perfume")) {
                     benefits = [
-                      { icon: "air", text: "Long-lasting sillage that leaves a memorable impression." },
-                      { icon: "favorite", text: "Expertly blended with premium aromatic notes." },
-                      { icon: "diamond", text: "Elegant packaging perfect for gifting or display." },
+                      { icon: <Air />, text: "Long-lasting sillage that leaves a memorable impression." },
+                      { icon: <Favorite />, text: "Expertly blended with premium aromatic notes." },
+                      { icon: <Diamond />, text: "Elegant packaging perfect for gifting or display." },
                     ];
                   }
 
                   return benefits.map((benefit, idx) => (
                     <li key={idx} className="flex gap-4 items-start">
-                      <span className="material-symbols-outlined text-[20px] text-primary">{benefit.icon}</span>
+                      <span className="text-[20px] text-primary flex-shrink-0 flex items-center justify-center">{benefit.icon}</span>
                       {benefit.text}
                     </li>
                   ));

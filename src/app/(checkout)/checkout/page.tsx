@@ -9,6 +9,7 @@ import { useCartStore } from "@/store/useCartStore";
 import { useAuthStore } from "@/store/useAuthStore";
 import { processCheckout } from "@/lib/cart";
 import { toast } from "sonner";
+import { ChevronRight, AccountCircle, KeyboardArrowDown, Forum, Lock } from '@material-symbols-svg/react';
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -192,7 +193,7 @@ export default function CheckoutPage() {
 
       <div className="flex items-center gap-2 mb-8 text-sm text-on-surface-variant animate-fade-in">
         <Link href="/cart" className="hover:text-primary transition-colors">Cart</Link>
-        <span className="material-symbols-outlined text-[14px]">chevron_right</span>
+        <ChevronRight className="text-[14px]" />
         <span className="font-bold text-on-background">Checkout</span>
       </div>
 
@@ -205,7 +206,7 @@ export default function CheckoutPage() {
 
           {isAuthenticated && user ? (
             <div className="mb-8 p-4 bg-secondary-container/20 border border-secondary-container rounded-sm flex items-start gap-3">
-              <span className="material-symbols-outlined text-secondary text-[20px] mt-0.5">account_circle</span>
+              <AccountCircle className="text-secondary text-[20px] mt-0.5" />
               <div>
                 <p className="font-body-md text-sm text-on-surface mb-1">
                   You are checked in as <span className="font-medium">{user.user_email}</span>.
@@ -361,7 +362,7 @@ export default function CheckoutPage() {
                     <option value="ZA">Zamfara</option>
                   </select>
                   <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant flex items-center justify-center">
-                    <span className="material-symbols-outlined text-[20px]">expand_more</span>
+                    <KeyboardArrowDown className="text-[20px]" />
                   </div>
                 </div>
               </div>
@@ -499,13 +500,13 @@ export default function CheckoutPage() {
                   disabled={isProcessing || !cart || cart.items.length === 0}
                   className={`w-full mt-4 h-14 bg-transparent border border-on-background text-on-background font-label-lg uppercase tracking-[0.2em] text-sm hover:bg-surface-container-highest transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center rounded-sm gap-2 ${isStoreDown ? 'animate-pulse ring-2 ring-primary ring-offset-2' : ''}`}
                 >
-                  <span className="material-symbols-outlined text-[20px]">forum</span>
+                  <Forum className="text-[20px]" />
                   Network Issues? Order via WhatsApp
                 </button>
 
                 
                 <div className="mt-6 flex items-center justify-center gap-2 text-on-surface-variant opacity-70">
-                  <span className="material-symbols-outlined text-[16px] font-light">lock</span>
+                  <Lock className="text-[16px] font-light" />
                   <span className="font-body-md text-xs">Secured by Paystack</span>
                 </div>
               </>

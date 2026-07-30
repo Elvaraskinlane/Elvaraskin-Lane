@@ -4,6 +4,7 @@ import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useCartStore } from "@/store/useCartStore";
+import { Sync, Error as ErrorIcon, Redeem } from '@material-symbols-svg/react';
 
 function SharedCartHandler() {
   const searchParams = useSearchParams();
@@ -57,7 +58,7 @@ function SharedCartHandler() {
   if (error) {
     return (
       <div className="bg-error-container/20 border border-error/30 p-8 rounded-xl text-center max-w-md w-full shadow-md backdrop-blur-md">
-        <span className="material-symbols-outlined text-error text-4xl mb-4">error</span>
+        <ErrorIcon className="text-error text-4xl mb-4" />
         <h3 className="font-headline-sm text-on-surface mb-2">Invalid Link</h3>
         <p className="font-body-md text-on-surface-variant text-sm mb-6">
           {error}
@@ -72,7 +73,7 @@ function SharedCartHandler() {
   if (sharedItems.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center h-64 gap-4">
-        <span className="material-symbols-outlined animate-spin text-4xl text-primary">sync</span>
+        <Sync className="animate-spin text-4xl text-primary" />
         <span className="font-label-md text-on-surface-variant">Reading shared cart...</span>
       </div>
     );
@@ -80,7 +81,7 @@ function SharedCartHandler() {
 
   return (
     <div className="bg-surface/70 backdrop-blur-md border border-outline-variant/30 p-8 md:p-12 rounded-2xl text-center max-w-md w-full shadow-lg">
-      <span className="material-symbols-outlined text-primary text-5xl mb-6">redeem</span>
+      <Redeem className="text-primary text-5xl mb-6" />
       <h2 className="font-headline-md text-on-surface mb-4">You received a shared cart!</h2>
       <p className="font-body-md text-on-surface-variant mb-8">
         Someone has shared their curated Elvara Skinlane routine with you. It contains {sharedItems.reduce((acc, item) => acc + item.quantity, 0)} items.
@@ -93,7 +94,7 @@ function SharedCartHandler() {
       >
         {isImporting ? (
           <>
-            <span className="material-symbols-outlined animate-spin text-[18px]">sync</span>
+            <Sync className="animate-spin text-[18px]" />
             Importing Cart...
           </>
         ) : (
@@ -120,7 +121,7 @@ export default function SharedCartPage() {
       <div className="relative z-10 w-full max-w-md">
         <Suspense fallback={
           <div className="flex flex-col items-center justify-center h-64 gap-4">
-            <span className="material-symbols-outlined animate-spin text-4xl text-primary">sync</span>
+            <Sync className="animate-spin text-4xl text-primary" />
             <span className="font-label-md text-on-surface-variant">Loading...</span>
           </div>
         }>

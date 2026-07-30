@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { CreditCard, AccountBalance, Lock } from '@material-symbols-svg/react';
 
 export default function CheckoutForm() {
   const [deliveryMethod, setDeliveryMethod] = useState("standard");
@@ -91,7 +92,7 @@ export default function CheckoutForm() {
                   <input type="radio" name="payment" value="card" checked={paymentMethod === "card"} onChange={(e) => setPaymentMethod(e.target.value)} className="w-5 h-5 text-primary focus:ring-primary border-outline-variant bg-transparent cursor-pointer" />
                   <span className="font-body-md text-on-background">Credit / Debit Card</span>
                 </div>
-                <span className="material-symbols-outlined text-[24px] text-on-surface-variant">credit_card</span>
+                <CreditCard className="text-[24px] text-on-surface-variant" />
               </label>
               
               {paymentMethod === "card" && (
@@ -118,7 +119,7 @@ export default function CheckoutForm() {
                 <input type="radio" name="payment" value="bank" checked={paymentMethod === "bank"} onChange={(e) => setPaymentMethod(e.target.value)} className="w-5 h-5 text-primary focus:ring-primary border-outline-variant bg-transparent cursor-pointer" />
                 <span className="font-body-md text-on-background">Direct Bank Transfer</span>
               </div>
-              <span className="material-symbols-outlined text-[24px] text-on-surface-variant">account_balance</span>
+              <AccountBalance className="text-[24px] text-on-surface-variant" />
             </label>
           </div>
         </section>
@@ -171,7 +172,7 @@ export default function CheckoutForm() {
           </div>
 
           <button type="button" className="w-full bg-on-background text-on-primary font-label-md uppercase tracking-[0.1em] py-5 rounded-sm hover:bg-tertiary transition-colors duration-300 shadow-md flex justify-center items-center gap-2">
-            <span className="material-symbols-outlined text-[18px]">lock</span>
+            <Lock className="text-[18px]" />
             Pay Now
           </button>
         </div>

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useAuthStore } from "@/store/useAuthStore";
+import { Person, Lock, LocalShipping, Sync } from '@material-symbols-svg/react';
 
 export default function AccountSettingsPage() {
   const { user, isAuthenticated } = useAuthStore();
@@ -149,7 +150,7 @@ export default function AccountSettingsPage() {
           {/* Profile Section */}
           <section>
             <h2 className="font-headline-sm text-on-surface mb-6 flex items-center gap-2">
-              <span className="material-symbols-outlined text-on-surface-variant font-light">person</span>
+              <Person className="text-on-surface-variant font-light" />
               Personal Profile
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -191,7 +192,7 @@ export default function AccountSettingsPage() {
           {/* Security Section */}
           <section>
             <h2 className="font-headline-sm text-on-surface mb-6 flex items-center gap-2">
-              <span className="material-symbols-outlined text-on-surface-variant font-light">lock</span>
+              <Lock className="text-on-surface-variant font-light" />
               Security
             </h2>
             <div className="flex flex-col max-w-md">
@@ -212,7 +213,7 @@ export default function AccountSettingsPage() {
           {/* Billing Address Section */}
           <section>
             <h2 className="font-headline-sm text-on-surface mb-6 flex items-center gap-2">
-              <span className="material-symbols-outlined text-on-surface-variant font-light">local_shipping</span>
+              <LocalShipping className="text-on-surface-variant font-light" />
               Billing & Shipping Details
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -296,7 +297,7 @@ export default function AccountSettingsPage() {
             >
               {saving ? (
                 <>
-                  <span className="material-symbols-outlined animate-spin" style={{ fontSize: '18px' }}>sync</span>
+                  <Sync className="animate-spin" style={{ fontSize: '18px' }} />
                   Saving...
                 </>
               ) : "Save Changes"}

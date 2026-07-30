@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
+import { CheckCircle } from '@material-symbols-svg/react';
 
 function SuccessContent() {
   const searchParams = useSearchParams();
@@ -15,9 +16,7 @@ function SuccessContent() {
   return (
     <div className="text-center max-w-2xl mx-auto animate-fade-in">
       <div className="w-24 h-24 bg-primary-container/20 rounded-full flex items-center justify-center mx-auto mb-8 border border-primary/20">
-        <span className="material-symbols-outlined text-4xl text-primary font-light">
-          check_circle
-        </span>
+        <CheckCircle className="text-4xl text-primary font-light" />
       </div>
       
       <h1 className="font-headline-md text-4xl md:text-5xl text-on-background uppercase tracking-wide mb-6">

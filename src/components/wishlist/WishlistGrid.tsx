@@ -7,6 +7,7 @@ import { useWishlistStore } from "@/store/useWishlistStore";
 import { useCartStore } from "@/store/useCartStore";
 import { useUIStore } from "@/store/useUIStore";
 import { toast } from "sonner";
+import { Favorite, Share, Close } from '@material-symbols-svg/react';
 
 export default function WishlistGrid() {
   const { items, toggleItem } = useWishlistStore();
@@ -46,7 +47,7 @@ export default function WishlistGrid() {
   if (items.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-32 text-center animate-fade-in">
-        <span className="material-symbols-outlined text-6xl text-outline-variant mb-6 font-light">favorite</span>
+        <Favorite className="text-6xl text-outline-variant mb-6 font-light" />
         <h2 className="font-headline-md text-on-surface mb-4">Your wishlist is empty</h2>
         <p className="font-body-lg text-on-surface-variant max-w-md mx-auto mb-8">Discover our collection of high-performance skincare and save your favorite products here.</p>
         <Link href="/shop" className="inline-block border border-on-surface text-on-surface px-8 py-4 font-label-md uppercase tracking-wider hover:bg-on-surface hover:text-on-primary transition-colors">
@@ -73,7 +74,7 @@ export default function WishlistGrid() {
           }}
           className="bg-transparent border border-outline-variant text-on-surface px-6 py-3 font-label-md tracking-[0.15em] uppercase text-xs hover:bg-surface-container-highest transition-all duration-300 flex items-center gap-2 rounded-sm"
         >
-          <span className="material-symbols-outlined text-[16px]">share</span>
+          <Share className="text-[16px]" />
           Share My Routine
         </button>
       </div>
@@ -95,7 +96,7 @@ export default function WishlistGrid() {
                   aria-label="Remove" 
                   className="w-10 h-10 rounded-full bg-surface/90 backdrop-blur flex items-center justify-center text-on-surface hover:bg-surface hover:text-error transition-colors shadow-sm"
                 >
-                  <span className="material-symbols-outlined text-xl">close</span>
+                  <Close className="text-xl" />
                 </button>
               </div>
               <button 

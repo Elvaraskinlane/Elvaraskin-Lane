@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  experimental: {
+    optimizePackageImports: ['@material-symbols-svg/react'],
+  },
   // Next.js feature to allow network testing
   allowedDevOrigins: ['192.168.100.37', '193.168.4.230', '193.168.5.146'],
   async rewrites() {

@@ -15,6 +15,7 @@
     "@ai-sdk/react": "^4.0.40",
     "@huggingface/transformers": "^4.2.0",
     "@marsidev/react-turnstile": "^1.5.3",
+    "@material-symbols-svg/react": "^0.13.0",
     "@vercel/speed-insights": "^2.0.0",
     "ai": "^7.0.37",
     "next": "16.2.9",

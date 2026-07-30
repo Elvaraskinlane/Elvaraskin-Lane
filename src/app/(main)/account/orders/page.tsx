@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useAuthStore } from "@/store/useAuthStore";
 import { fetchCustomerOrders } from "@/lib/auth";
+import { ReceiptLong, ShoppingBag } from '@material-symbols-svg/react';
 
 export default function OrderHistoryPage() {
   const { user, isAuthenticated, logout } = useAuthStore();
@@ -59,7 +60,7 @@ export default function OrderHistoryPage() {
           </div>
         ) : orders.length === 0 ? (
           <div className="text-center flex flex-col items-center py-12">
-            <span className="material-symbols-outlined text-4xl text-outline-variant mb-4">receipt_long</span>
+            <ReceiptLong className="text-4xl text-outline-variant mb-4" />
             <h3 className="font-headline-sm text-on-surface mb-2">No orders yet</h3>
             <p className="font-body-md text-on-surface-variant max-w-md mx-auto">
               When you complete a purchase, your order history and tracking details will appear here.
@@ -70,7 +71,7 @@ export default function OrderHistoryPage() {
             {orders.map((order) => (
               <div key={order.id} className="flex flex-col sm:flex-row gap-6 p-6 bg-white border border-outline-variant/15 hover:border-black/20 hover:shadow-[0_4px_20px_rgb(0,0,0,0.03)] transition-all rounded-sm group">
                 <div className="w-full sm:w-24 h-24 bg-[#fafafa] rounded-sm flex-shrink-0 flex items-center justify-center">
-                  <span className="material-symbols-outlined text-on-surface-variant/40 text-4xl font-light">shopping_bag</span>
+                  <ShoppingBag className="text-on-surface-variant/40 text-4xl font-light" />
                 </div>
                 
                 <div className="flex-grow flex flex-col gap-2">

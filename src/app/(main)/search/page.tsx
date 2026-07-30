@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import SearchControls from "@/components/search/SearchControls";
 import { searchProducts } from "@/lib/woocommerce";
+import { SearchOff } from '@material-symbols-svg/react';
 
 // Note: In Next.js 15+, searchParams must be awaited if accessed dynamically
 export default async function SearchPage({
@@ -64,7 +65,7 @@ export default async function SearchPage({
             })
           ) : (
             <div className="col-span-full flex flex-col items-center justify-center py-20 text-center">
-              <span className="material-symbols-outlined text-5xl text-outline-variant mb-4">search_off</span>
+              <SearchOff className="text-5xl text-outline-variant mb-4" />
               <h2 className="font-headline-sm text-on-surface mb-2">No results found</h2>
               <p className="font-body-md text-on-surface-variant mb-8">Try adjusting your search terms or explore our curated collections.</p>
               <Link href="/shop" className="border border-primary text-primary px-10 py-4 font-label-md hover:bg-primary hover:text-on-primary transition-colors duration-300 rounded-sm">

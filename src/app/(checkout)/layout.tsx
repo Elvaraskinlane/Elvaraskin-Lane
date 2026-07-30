@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { Lock } from '@material-symbols-svg/react';
 
 export default function CheckoutLayout({
   children,
@@ -14,7 +15,7 @@ export default function CheckoutLayout({
            <span className="font-headline-md text-headline-md italic text-primary">Elvara Skinlane</span>
         </Link>
         <div className="flex items-center gap-2 text-primary">
-          <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>lock</span>
+          <Lock className="text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }} />
           <span className="font-label-md text-label-md text-on-surface-variant">Secure Checkout</span>
         </div>
       </header>

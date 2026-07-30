@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { getAllBrands } from "@/lib/woocommerce";
+import { Inventory2 } from '@material-symbols-svg/react';
 
 export const metadata = {
   title: 'Brands | Elvara Skinlane',
@@ -30,7 +31,7 @@ export default async function BrandsPage() {
       <div className="max-w-[1280px] mx-auto px-margin-mobile md:px-margin-desktop pt-16">
         {activeBrands.length === 0 ? (
           <div className="text-center py-20 text-on-surface-variant">
-            <span className="material-symbols-outlined text-[48px] mb-4 opacity-50">inventory_2</span>
+            <Inventory2 className="text-[48px] mb-4 opacity-50" />
             <p>No brands found at the moment.</p>
           </div>
         ) : (
