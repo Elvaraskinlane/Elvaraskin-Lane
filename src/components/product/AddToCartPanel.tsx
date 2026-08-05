@@ -5,7 +5,7 @@ import { useCartStore } from "@/store/useCartStore";
 import { useUIStore } from "@/store/useUIStore";
 import { useWishlistStore } from "@/store/useWishlistStore";
 import { toast } from "sonner";
-import { Chat, Remove, Add } from '@material-symbols-svg/react';
+import { Chat, Remove, Add, Favorite } from '@material-symbols-svg/react';
 
 interface AddToCartProps {
   productId: number;
@@ -127,12 +127,9 @@ export default function AddToCartPanel({ productId, price, stockStatus, productN
               : 'border-outline-variant/30 text-on-surface-variant hover:text-error hover:border-error/30 hover:bg-error/5'
           }`}
         >
-          <span 
-            className={`material-symbols-outlined text-[20px] ${isWished ? 'text-error' : 'font-light'}`}
-            style={{ fontVariationSettings: isWished ? "'FILL' 1" : "'FILL' 0" }}
-          >
-            favorite
-          </span>
+          <Favorite 
+            className={`text-[20px] ${isWished ? 'text-error fill-current' : 'font-light'}`} 
+          />
         </button>
       </div>
     </div>

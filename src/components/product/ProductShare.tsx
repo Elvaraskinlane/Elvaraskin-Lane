@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Check, Link as LinkIcon } from '@material-symbols-svg/react';
 
 interface ProductShareProps {
   productName: string;
@@ -73,9 +74,11 @@ export default function ProductShare({ productName }: ProductShareProps) {
           className={`w-10 h-10 rounded-full border flex items-center justify-center transition-colors ${copied ? 'border-primary text-primary bg-primary-container' : 'border-outline-variant text-on-surface-variant hover:text-primary hover:border-primary'}`}
           aria-label="Copy Link"
         >
-          <span className="material-symbols-outlined text-[18px]">
-            {copied ? 'check' : 'link'}
-          </span>
+          {copied ? (
+            <Check className="text-[18px]" />
+          ) : (
+            <LinkIcon className="text-[18px]" />
+          )}
         </button>
       </div>
     </div>

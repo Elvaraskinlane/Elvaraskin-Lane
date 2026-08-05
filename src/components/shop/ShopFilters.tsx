@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useState } from "react";
-import { FilterAltOff } from '@material-symbols-svg/react';
+import { FilterAltOff, Remove, Add } from '@material-symbols-svg/react';
 
 export default function ShopFilters() {
   const router = useRouter();
@@ -135,9 +135,11 @@ export default function ShopFilters() {
           className="w-full flex justify-between items-center py-5 bg-transparent hover:text-primary transition-colors group"
         >
           <span className="font-label-md text-xs text-on-surface uppercase tracking-[0.2em] group-hover:text-primary transition-colors">Categories</span>
-          <span className="material-symbols-outlined text-on-surface-variant text-[18px] group-hover:text-primary transition-colors">
-            {openSection === "categories" ? "remove" : "add"}
-          </span>
+          {openSection === "categories" ? (
+            <Remove className="text-on-surface-variant text-[18px] group-hover:text-primary transition-colors" />
+          ) : (
+            <Add className="text-on-surface-variant text-[18px] group-hover:text-primary transition-colors" />
+          )}
         </button>
         {openSection === "categories" && (
           <div className="pb-5 bg-transparent max-h-64 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">
@@ -170,9 +172,11 @@ export default function ShopFilters() {
           className="w-full flex justify-between items-center py-5 bg-transparent hover:text-primary transition-colors group"
         >
           <span className="font-label-md text-xs text-on-surface uppercase tracking-[0.2em] group-hover:text-primary transition-colors">Brands</span>
-          <span className="material-symbols-outlined text-on-surface-variant text-[18px] group-hover:text-primary transition-colors">
-            {openSection === "brands" ? "remove" : "add"}
-          </span>
+          {openSection === "brands" ? (
+            <Remove className="text-on-surface-variant text-[18px] group-hover:text-primary transition-colors" />
+          ) : (
+            <Add className="text-on-surface-variant text-[18px] group-hover:text-primary transition-colors" />
+          )}
         </button>
         {openSection === "brands" && (
           <div className="pb-5 bg-transparent max-h-64 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">
@@ -205,9 +209,11 @@ export default function ShopFilters() {
           className="w-full flex justify-between items-center py-5 bg-transparent hover:text-primary transition-colors group"
         >
           <span className="font-label-md text-xs text-on-surface uppercase tracking-[0.2em] group-hover:text-primary transition-colors">Skin Concerns</span>
-          <span className="material-symbols-outlined text-on-surface-variant text-[18px] group-hover:text-primary transition-colors">
-            {openSection === "concerns" ? "remove" : "add"}
-          </span>
+          {openSection === "concerns" ? (
+            <Remove className="text-on-surface-variant text-[18px] group-hover:text-primary transition-colors" />
+          ) : (
+            <Add className="text-on-surface-variant text-[18px] group-hover:text-primary transition-colors" />
+          )}
         </button>
         {openSection === "concerns" && (
           <div className="pb-5 bg-transparent max-h-64 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">

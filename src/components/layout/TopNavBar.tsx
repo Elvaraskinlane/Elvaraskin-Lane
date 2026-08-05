@@ -265,9 +265,7 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
           aria-label="Toggle mobile menu"
           aria-expanded={isMobileMenuOpen}
         >
-          <span className="material-symbols-outlined">
-            {isMobileMenuOpen ? "close" : "menu"}
-          </span>
+          {isMobileMenuOpen ? <Close /> : <Menu />}
         </button>
 
         {/* Navigation Links (Desktop) */}
