@@ -81,7 +81,7 @@ export default function StoreAssistant() {
       triggerLocalFallback();
     } else {
       // Standard cloud routing
-      sendMessage({ role: "user", content: input });
+      sendMessage({ text: input });
     }
     
     // Clear input
