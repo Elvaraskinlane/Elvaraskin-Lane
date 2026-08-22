@@ -75,9 +75,7 @@ When a user asks for a recommendation, ask clarifying questions if needed (e.g.,
       });
     }
 
-    return (result as any).toUIMessageStreamResponse 
-      ? (result as any).toUIMessageStreamResponse() 
-      : (result as any).toTextStreamResponse();
+    return result.toDataStreamResponse();
     
   } catch (error: any) {
     console.error("Cloud Assistant Error:", error);

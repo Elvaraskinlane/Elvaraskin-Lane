@@ -17,7 +17,7 @@ export default function StoreAssistant() {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value);
 
   // Initialize standard Vercel AI SDK (this will hit Groq, then DeepSeek)
-  const { messages, setMessages, sendMessage, status } = useChat({
+  const { messages, setMessages, append, status } = useChat({
     // @ts-ignore
     transport: new DefaultChatTransport({ api: "/api/assistant" }),
     onError: (error: any) => {
@@ -52,7 +52,7 @@ export default function StoreAssistant() {
         // Append the local AI's response to the Vercel AI SDK message state
         setMessages((prev: any[]) => [
           ...prev,
-          { id: Date.now().toString(), role: "assistant", parts: [{ type: "text", text: e.data.output }] },
+          { id: Date.now().toString(), role: "assistant", content: e.data.output },
         ]);
       }
       
@@ -67,7 +67,7 @@ export default function StoreAssistant() {
   const triggerLocalFallback = () => {
     // Send the current conversation history to the local Transformers.js worker
     worker.current?.postMessage({
-      messages: [...messages.map((m: any) => ({ role: m.role, content: m.parts?.map((p: any) => p.type === "text" ? p.text : "").join("") || "" })), { role: "user", content: input }],
+      messages: [...messages.map((m: any) => ({ role: m.role, content: m.parts?.map((p: any) => p.type === "text" ? p.text : "").join("") || m.content || "" })), { role: "user", content: input }],
     });
   };
 
@@ -77,11 +77,11 @@ export default function StoreAssistant() {
 
     if (isLocalMode) {
       // Bypass API completely and route to client GPU
-      setMessages((prev: any[]) => [...prev, { id: Date.now().toString(), role: "user", parts: [{ type: "text", text: input }] }]);
+      setMessages((prev: any[]) => [...prev, { id: Date.now().toString(), role: "user", content: input }]);
       triggerLocalFallback();
     } else {
       // Standard cloud routing
-      sendMessage({ role: "user", parts: [{ type: "text", text: input }] });
+      append({ role: "user", content: input });
     }
     
     // Clear input
