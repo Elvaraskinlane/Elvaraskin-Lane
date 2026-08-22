@@ -60,7 +60,7 @@ When a user asks for a recommendation, ask clarifying questions if needed (e.g.,
     let result;
     try {
       result = await streamText({
-        model: groq('llama-3.3-70b-versatile') as any,
+        model: groq('openai/gpt-oss-120b') as any,
         system: systemPrompt,
         messages: coreMessages,
         temperature: 0.7,
@@ -74,8 +74,7 @@ When a user asks for a recommendation, ask clarifying questions if needed (e.g.,
         temperature: 0.7,
       });
     }
-
-    return result.toDataStreamResponse();
+    return result.toUIMessageStreamResponse();
     
   } catch (error: any) {
     console.error("Cloud Assistant Error:", error);
