@@ -17,7 +17,7 @@ export default function StoreAssistant() {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value);
 
   // Initialize standard Vercel AI SDK (this will hit Groq, then DeepSeek)
-  const { messages, setMessages, append, status } = useChat({
+  const { messages, setMessages, sendMessage, status } = useChat({
     // @ts-ignore
     transport: new DefaultChatTransport({ api: "/api/assistant" }),
     onError: (error: any) => {
@@ -81,7 +81,7 @@ export default function StoreAssistant() {
       triggerLocalFallback();
     } else {
       // Standard cloud routing
-      append({ role: "user", content: input });
+      sendMessage({ role: "user", content: input });
     }
     
     // Clear input
