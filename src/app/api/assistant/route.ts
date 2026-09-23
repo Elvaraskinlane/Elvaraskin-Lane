@@ -64,7 +64,7 @@ When a user asks for a recommendation, ask clarifying questions if needed (e.g.,
     // 2. Multi-tier Cloud Fallback (Groq -> DeepSeek)
     let result;
     try {
-      const groqModel = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
+      const groqModel = process.env.GROQ_MODEL || 'openai/gpt-oss-120b';
       result = await streamText({
         model: groq(groqModel) as any,
         system: systemPrompt,
