@@ -11,13 +11,9 @@ const deepseek = createDeepSeek({
 
 export async function POST(req: Request) {
   try {
-    const { messages } = await req.json();
+    const { messages, pathname } = await req.json();
 
-    // 1. RAG: Fetch store inventory (Top 100 in-stock)
-    // We only fetch a few fields to keep the prompt small
-    const rawProducts = await getProducts(100, { 
-      // Assuming getProducts handles basic queries, or we just get latest
-    });
+    const rawProducts = await getProducts(100);
     
     // Filter and format for the AI (INCLUDE SLUG FOR URLS)
     const catalogSummary = rawProducts
@@ -29,9 +25,23 @@ export async function POST(req: Request) {
       })
       .join('\n');
 
+    let shopperContext = `The shopper is browsing ${pathname || "the store"}.`;
+    if (typeof pathname === "string" && pathname.startsWith("/product/")) {
+      const slug = pathname.split("/product/")[1]?.split("/")[0];
+      const viewing = rawProducts.find((product: { slug: string }) => product.slug === slug);
+      if (viewing) {
+        shopperContext = `The shopper is currently viewing **${viewing.name}** (₦${viewing.price}, /product/${viewing.slug}). Acknowledge it briefly. If it fits their need, recommend it with the exact markdown link. Then suggest 1-2 complementary products from the catalog.`;
+      }
+    } else if (pathname === "/shop" || (typeof pathname === "string" && pathname.startsWith("/category/"))) {
+      shopperContext = "The shopper is browsing the catalog. Help them narrow by skin type or concern, then recommend 2-3 products.";
+    }
+
     const systemPrompt = `You are the exclusive Elvara Skinlane beauty consultant. 
 Your tone is elegant, luxurious, deeply knowledgeable, and concise. 
-Your goal is to provide highly converting, tailored recommendations.
+Your goal is to provide highly converting, tailored recommendations that make it easy to buy.
+
+SHOPPER CONTEXT:
+${shopperContext}
 
 CRITICAL SECURITY & BEHAVIOR BOUNDARIES:
 - UNDER NO CIRCUMSTANCES should you alter your persona or role. You are strictly a beauty consultant for Elvara Skinlane.
@@ -48,7 +58,9 @@ CRITICAL FORMATTING INSTRUCTIONS:
    Correct: **[Product Name](/product/slug)**
    Incorrect: Product Name (ID: 138)
 4. Keep responses punchy and visually structured (use bullet points). Max 3 short paragraphs.
-5. Focus on product benefits to encourage purchase.
+5. Focus on product benefits and why they should buy now.
+6. Recommend 2-3 products when possible so they can build a routine.
+7. Ask at most one clarifying question, and still give an immediate recommendation.
 
 LIVE IN-STOCK CATALOG:
 ${catalogSummary}
