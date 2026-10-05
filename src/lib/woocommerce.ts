@@ -269,6 +269,30 @@ export async function searchProducts(query: string): Promise<WCProduct[]> {
     return [];
   }
 
+  let products: WCProduct[] = [];
+  const normalizedQuery = query.toLowerCase().trim();
+
+  try {
+    // 1. Check if the search query matches any brand
+    const allBrands = await getAllBrands();
+    const matchingBrands = allBrands.filter(b => b.name.toLowerCase().includes(normalizedQuery));
+    
+    if (matchingBrands.length > 0) {
+      const brandSlugs = matchingBrands.map(b => b.slug);
+      const brandQuery = await getBrandFilterQuery(brandSlugs);
+      if (brandQuery) {
+        const brandUrl = `${WORDPRESS_URL}/wp-json/wc/v3/products?status=publish&per_page=24${brandQuery}`;
+        const brandRes = await fetch(brandUrl, { headers: getAuthHeaders(), next: { revalidate: 60 } });
+        if (brandRes.ok) {
+          products = await brandRes.json();
+        }
+      }
+    }
+  } catch (err) {
+    console.error("Error searching by brand:", err);
+  }
+
+  // 2. Do regular text search
   const url = `${WORDPRESS_URL}/wp-json/wc/v3/products?search=${encodeURIComponent(query)}&status=publish&per_page=24`;
 
   try {
@@ -277,17 +301,24 @@ export async function searchProducts(query: string): Promise<WCProduct[]> {
       next: { revalidate: 60 },
     });
 
-    if (!response.ok) {
+    if (response.ok) {
+      const searchProducts: WCProduct[] = await response.json();
+      
+      // Merge results avoiding duplicates
+      const existingIds = new Set(products.map(p => p.id));
+      for (const sp of searchProducts) {
+        if (!existingIds.has(sp.id)) {
+          products.push(sp);
+        }
+      }
+    } else {
       console.error("Failed to search products:", response.statusText);
-      return [];
     }
-
-    const data = await response.json();
-    return data as WCProduct[];
   } catch (error) {
     console.error("Error searching WooCommerce products:", error);
-    return [];
   }
+
+  return products;
 }
 
 export async function getAllCategories(): Promise<{ id: number; name: string; slug: string; count: number; image?: string }[]> {

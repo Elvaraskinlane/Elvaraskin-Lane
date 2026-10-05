@@ -134,7 +134,9 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
               { name: "Skin Aqua", href: "/shop?brand=skin-aqua" },
               { name: "The Ordinary", href: "/shop?brand=the-ordinary" },
               { name: "TIAM", href: "/shop?brand=tiam" },
-              { name: "VEE BEAUTY", href: "/shop?brand=vee-beauty" }
+              { name: "Timeless", href: "/shop?brand=timeless" },
+              { name: "VEE BEAUTY", href: "/shop?brand=vee-beauty" },
+              { name: "View All Brands →", href: "/brands" }
             ]
           },
           {
