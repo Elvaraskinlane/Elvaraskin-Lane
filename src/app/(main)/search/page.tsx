@@ -24,7 +24,18 @@ export default async function SearchPage({
     let minDistance = 3; // Max allowed distance
 
     brands.forEach(brand => {
-      const dist = getLevenshteinDistance(searchQuery.toLowerCase(), brand.name.toLowerCase());
+      // Check full name first
+      let dist = getLevenshteinDistance(searchQuery.toLowerCase(), brand.name.toLowerCase());
+      
+      // Also check individual words (e.g. "Timeless Skincare" -> "Timeless", "Skincare")
+      const words = brand.name.toLowerCase().split(/[\s-]+/);
+      for (const word of words) {
+        if (word.length > 3) {
+          const wordDist = getLevenshteinDistance(searchQuery.toLowerCase(), word);
+          if (wordDist < dist) dist = wordDist;
+        }
+      }
+
       if (dist < minDistance) {
         minDistance = dist;
         bestMatch = brand.name;

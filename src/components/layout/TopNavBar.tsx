@@ -15,6 +15,7 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [liveResults, setLiveResults] = useState<any[]>([]);
+  const [didYouMeanLive, setDidYouMeanLive] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [showLiveResults, setShowLiveResults] = useState(false);
   const [expandedMobileMenu, setExpandedMobileMenu] = useState<string | null>(null);
@@ -48,6 +49,7 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
   useEffect(() => {
     if (!searchQuery.trim() || searchQuery.length < 2) {
       setLiveResults([]);
+      setDidYouMeanLive("");
       setShowLiveResults(false);
       return;
     }
@@ -59,7 +61,13 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
         const res = await fetch(`/api/products?search=${encodeURIComponent(searchQuery)}`);
         if (res.ok) {
           const data = await res.json();
-          setLiveResults(data.slice(0, 5)); // show up to 5 results
+          if (data.products) {
+            setLiveResults(data.products.slice(0, 5));
+            setDidYouMeanLive(data.didYouMean || "");
+          } else if (Array.isArray(data)) {
+            setLiveResults(data.slice(0, 5));
+            setDidYouMeanLive("");
+          }
         }
       } catch (err) {
         console.error(err);
@@ -455,7 +463,14 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
                         </button>
                       </div>
                     ) : (
-                      <div className="p-4 text-center text-sm text-on-surface-variant">No products found</div>
+                      <div className="p-4 text-center flex flex-col items-center">
+                        <span className="text-sm text-on-surface-variant mb-2">No products found</span>
+                        {didYouMeanLive && (
+                          <span className="text-sm">
+                            Did you mean <button onClick={() => { setSearchQuery(didYouMeanLive); handleSearchSubmit({ preventDefault: () => {} } as any); }} className="text-primary font-bold hover:underline">{didYouMeanLive}</button>?
+                          </span>
+                        )}
+                      </div>
                     )}
                   </div>
                 )}
