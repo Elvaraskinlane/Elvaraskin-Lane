@@ -170,3 +170,55 @@ export async function processCheckout(checkoutData: any, authToken?: string) {
   saveCartToken(response);
   return response.json();
 }
+
+/**
+ * Update customer address (triggers shipping rate calculation in WooCommerce)
+ */
+export async function updateCustomer(addressData: any) {
+  const response = await fetch(`${WC_STORE_URL}/cart/update-customer`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Cart-Token": getCartToken(),
+    },
+    body: JSON.stringify({
+      billing_address: addressData,
+      shipping_address: addressData,
+    }),
+  });
+
+  saveCartToken(response);
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.message || "Failed to update address");
+  }
+
+  return response.json(); // Returns cart data including shipping_rates
+}
+
+/**
+ * Select a specific shipping rate
+ */
+export async function selectShippingRate(rateId: string) {
+  const response = await fetch(`${WC_STORE_URL}/cart/select-shipping-rate`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Cart-Token": getCartToken(),
+    },
+    body: JSON.stringify({
+      package_id: 0, // Usually 0 for a single package
+      rate_id: rateId,
+    }),
+  });
+
+  saveCartToken(response);
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.message || "Failed to select shipping rate");
+  }
+
+  return response.json(); // Returns updated cart data with new totals
+}

@@ -25,6 +25,18 @@ export interface CartData {
     total_price: string;
     currency_symbol: string;
   };
+  shipping_rates?: Array<{
+    package_id: number;
+    name: string;
+    shipping_rates: Array<{
+      rate_id: string;
+      name: string;
+      description: string;
+      price: string;
+      currency_symbol: string;
+      selected: boolean;
+    }>;
+  }>;
 }
 
 interface CartState {
@@ -35,11 +47,14 @@ interface CartState {
   removeItem: (itemKey: string) => Promise<void>;
   updateItemQuantity: (itemKey: string, quantity: number) => Promise<void>;
   clearCart: () => void;
+  setCart: (data: CartData) => void;
 }
 
 export const useCartStore = create<CartState>((set) => ({
   cart: null,
   isLoading: false,
+
+  setCart: (data: CartData) => set({ cart: data }),
 
   fetchCart: async () => {
     // Only set loading on initial fetch
