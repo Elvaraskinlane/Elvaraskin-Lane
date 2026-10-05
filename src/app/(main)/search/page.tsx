@@ -1,8 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import SearchControls from "@/components/search/SearchControls";
-import { searchProducts } from "@/lib/woocommerce";
+import { searchProducts, getAllBrands } from "@/lib/woocommerce";
 import { SearchOff } from '@material-symbols-svg/react';
+import { getLevenshteinDistance } from "@/lib/distance";
 
 // Note: In Next.js 15+, searchParams must be awaited if accessed dynamically
 export default async function SearchPage({
@@ -16,6 +17,25 @@ export default async function SearchPage({
   // Fetch live products based on query, or empty array if no query
   const products = searchQuery ? await searchProducts(searchQuery) : [];
 
+  let didYouMean = "";
+  if (products.length === 0 && searchQuery.length > 2) {
+    const brands = await getAllBrands();
+    let bestMatch = "";
+    let minDistance = 3; // Max allowed distance
+
+    brands.forEach(brand => {
+      const dist = getLevenshteinDistance(searchQuery.toLowerCase(), brand.name.toLowerCase());
+      if (dist < minDistance) {
+        minDistance = dist;
+        bestMatch = brand.name;
+      }
+    });
+
+    if (bestMatch) {
+      didYouMean = bestMatch;
+    }
+  }
+
   return (
     <>
       <header className="w-full pt-margin-desktop pb-12 px-margin-mobile md:px-margin-desktop flex flex-col items-center text-center max-w-[1280px] mx-auto">
@@ -26,6 +46,11 @@ export default async function SearchPage({
             ? `Discover our curated selection of formulations matching your search.`
             : `We couldn't find any products matching your search.`}
         </p>
+        {didYouMean && (
+          <p className="mt-4 text-lg text-on-surface">
+            Did you mean <Link href={`/search?q=${encodeURIComponent(didYouMean)}`} className="text-primary font-bold hover:underline">{didYouMean}</Link>?
+          </p>
+        )}
       </header>
 
       {products.length > 0 && <SearchControls resultCount={products.length} />}

@@ -14,6 +14,9 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [liveResults, setLiveResults] = useState<any[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [showLiveResults, setShowLiveResults] = useState(false);
   const [expandedMobileMenu, setExpandedMobileMenu] = useState<string | null>(null);
   
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -40,6 +43,33 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
   useEffect(() => {
     fetchCart();
   }, [fetchCart]);
+
+  // Live search effect
+  useEffect(() => {
+    if (!searchQuery.trim() || searchQuery.length < 2) {
+      setLiveResults([]);
+      setShowLiveResults(false);
+      return;
+    }
+    
+    const delayDebounceFn = setTimeout(async () => {
+      setIsSearching(true);
+      setShowLiveResults(true);
+      try {
+        const res = await fetch(`/api/products?search=${encodeURIComponent(searchQuery)}`);
+        if (res.ok) {
+          const data = await res.json();
+          setLiveResults(data.slice(0, 5)); // show up to 5 results
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setIsSearching(false);
+      }
+    }, 300);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchQuery]);
   
   const toggleMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -377,6 +407,7 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
+                    onFocus={() => setShowLiveResults(true)}
                     placeholder="Search collection..."
                     autoFocus
                     className="w-full bg-surface-container-lowest border border-outline-variant/50 rounded-sm py-2 px-3 pr-10 text-on-surface focus:outline-none focus:border-primary text-sm font-body-md"
@@ -385,6 +416,49 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
                     <ArrowForward className="text-lg" />
                   </button>
                 </form>
+
+                {/* Live search results */}
+                {showLiveResults && searchQuery.length >= 2 && (
+                  <div className="absolute top-full left-0 right-0 mt-1 bg-surface border border-outline-variant/20 shadow-lg rounded-sm overflow-hidden z-50 max-h-96 overflow-y-auto">
+                    {isSearching ? (
+                      <div className="p-4 text-center text-sm text-on-surface-variant">Searching...</div>
+                    ) : liveResults.length > 0 ? (
+                      <div className="flex flex-col">
+                        {liveResults.map((product) => (
+                          <Link
+                            key={product.id}
+                            href={`/product/${product.slug}`}
+                            onClick={() => setIsSearchOpen(false)}
+                            className="flex items-center gap-3 p-3 hover:bg-surface-container-lowest transition-colors border-b border-outline-variant/10 last:border-0"
+                          >
+                            {product.images?.[0] && (
+                              <div className="w-10 h-10 relative flex-shrink-0 bg-surface-container rounded-sm overflow-hidden">
+                                <Image
+                                  src={product.images[0].src}
+                                  alt={product.name}
+                                  fill
+                                  className="object-cover mix-blend-multiply"
+                                />
+                              </div>
+                            )}
+                            <div className="flex flex-col overflow-hidden">
+                              <span className="text-sm font-medium text-on-surface truncate">{product.name}</span>
+                              <span className="text-xs text-on-surface-variant">₦{parseInt(product.price || "0").toLocaleString()}</span>
+                            </div>
+                          </Link>
+                        ))}
+                        <button
+                          onClick={handleSearchSubmit}
+                          className="w-full p-3 text-sm text-center text-primary hover:bg-surface-container-lowest font-medium border-t border-outline-variant/20 transition-colors"
+                        >
+                          View all results for "{searchQuery}"
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="p-4 text-center text-sm text-on-surface-variant">No products found</div>
+                    )}
+                  </div>
+                )}
               </div>
             )}
           </div>
