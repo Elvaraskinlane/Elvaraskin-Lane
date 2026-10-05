@@ -7,14 +7,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCartStore } from "@/store/useCartStore";
 import { useAuthStore } from "@/store/useAuthStore";
-import { processCheckout } from "@/lib/cart";
+import { processCheckout, updateCustomer, selectShippingRate } from "@/lib/cart";
 import { toast } from "sonner";
 import { ChevronRight, AccountCircle, KeyboardArrowDown, Forum, Lock } from '@material-symbols-svg/react';
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { cart, clearCart, fetchCart } = useCartStore();
+  const { cart, clearCart, fetchCart, setCart } = useCartStore();
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isUpdatingShipping, setIsUpdatingShipping] = useState(false);
   const [isStoreDown, setIsStoreDown] = useState(false);
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -58,6 +59,48 @@ export default function CheckoutPage() {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Add a debounced effect to automatically calculate shipping rates when address changes
+  useEffect(() => {
+    if (!mounted || !formData.state || !formData.city) return;
+    
+    const delayDebounceFn = setTimeout(async () => {
+      setIsUpdatingShipping(true);
+      try {
+        const updatedCart = await updateCustomer({
+          first_name: formData.first_name,
+          last_name: formData.last_name,
+          email: formData.email,
+          phone: formData.phone,
+          address_1: formData.address_1,
+          city: formData.city,
+          state: formData.state,
+          country: formData.country,
+          postcode: "000000"
+        });
+        setCart(updatedCart);
+      } catch (err) {
+        console.error("Error updating shipping rates:", err);
+      } finally {
+        setIsUpdatingShipping(false);
+      }
+    }, 1500); // 1.5 second debounce
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [formData.state, formData.city, formData.address_1, mounted, setCart]);
+
+  const handleShippingChange = async (rateId: string) => {
+    setIsUpdatingShipping(true);
+    try {
+      const updatedCart = await selectShippingRate(rateId);
+      setCart(updatedCart);
+    } catch (err) {
+      console.error("Error selecting shipping rate:", err);
+      toast.error("Failed to select shipping method.");
+    } finally {
+      setIsUpdatingShipping(false);
+    }
   };
 
   const handlePayment = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -166,6 +209,13 @@ export default function CheckoutPage() {
       setIsProcessing(false);
       
       const errorMessage = error?.message?.toLowerCase() || "";
+      
+      if (errorMessage.includes("expired token") || errorMessage.includes("invalid token") || errorMessage.includes("jwt")) {
+        logout();
+        toast.error("Your login session expired. We've logged you out. Please log in again or continue as a guest.", { duration: 6000 });
+        return;
+      }
+      
       // If it's a clear network failure or 500 error, show the store down banner
       if (errorMessage.includes("failed to fetch") || errorMessage.includes("network error")) {
         setIsStoreDown(true); // Trigger WhatsApp fallback
@@ -441,14 +491,52 @@ export default function CheckoutPage() {
                   ))}
                 </div>
 
+                {/* Shipping Rates Selection */}
+                {cart.shipping_rates && cart.shipping_rates.length > 0 && cart.shipping_rates[0].shipping_rates.length > 0 && (
+                  <div className="border-t border-outline-variant/30 pt-6 mb-6">
+                    <h3 className="font-label-md text-sm uppercase tracking-widest text-on-surface-variant mb-4">Shipping Method</h3>
+                    <div className="space-y-3">
+                      {isUpdatingShipping ? (
+                        <div className="flex items-center justify-center p-4">
+                          <div className="w-5 h-5 border-2 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+                        </div>
+                      ) : (
+                        cart.shipping_rates[0].shipping_rates.map((rate) => (
+                          <label key={rate.rate_id} className={`flex items-center justify-between p-4 border rounded-sm cursor-pointer transition-colors ${rate.selected ? 'border-primary bg-primary/5' : 'border-outline-variant/30 hover:border-primary/50'}`}>
+                            <div className="flex items-center gap-3">
+                              <input 
+                                type="radio" 
+                                name="shipping_rate" 
+                                value={rate.rate_id} 
+                                checked={rate.selected}
+                                onChange={() => handleShippingChange(rate.rate_id)}
+                                className="text-primary focus:ring-primary h-4 w-4"
+                              />
+                              <div className="flex flex-col">
+                                <span className="font-headline-sm text-sm text-on-surface">{rate.name}</span>
+                                {rate.description && <span className="font-body-md text-xs text-on-surface-variant">{rate.description}</span>}
+                              </div>
+                            </div>
+                            <span className="font-label-md text-sm text-on-surface uppercase tracking-widest">{formatPrice(rate.price)}</span>
+                          </label>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                )}
+
                 <div className="border-t border-outline-variant/30 pt-6 space-y-4 mb-8">
                   <div className="flex justify-between items-center text-on-surface-variant font-body-md">
                     <span>Subtotal</span>
-                    <span>{formatPrice(cart.totals.total_price)}</span>
+                    <span>{formatPrice(cart.totals.total_items)}</span>
                   </div>
                   <div className="flex justify-between items-center text-on-surface-variant font-body-md">
                     <span>Shipping</span>
-                    <span>Calculated at next step</span>
+                    <span>
+                      {cart.shipping_rates?.[0]?.shipping_rates.find(r => r.selected) 
+                        ? formatPrice(cart.shipping_rates[0].shipping_rates.find(r => r.selected)!.price)
+                        : (isUpdatingShipping ? "Calculating..." : "Enter address to calculate")}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center text-on-background font-headline-sm text-xl pt-4 border-t border-outline-variant/30">
                     <span>Total</span>
