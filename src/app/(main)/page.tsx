@@ -34,9 +34,8 @@ export default async function Home() {
     <div className="flex flex-col w-full">
       <HeroSection />
       <ValueProps />
-      <CuratedEssentials />
-      {/* Hydrate the carousel with live database items */}
       <BestsellersCarousel initialProducts={carouselProducts} />
+      <CuratedEssentials />
       <BrandStory />
       <Newsletter />
     </div>

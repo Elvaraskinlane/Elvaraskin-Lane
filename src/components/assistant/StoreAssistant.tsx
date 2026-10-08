@@ -51,7 +51,7 @@ export default function StoreAssistant() {
   const lastSubmittedRef = useRef("");
 
   const { addItem } = useCartStore();
-  const { openCartDrawer, isCartDrawerOpen } = useUIStore();
+  const { openCartDrawer } = useUIStore();
 
   const transport = useMemo(
     () =>
@@ -133,21 +133,7 @@ export default function StoreAssistant() {
       .catch(() => {});
   }, []);
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const isShopOrPdp = pathname === "/shop" || pathname.startsWith("/product/");
-    if (!isShopOrPdp || sessionStorage.getItem(SESSION_KEY)) return;
 
-    const timer = window.setTimeout(() => {
-      if (isCartDrawerOpen || isOpen) return;
-      sessionStorage.setItem(SESSION_KEY, "1");
-      openedByUser.current = false;
-      setIsOpen(true);
-      setHasOpened(true);
-    }, 8000);
-
-    return () => window.clearTimeout(timer);
-  }, [pathname, isCartDrawerOpen, isOpen]);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -297,25 +283,20 @@ export default function StoreAssistant() {
     <>
       <button
         onClick={isOpen ? closeAssistant : openAssistant}
-        className={`fixed bottom-6 right-6 z-50 items-center gap-2.5 h-14 bg-on-background text-background rounded-full shadow-lg hover:scale-[1.03] transition-transform ${
-          isOpen ? "hidden md:flex w-14 justify-center" : "flex pl-2 pr-5"
+        className={`fixed bottom-24 md:bottom-6 right-4 md:right-6 z-50 items-center justify-center h-14 w-14 bg-on-background text-background rounded-full shadow-lg hover:scale-[1.03] transition-transform ${
+          isOpen ? "hidden md:flex" : "flex"
         }`}
         aria-label={isOpen ? "Close consultant" : "Ask a consultant"}
       >
         {isOpen ? (
           <Close className="text-[22px]" />
         ) : (
-          <>
-            <span className="relative w-10 h-10 flex items-center justify-center">
-              {!hasOpened && (
-                <span className="absolute inset-0 rounded-full bg-primary animate-consultant-pulse" />
-              )}
-              <Forum className="relative text-[22px]" />
-            </span>
-            <span className="font-label-md text-[11px] uppercase tracking-[0.14em]">
-              Ask a consultant
-            </span>
-          </>
+          <span className="relative w-10 h-10 flex items-center justify-center">
+            {!hasOpened && (
+              <span className="absolute inset-0 rounded-full bg-primary animate-consultant-pulse" />
+            )}
+            <Forum className="relative text-[22px]" />
+          </span>
         )}
       </button>
 
@@ -380,7 +361,7 @@ export default function StoreAssistant() {
                       key={starter.label}
                       type="button"
                       onClick={() => submitText(starter.message)}
-                      className="px-3.5 py-2 rounded-full border border-outline-variant/40 text-[10px] font-label-md uppercase tracking-[0.12em] text-on-surface hover:bg-on-background hover:text-background hover:border-on-background transition-colors"
+                      className="px-3.5 py-2 rounded-full border border-outline-variant/40 text-sm text-on-surface hover:bg-on-background hover:text-background hover:border-on-background transition-colors"
                     >
                       {starter.label}
                     </button>

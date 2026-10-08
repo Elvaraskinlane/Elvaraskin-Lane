@@ -37,7 +37,7 @@ export default function CartDrawer() {
       <div className="relative w-full max-w-[420px] bg-surface h-full shadow-2xl flex flex-col animate-slide-in-right border-l border-outline-variant/10">
         
         {/* Header */}
-        <div className="flex items-center justify-between p-8 border-b border-outline-variant/20">
+        <div className="flex items-center justify-between p-4 md:p-8 border-b border-outline-variant/20">
           <h2 className="font-headline-sm text-xl text-on-surface tracking-tight">
             Shopping Bag ({cart?.items?.reduce((acc, item) => acc + item.quantity, 0) || 0})
           </h2>
@@ -47,7 +47,7 @@ export default function CartDrawer() {
         </div>
 
         {/* Cart Items */}
-        <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
+        <div className="flex-1 overflow-y-auto p-4 md:p-8 custom-scrollbar">
           {isLoading && !cart ? (
             <div className="flex justify-center items-center h-full">
               <ProgressActivity className="animate-spin text-primary text-3xl" />
@@ -73,17 +73,17 @@ export default function CartDrawer() {
                 <div className="flex-1 pt-1">
                   <div className="flex justify-between items-start gap-2 mb-2">
                     <h3 className="font-headline-sm text-lg text-on-surface leading-tight" dangerouslySetInnerHTML={{ __html: item.name }} />
-                    <button onClick={() => removeItem(item.key)} className="text-on-surface-variant hover:text-error transition-colors" aria-label="Remove item">
+                    <button onClick={() => removeItem(item.key)} className="w-11 h-11 flex items-center justify-center text-on-surface-variant hover:text-error transition-colors" aria-label="Remove item">
                       <Delete className="text-[20px]" />
                     </button>
                   </div>
                   <p className="font-body-md text-sm text-on-surface-variant/80 uppercase tracking-widest mb-6">{formatPrice(item.prices.price)}</p>
                   
-                  <div className="flex items-center border border-outline-variant/50 w-fit rounded-none h-10">
+                  <div className="flex items-center border border-outline-variant/50 w-fit rounded-none h-11">
                     <button 
                       onClick={() => useCartStore.getState().updateItemQuantity(item.key, item.quantity - 1)}
                       disabled={isLoading || item.quantity <= 1}
-                      className="w-10 h-full flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors disabled:opacity-50"
+                      className="w-11 h-full flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors disabled:opacity-50"
                     >
                       <Remove className="text-[16px]" />
                     </button>
@@ -91,7 +91,7 @@ export default function CartDrawer() {
                     <button 
                       onClick={() => useCartStore.getState().updateItemQuantity(item.key, item.quantity + 1)}
                       disabled={isLoading}
-                      className="w-10 h-full flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors disabled:opacity-50"
+                      className="w-11 h-full flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors disabled:opacity-50"
                     >
                       <Add className="text-[16px]" />
                     </button>
@@ -103,7 +103,7 @@ export default function CartDrawer() {
         </div>
 
         {/* Footer / Checkout */}
-        <div className="p-8 border-t border-outline-variant/20 bg-surface">
+        <div className="p-4 md:p-8 pb-[max(16px,env(safe-area-inset-bottom))] border-t border-outline-variant/20 bg-surface">
           <div className="flex justify-between items-end mb-8">
             <span className="font-body-md text-on-surface-variant uppercase tracking-widest text-sm">Subtotal</span>
             <span className="font-headline-sm text-2xl text-on-surface tracking-tight">
@@ -114,9 +114,9 @@ export default function CartDrawer() {
             <Link 
               href="/checkout"
               onClick={closeCartDrawer} 
-              className="w-full bg-on-background text-background py-5 font-label-lg tracking-[0.2em] uppercase text-sm hover:bg-primary hover:text-on-primary transition-all duration-300 flex justify-center items-center shadow-md mb-4"
+              className="w-full bg-on-background text-background py-5 font-body-md text-sm hover:bg-primary hover:text-on-primary transition-all duration-300 flex justify-center items-center shadow-md mb-4"
             >
-              PROCEED TO CHECKOUT
+              Checkout
             </Link>
           )}
           <Link 

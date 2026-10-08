@@ -1,6 +1,6 @@
 import Link from "next/link";
-import Image from "next/image";
 import { Lock } from '@material-symbols-svg/react';
+import AuthModal from "@/components/auth/AuthModal";
 
 export default function CheckoutLayout({
   children,
@@ -20,6 +20,7 @@ export default function CheckoutLayout({
         </div>
       </header>
       
+      <AuthModal />
       <main className="flex-grow w-full max-w-[1280px] mx-auto px-margin-mobile md:px-margin-desktop py-margin-desktop">
         {children}
       </main>

@@ -247,9 +247,8 @@ export default function CheckoutPage() {
         <span className="font-bold text-on-background">Checkout</span>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-12 gap-y-16 animate-fade-in">
-        {/* Left Column: Billing Form */}
-        <div className="lg:col-span-7">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-12 gap-y-10 lg:gap-y-16 animate-fade-in">
+        <div className="lg:col-span-7 order-2 lg:order-1">
           <h2 className="font-headline-sm text-lg text-on-surface uppercase tracking-widest mb-8 border-b border-outline-variant/30 pb-4">
             Billing Details
           </h2>
@@ -272,7 +271,7 @@ export default function CheckoutPage() {
           ) : (
             <div className="mb-8 p-4 bg-surface-container border border-outline-variant/30 rounded-sm flex items-center justify-between">
               <p className="font-body-md text-sm text-on-surface-variant">
-                Returning customer?
+                Already have an account?
               </p>
               <button 
                 type="button"
@@ -281,9 +280,9 @@ export default function CheckoutPage() {
                     module.useUIStore.getState().openAuthModal();
                   });
                 }}
-                className="font-label-md text-xs text-primary uppercase tracking-wider hover:underline"
+                className="h-11 px-4 text-sm text-on-background border border-outline-variant rounded-full"
               >
-                Click here to log in
+                Log in
               </button>
             </div>
           )}
@@ -455,8 +454,7 @@ export default function CheckoutPage() {
           </form>
         </div>
 
-        {/* Right Column: Order Summary */}
-        <div className="lg:col-span-5">
+        <div className="lg:col-span-5 order-1 lg:order-2">
           <div className="bg-surface-container-low p-8 sticky top-24 border border-outline-variant/20 rounded-sm">
             <h2 className="font-headline-sm text-lg text-on-surface uppercase tracking-widest mb-8 border-b border-outline-variant/30 pb-4">
               Your Order
@@ -586,10 +584,10 @@ export default function CheckoutPage() {
                     window.open(`https://wa.me/2348089647342?text=${encodedText}`, '_blank');
                   }}
                   disabled={isProcessing || !cart || cart.items.length === 0}
-                  className={`w-full mt-4 h-14 bg-transparent border border-on-background text-on-background font-label-lg uppercase tracking-[0.2em] text-sm hover:bg-surface-container-highest transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center rounded-sm gap-2 ${isStoreDown ? 'animate-pulse ring-2 ring-primary ring-offset-2' : ''}`}
+                  className={`w-full mt-4 h-14 bg-transparent border border-on-background text-on-background font-body-md text-sm hover:bg-surface-container-highest transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center rounded-sm gap-2 ${isStoreDown ? 'animate-pulse ring-2 ring-primary ring-offset-2' : ''}`}
                 >
                   <Forum className="text-[20px]" />
-                  Network Issues? Order via WhatsApp
+                  {isStoreDown ? "Order via WhatsApp instead" : "Order via WhatsApp"}
                 </button>
 
                 

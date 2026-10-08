@@ -56,7 +56,7 @@ export default function AddToCartPanel({ productId, price, stockStatus, productN
   const isOutOfStock = stockStatus === 'outofstock';
 
   return (
-    <div className="flex flex-col gap-8 mt-12 pt-8 border-t border-outline-variant/15">
+    <div className="flex flex-col gap-6 md:gap-8 mt-2 md:mt-12 md:pt-8 md:border-t border-outline-variant/15">
       <div className="flex items-center justify-between">
         <span className="font-headline-md text-2xl md:text-3xl text-on-background tracking-tight">
           {formatPrice(price)}
@@ -104,9 +104,9 @@ export default function AddToCartPanel({ productId, price, stockStatus, productN
             <button 
               onClick={handleAddToCart}
               disabled={isAdding}
-              className="flex-grow h-[52px] w-full bg-black text-white font-label-md text-[11px] uppercase tracking-[0.2em] rounded-full hover:bg-primary hover:text-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 shadow-lg"
+              className="flex-grow h-[52px] w-full bg-black text-white font-body-md text-sm md:text-[13px] rounded-full hover:bg-primary hover:text-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 shadow-lg"
             >
-              {isAdding ? "Adding..." : "Add to Cart"}
+              {isAdding ? "Adding..." : "Add to cart"}
             </button>
           </>
         )}
@@ -132,6 +132,29 @@ export default function AddToCartPanel({ productId, price, stockStatus, productN
           />
         </button>
       </div>
+
+      <div className="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-surface/95 backdrop-blur-md border-t border-outline-variant/20 px-4 py-3 pb-[max(12px,env(safe-area-inset-bottom))] flex items-center gap-3">
+        <span className="font-headline-sm text-lg text-on-background whitespace-nowrap">
+          {formatPrice(price)}
+        </span>
+        {isOutOfStock ? (
+          <a
+            href={`https://wa.me/2348089647342?text=${encodeURIComponent(`Hi Elvara Skinlane! I am interested in the ${productName} but it is out of stock.`)}`}
+            className="flex-1 h-12 bg-[#25D366] text-white text-sm rounded-full flex items-center justify-center"
+          >
+            Ask about restock
+          </a>
+        ) : (
+          <button
+            onClick={handleAddToCart}
+            disabled={isAdding}
+            className="flex-1 h-12 bg-on-background text-background text-sm rounded-full disabled:opacity-50"
+          >
+            {isAdding ? "Adding..." : "Add to cart"}
+          </button>
+        )}
+      </div>
+      <div className="lg:hidden h-20" />
     </div>
   );
 }

@@ -53,7 +53,7 @@ export default function AssistantProductCard({
             onAdd();
           }}
           disabled={isAdding || isAdded}
-          className={`w-full h-9 rounded-full font-label-md text-[10px] uppercase tracking-[0.16em] flex items-center justify-center gap-1.5 transition-all duration-300 disabled:cursor-not-allowed ${
+          className={`w-full h-11 rounded-full text-sm flex items-center justify-center gap-1.5 transition-all duration-300 disabled:cursor-not-allowed ${
             isAdded
               ? "bg-surface-container text-on-surface"
               : "bg-on-background text-background hover:bg-primary hover:text-on-primary"

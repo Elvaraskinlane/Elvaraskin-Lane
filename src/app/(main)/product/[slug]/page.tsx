@@ -70,13 +70,21 @@ export default async function ProductDetailsPage({ params }: { params: Promise<{
 
           {/* Right Column: Product Data */}
           <div className="lg:col-span-5 flex flex-col pt-2 md:pt-4">
-            <h1 className="font-display-md text-3xl md:text-4xl lg:text-[42px] text-on-background mb-6 leading-[1.2] uppercase tracking-[0.02em]">
+            <h1 className="font-display-md text-2xl md:text-4xl lg:text-[42px] text-on-background mb-4 leading-[1.2] md:uppercase tracking-[0.02em]">
               {product.name}
             </h1>
-            
-            {/* Render raw HTML description safely */}
+
+            <AddToCartPanel 
+              productId={product.id} 
+              productName={product.name}
+              price={product.price} 
+              stockStatus={product.stock_status || "instock"} 
+              image={product.images?.[0]?.src || "/hero-2-fixed.png"}
+              slug={product.slug}
+            />
+
             <div 
-              className="font-body-md text-[15px] md:text-[16px] text-on-surface-variant/80 leading-[1.8] font-light prose prose-stone prose-p:mb-6 max-w-none italic"
+              className="font-body-md text-[15px] md:text-[16px] text-on-surface-variant/80 leading-[1.8] font-light prose prose-stone prose-p:mb-6 max-w-none mt-8"
               dangerouslySetInnerHTML={{ __html: product.description || product.short_description || "<p>A beautifully crafted product to elevate your routine.</p>" }}
             />
 
@@ -124,16 +132,6 @@ export default async function ProductDetailsPage({ params }: { params: Promise<{
               </ul>
             </div>
 
-            {/* Interactive Client Panel */}
-            <AddToCartPanel 
-              productId={product.id} 
-              productName={product.name}
-              price={product.price} 
-              stockStatus={product.stock_status || "instock"} 
-              image={product.images?.[0]?.src || "/hero-2-fixed.png"}
-              slug={product.slug}
-            />
-            
             <ProductShare productName={product.name} />
             
           </div>

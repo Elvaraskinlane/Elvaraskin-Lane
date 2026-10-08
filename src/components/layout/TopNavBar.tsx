@@ -103,11 +103,19 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Close mobile menu on navigation
   useEffect(() => {
     setIsMobileMenuOpen(false);
     setExpandedMobileMenu(null);
   }, [pathname, searchParams]);
+
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [isMobileMenuOpen]);
 
   const navMenus = [
     {
@@ -300,12 +308,12 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
         
         {/* Mobile Menu Button */}
         <button 
-          className="md:hidden text-on-background hover:opacity-80 transition-opacity"
+          className="md:hidden w-11 h-11 flex items-center justify-center text-on-background"
           onClick={toggleMenu}
           aria-label="Toggle mobile menu"
           aria-expanded={isMobileMenuOpen}
         >
-          {isMobileMenuOpen ? <Close /> : <Menu />}
+          {isMobileMenuOpen ? <Close className="text-[24px]" /> : <Menu className="text-[24px]" />}
         </button>
 
         {/* Navigation Links (Desktop) */}
@@ -397,26 +405,25 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
         </Link>
 
         {/* Trailing Icons */}
-        <div className="flex items-center space-x-4 md:space-x-6 text-on-surface">
+        <div className="flex items-center gap-1 md:gap-4 text-on-surface">
           <div className="relative" ref={searchRef}>
             <button 
-              aria-label="Search" 
+              aria-label="Search products" 
               onClick={() => setIsSearchOpen(!isSearchOpen)}
-              className="hover:opacity-80 transition-opacity flex items-center"
+              className="w-11 h-11 flex items-center justify-center"
             >
               <Search className="text-2xl" />
             </button>
 
-            {/* Inline Search Dropdown */}
             {isSearchOpen && (
-              <div className="absolute top-full right-0 mt-4 w-72 bg-surface shadow-lg border border-outline-variant/20 rounded-md p-2 animate-fade-in origin-top-right">
+              <div className="absolute top-full right-0 mt-3 w-[min(100vw-2rem,22rem)] max-md:fixed max-md:left-4 max-md:right-4 max-md:w-auto bg-surface shadow-lg border border-outline-variant/20 rounded-md p-3 animate-fade-in origin-top-right z-50">
                 <form onSubmit={handleSearchSubmit} className="flex items-center relative">
                   <input
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onFocus={() => setShowLiveResults(true)}
-                    placeholder="Search collection..."
+                    placeholder="Search products"
                     autoFocus
                     className="w-full bg-surface-container-lowest border border-outline-variant/50 rounded-sm py-2 px-3 pr-10 text-on-surface focus:outline-none focus:border-primary text-sm font-body-md"
                   />
@@ -482,8 +489,8 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
             <div className="relative" ref={dropdownRef}>
               <button 
                 onClick={toggleProfileDropdown} 
-                aria-label="Account Menu" 
-                className={`hover:opacity-80 transition-opacity flex items-center ${isProfileDropdownOpen ? "text-primary" : ""}`}
+                aria-label="Account" 
+                className={`w-11 h-11 flex items-center justify-center ${isProfileDropdownOpen ? "text-primary" : ""}`}
               >
                 <Person className="text-2xl" />
               </button>
@@ -526,12 +533,12 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
               )}
             </div>
           ) : (
-            <button onClick={openAuthModal} aria-label="Login" className="hover:opacity-80 transition-opacity flex items-center">
+            <button onClick={openAuthModal} aria-label="Sign in" className="w-11 h-11 flex items-center justify-center">
               <Person className="text-2xl" />
             </button>
           )}
           
-          <button onClick={openCartDrawer} aria-label="Shopping Bag" className="hover:opacity-80 transition-opacity relative flex items-center">
+          <button onClick={openCartDrawer} aria-label="Shopping bag" className="w-11 h-11 flex items-center justify-center relative">
             <ShoppingBag className="text-2xl" />
             {totalItems > 0 && (
               <span className="absolute -top-1 -right-2 bg-primary text-on-primary text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full animate-fade-in">
@@ -555,6 +562,33 @@ export default function TopNavBar({ featuredProduct }: { featuredProduct?: any }
           />
           <div className="md:hidden absolute top-full left-0 w-full bg-background border-b border-outline-variant/30 shadow-2xl flex flex-col max-h-[85vh] overflow-y-auto z-50">
           <div className="flex flex-col py-2 px-margin-mobile">
+            <div className="grid grid-cols-2 gap-2 py-4 border-b border-outline-variant/15">
+              <Link href="/shop" onClick={() => setIsMobileMenuOpen(false)} className="h-12 rounded-full bg-on-background text-background text-sm flex items-center justify-center">
+                Shop all
+              </Link>
+              <Link href="/concerns" onClick={() => setIsMobileMenuOpen(false)} className="h-12 rounded-full border border-outline-variant text-on-surface text-sm flex items-center justify-center">
+                For my skin
+              </Link>
+              {isAuthenticated ? (
+                <Link href="/account" onClick={() => setIsMobileMenuOpen(false)} className="h-12 rounded-full border border-outline-variant text-on-surface text-sm flex items-center justify-center">
+                  Account
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    openAuthModal();
+                  }}
+                  className="h-12 rounded-full border border-outline-variant text-on-surface text-sm"
+                >
+                  Sign in
+                </button>
+              )}
+              <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)} className="h-12 rounded-full border border-outline-variant text-on-surface text-sm flex items-center justify-center">
+                Help
+              </Link>
+            </div>
             {navMenus.map((link) => (
               <div key={link.name} className="flex flex-col border-b border-outline-variant/15 last:border-b-0">
                 {link.megaMenu ? (

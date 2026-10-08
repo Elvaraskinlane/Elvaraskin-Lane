@@ -77,7 +77,7 @@ export default function BestsellersCarousel({
           <Link 
             href="/shop" 
             aria-label={linkText}
-            className="hidden md:inline-flex items-center font-label-md text-label-md text-primary hover:text-on-background transition-colors group tracking-widest uppercase text-xs"
+            className="inline-flex items-center font-body-md text-sm text-primary hover:text-on-background transition-colors group"
           >
             {linkText} 
             <ArrowForward className="ml-1 text-[18px] group-hover:translate-x-1 transition-transform font-light" />
@@ -85,58 +85,46 @@ export default function BestsellersCarousel({
         </div>
       </div>
 
-      <div ref={scrollRef} className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar px-margin-mobile md:px-margin-desktop pb-8 space-x-8 md:space-x-10 w-full max-w-[1280px] mx-auto scroll-smooth">
+      <div ref={scrollRef} className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar px-margin-mobile md:px-margin-desktop pb-8 space-x-4 md:space-x-10 w-full max-w-[1280px] mx-auto scroll-smooth">
         {initialProducts.map((product) => (
-          <Link href={`/product/${product.slug}`} key={product.id} className="flex-none w-[280px] md:w-[320px] snap-start group cursor-pointer flex flex-col block transition-all duration-500">
-            <div className="relative aspect-[3/4] bg-white mb-6 overflow-hidden rounded-sm flex items-center justify-center border border-outline-variant/15 group-hover:border-outline-variant/30 transition-all duration-500 group-hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)]">
-              <Image 
-                src={product.images?.[0]?.src || "/hero-2-fixed.png"} 
+          <div key={product.id} className="flex-none w-[70vw] max-w-[280px] md:w-[320px] md:max-w-none snap-start group flex flex-col">
+            <Link href={`/product/${product.slug}`} className="relative aspect-[3/4] bg-white mb-3 overflow-hidden rounded-sm flex items-center justify-center border border-outline-variant/15">
+              <Image
+                src={product.images?.[0]?.src || "/hero-2-fixed.png"}
                 alt={product.name}
                 fill
-                className="object-cover object-top mix-blend-multiply transition-transform duration-700 ease-out group-hover:scale-[1.03] p-6"
-                sizes="(max-width: 768px) 280px, 320px"
+                className="object-cover object-top mix-blend-multiply p-6"
+                sizes="(max-width: 768px) 70vw, 320px"
               />
-              
-              {/* Minimalist Floating Pill Button */}
-              <div className="absolute bottom-6 left-0 w-full px-4 flex justify-center opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-400 ease-out z-10">
-                {product.stock_status === "instock" ? (
-                  <button 
-                    aria-label={`Add ${product.name} to cart`}
-                    className="bg-black text-white font-label-md text-[11px] py-3.5 px-8 rounded-full shadow-lg hover:bg-primary transition-colors uppercase tracking-[0.15em] flex items-center gap-2"
-                    onClick={async (e) => {
-                      e.preventDefault(); 
-                      e.stopPropagation(); // Prevent navigating to product page
-                      try {
-                        await addItem(product.id, 1);
-                        openCartDrawer();
-                      } catch (err) {
-                        console.error("Cart error:", err);
-                        toast.error(err instanceof Error ? err.message : "Failed to add to cart. Item might be out of stock.");
-                      }
-                    }}
-                  >
-                    Add to Cart
-                  </button>
-                ) : (
-                  <button 
-                    disabled
-                    aria-label={`${product.name} is out of stock`}
-                    className="bg-surface-container-high text-on-surface-variant font-label-md text-[11px] py-3.5 px-8 rounded-full shadow-sm uppercase tracking-[0.15em] flex items-center gap-2 opacity-80 cursor-not-allowed"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                    }}
-                  >
-                    Out of Stock
-                  </button>
-                )}
-              </div>
+            </Link>
+            <div className="text-left md:text-center px-0 md:px-2 flex flex-col flex-1">
+              <Link href={`/product/${product.slug}`}>
+                <h4 className="font-body-md text-sm text-on-surface mb-1 line-clamp-2 leading-snug" dangerouslySetInnerHTML={{ __html: product.name }} />
+              </Link>
+              <p className="font-headline-sm text-base text-on-surface mb-3">{formatPrice(product.price)}</p>
+              {product.stock_status === "instock" ? (
+                <button
+                  type="button"
+                  aria-label={`Add ${product.name} to cart`}
+                  className="mt-auto w-full h-11 bg-on-background text-background text-sm rounded-full hover:bg-primary transition-colors"
+                  onClick={async () => {
+                    try {
+                      await addItem(product.id, 1);
+                      openCartDrawer();
+                    } catch (err) {
+                      toast.error(err instanceof Error ? err.message : "Could not add this item.");
+                    }
+                  }}
+                >
+                  Add to cart
+                </button>
+              ) : (
+                <button type="button" disabled className="mt-auto w-full h-11 bg-surface-container-high text-on-surface-variant text-sm rounded-full">
+                  Out of stock
+                </button>
+              )}
             </div>
-            <div className="text-center px-2">
-              <h4 className="font-label-md text-[13px] text-on-surface mb-2 uppercase tracking-widest line-clamp-2 leading-relaxed" dangerouslySetInnerHTML={{ __html: product.name }} />
-              <p className="font-headline-sm text-[15px] text-on-surface-variant/80">{formatPrice(product.price)}</p>
-            </div>
-          </Link>
+          </div>
         ))}
       </div>
     </section>

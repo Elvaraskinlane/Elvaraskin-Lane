@@ -9,8 +9,8 @@ const slides = [
     image: "/hero-retail-1.webp",
     title: "Your Premier Beauty Destination",
     subtitle: "Shop 100+ authentic global skincare, haircare, and makeup brands all in one place. From K-Beauty staples to dermatologist favorites.",
-    cta: "Shop All Brands",
-    href: "/brands",
+    cta: "Shop skincare",
+    href: "/shop",
   },
   {
     image: "/hero-retail-2.webp",
@@ -48,7 +48,7 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <section className="relative w-full h-[85vh] md:h-screen flex items-center justify-center overflow-hidden bg-background">
+    <section className="relative w-full h-[70vh] md:h-screen flex items-center justify-center overflow-hidden bg-background">
       {/* Carousel Backgrounds */}
       {slides.map((slide, index) => (
         <div
@@ -76,18 +76,15 @@ export default function HeroSection() {
 
         {/* We use a wrapper with a key to trigger animations when the slide changes */}
         <div key={currentSlide} className={`${isInitialLoad && currentSlide === 0 ? '' : 'animate-fade-in-up'} flex flex-col items-center`}>
-          <span className="font-label-md text-[10px] uppercase tracking-[0.3em] text-white/80 mb-6 border-b border-white/30 pb-2">
-            The Collection
-          </span>
-          <h1 className="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-white mb-6 drop-shadow-sm tracking-tight">
+          <h1 className="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-white mb-4 drop-shadow-sm tracking-tight">
             {slides[currentSlide].title}
           </h1>
-          <p className="font-body-md md:font-body-lg text-white/90 max-w-2xl mb-12 drop-shadow-sm mx-auto font-light leading-relaxed">
+          <p className="font-body-md md:font-body-lg text-white/90 max-w-2xl mb-8 drop-shadow-sm mx-auto font-light leading-relaxed text-[15px] md:text-base">
             {slides[currentSlide].subtitle}
           </p>
           <Link
             href={slides[currentSlide].href}
-            className="inline-flex items-center justify-center px-12 py-4 bg-white/10 backdrop-blur-sm border border-white/30 text-white font-label-md text-[11px] uppercase tracking-[0.15em] rounded-full hover:bg-white hover:text-black transition-all duration-300 shadow-md"
+            className="inline-flex items-center justify-center px-8 py-4 bg-white text-on-background font-body-md text-sm md:text-base rounded-full hover:bg-primary hover:text-on-primary transition-all duration-300 shadow-md"
           >
             {slides[currentSlide].cta}
           </Link>
@@ -95,6 +92,20 @@ export default function HeroSection() {
 
 
 
+      </div>
+
+      <div className="absolute bottom-8 left-0 right-0 z-10 flex justify-center gap-2">
+        {slides.map((slide, index) => (
+          <button
+            key={slide.title}
+            type="button"
+            aria-label={`Go to slide ${index + 1}`}
+            onClick={() => setCurrentSlide(index)}
+            className={`h-2.5 rounded-full transition-all ${
+              index === currentSlide ? "w-6 bg-white" : "w-2.5 bg-white/40"
+            }`}
+          />
+        ))}
       </div>
     </section>
   );

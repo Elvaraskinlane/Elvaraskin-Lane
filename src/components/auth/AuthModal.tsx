@@ -76,16 +76,16 @@ export default function AuthModal() {
       {/* Click outside to close */}
       <div className="fixed inset-0" onClick={closeAuthModal}></div>
       
-      <div className="relative z-10 w-full max-w-4xl bg-surface shadow-2xl rounded-sm border border-outline-variant/10 animate-fade-in flex flex-col md:flex-row overflow-hidden my-auto min-h-[500px]">
+      <div className="relative z-10 w-full max-w-4xl bg-surface shadow-2xl rounded-sm border border-outline-variant/10 animate-fade-in flex flex-col-reverse md:flex-row overflow-hidden my-auto min-h-[500px]">
         <button 
           onClick={closeAuthModal}
-          className="absolute top-4 right-4 text-on-surface-variant hover:text-error transition-colors z-20 bg-surface/50 rounded-full p-1 md:bg-transparent"
+          className="absolute top-3 right-3 w-11 h-11 flex items-center justify-center text-on-surface-variant hover:text-error transition-colors z-20 bg-surface/50 rounded-full md:bg-transparent"
         >
           <Close className="font-light text-2xl" />
         </button>
 
         {/* Left Column (The Teaser) */}
-        <div className="w-full md:w-1/2 bg-surface-container-lowest p-8 md:p-12 border-b md:border-b-0 md:border-r border-outline-variant/10 flex flex-col">
+        <div className="hidden md:flex w-full md:w-1/2 bg-surface-container-lowest p-8 md:p-12 border-b md:border-b-0 md:border-r border-outline-variant/10 flex-col">
           <h2 className="font-headline-sm text-lg tracking-[0.15em] text-on-surface uppercase mb-8">Your Wishlist</h2>
           
           {/* Dynamic Wishlist Items */}
@@ -198,16 +198,16 @@ export default function AuthModal() {
               disabled={isLoading}
               className="w-full bg-on-background text-background py-4 font-label-lg tracking-[0.2em] uppercase text-sm hover:bg-primary hover:text-on-primary transition-all duration-300 shadow-md mt-6 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isLoading ? "AUTHENTICATING..." : "SIGN IN"}
+              {isLoading ? "Signing in..." : "Sign in"}
             </button>
           </form>
           
           <div className="mt-8 flex flex-col items-center space-y-4">
             <Link href="/register" onClick={closeAuthModal} className="font-label-md text-xs uppercase tracking-widest text-on-surface hover:text-primary transition-colors underline underline-offset-4 decoration-outline-variant/30">
-              CREATE ACCOUNT
+              Create account
             </Link>
-            <Link href="/forgot-password" onClick={closeAuthModal} className="font-label-md text-xs uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors underline underline-offset-4 decoration-outline-variant/30">
-              LOST YOUR PASSWORD?
+            <Link href="/forgot-password" onClick={closeAuthModal} className="font-body-md text-sm text-on-surface-variant hover:text-primary transition-colors underline underline-offset-4 decoration-outline-variant/30">
+              Forgot password?
             </Link>
           </div>
         </div>

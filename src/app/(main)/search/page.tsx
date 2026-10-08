@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import SearchControls from "@/components/search/SearchControls";
+import AddToCartButton from "@/components/shop/AddToCartButton";
 import { searchProducts, getAllBrands } from "@/lib/woocommerce";
 import { SearchOff } from '@material-symbols-svg/react';
 import { getLevenshteinDistance } from "@/lib/distance";
@@ -67,36 +68,33 @@ export default async function SearchPage({
       {products.length > 0 && <SearchControls resultCount={products.length} />}
 
       <section className="w-full px-margin-mobile md:px-margin-desktop py-margin-desktop bg-surface-container-lowest min-h-[50vh]">
-        <div className="w-full max-w-[1280px] mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-gutter gap-y-16">
+        <div className="w-full max-w-[1280px] mx-auto grid grid-cols-2 lg:grid-cols-4 gap-x-3 md:gap-x-gutter gap-y-8 md:gap-y-16">
           {products.length > 0 ? (
             products.map((product) => {
               const imageUrl = product.images?.[0]?.src || "/hero-2-fixed.png";
               return (
-                <Link href={`/product/${product.slug}`} key={product.id} className="group flex flex-col cursor-pointer">
-                  <div className="relative w-full aspect-[4/5] bg-surface-container-low overflow-hidden mb-6 rounded-sm">
-                    <Image 
-                      src={imageUrl} 
-                      alt={product.name} 
-                      fill 
-                      className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out mix-blend-multiply p-4" 
-                      sizes="(max-width: 640px) 100vw, 250px"
+                <div key={product.id} className="group flex flex-col">
+                  <Link href={`/product/${product.slug}`} className="relative w-full aspect-[4/5] bg-surface-container-low overflow-hidden mb-3 rounded-sm">
+                    <Image
+                      src={imageUrl}
+                      alt={product.name}
+                      fill
+                      className="object-cover mix-blend-multiply p-4"
+                      sizes="(max-width: 640px) 50vw, 250px"
                     />
-                    <div className="absolute inset-0 bg-secondary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    
-                    <button className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-surface text-primary px-6 py-3 font-label-md opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 w-[calc(100%-2rem)] border border-outline-variant/30 hover:bg-surface-container-low shadow-sm">
-                      View Details
-                    </button>
-                  </div>
-                  <div className="text-center flex flex-col gap-2">
-                    <p className="font-label-md text-on-surface-variant uppercase tracking-wider text-[11px]">
-                      {product.categories?.[0]?.name || "Product"}
-                    </p>
-                    <h3 className="font-headline-sm text-primary">{product.name}</h3>
-                    <p className="font-body-md text-on-surface-variant mt-1">
+                  </Link>
+                  <div className="flex flex-col gap-1 flex-1">
+                    <Link href={`/product/${product.slug}`}>
+                      <h3 className="font-body-md text-sm text-on-surface line-clamp-2">{product.name}</h3>
+                    </Link>
+                    <p className="font-headline-sm text-base text-on-surface mb-3">
                       ₦{parseInt(product.price || "0").toLocaleString()}
                     </p>
+                    <div className="mt-auto">
+                      <AddToCartButton productId={product.id} compact />
+                    </div>
                   </div>
-                </Link>
+                </div>
               );
             })
           ) : (

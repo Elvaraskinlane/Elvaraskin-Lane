@@ -10,7 +10,7 @@ import { useUIStore } from "@/store/useUIStore";
 import { toast } from "sonner";
 import { loadMoreProductsAction } from "@/app/actions/shopActions";
 import ShopFilters from "./ShopFilters";
-import { Search, SearchOff } from '@material-symbols-svg/react';
+import { Search, SearchOff, Tune, Close } from '@material-symbols-svg/react';
 
 export default function ShopAllContainer({ initialProducts }: { initialProducts: WCProduct[] }) {
   const router = useRouter();
@@ -34,6 +34,12 @@ export default function ShopAllContainer({ initialProducts }: { initialProducts:
   if (currentOrderBy === "price" && currentOrder === "desc") sortValue = "high-to-low";
 
   const [sortBy, setSortBy] = useState(sortValue);
+  const [filtersOpen, setFiltersOpen] = useState(false);
+
+  const filterCount =
+    (searchParams.get("category")?.split(",").filter(Boolean).length || 0) +
+    (searchParams.get("brand")?.split(",").filter(Boolean).length || 0) +
+    (searchParams.get("concern")?.split(",").filter(Boolean).length || 0);
 
   useEffect(() => {
     setVisibleProducts(initialProducts);
@@ -42,17 +48,28 @@ export default function ShopAllContainer({ initialProducts }: { initialProducts:
     setNoMoreMessage(false);
   }, [initialProducts]);
 
-  const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      const params = new URLSearchParams(searchParams.toString());
-      if (searchQuery.trim()) {
-        params.set("search", searchQuery.trim());
-      } else {
-        params.delete("search");
-      }
-      params.delete("page");
-      router.push(`/shop?${params.toString()}`, { scroll: false });
+  useEffect(() => {
+    if (!filtersOpen) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [filtersOpen]);
+
+  const applySearch = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (searchQuery.trim()) {
+      params.set("search", searchQuery.trim());
+    } else {
+      params.delete("search");
     }
+    params.delete("page");
+    router.push(`/shop?${params.toString()}`, { scroll: false });
+  };
+
+  const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") applySearch();
   };
 
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -103,45 +120,92 @@ export default function ShopAllContainer({ initialProducts }: { initialProducts:
     }
   };
 
+  const searchField = (
+    <div className="relative transition-colors group">
+      <input
+        type="search"
+        placeholder="Search products"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        onKeyDown={handleSearch}
+        className="w-full bg-surface-container-low rounded-full py-3.5 pl-5 pr-12 font-body-md text-sm outline-none border border-transparent focus:border-outline-variant/30 focus:bg-surface transition-all placeholder:text-outline-variant/70 shadow-sm"
+      />
+      <button
+        type="button"
+        onClick={applySearch}
+        className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center text-on-surface-variant"
+        aria-label="Search"
+      >
+        <Search className="text-[20px]" />
+      </button>
+    </div>
+  );
+
   return (
-    <div className="w-full max-w-[1280px] mx-auto px-margin-mobile md:px-margin-desktop py-margin-desktop grid grid-cols-1 md:grid-cols-12 gap-gutter">
-      
-      {/* Sidebar Filters */}
-      <aside className="md:col-span-3 space-y-8">
+    <div className="w-full max-w-[1280px] mx-auto px-margin-mobile md:px-margin-desktop py-8 md:py-margin-desktop grid grid-cols-1 md:grid-cols-12 gap-gutter">
+      <aside className="hidden md:block md:col-span-3 space-y-8">
         <div>
           <h3 className="font-label-md text-label-md text-primary uppercase tracking-widest mb-4 border-b border-outline-variant pb-2">
-            Search Collection
+            Search
           </h3>
-          <div className="relative mb-8 transition-colors group">
-            <input 
-              type="text" 
-              placeholder="Search and press Enter..." 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyDown={handleSearch}
-              className="w-full bg-surface-container-low rounded-full py-3.5 pl-5 pr-12 font-body-md text-sm outline-none border border-transparent focus:border-outline-variant/30 focus:bg-surface transition-all placeholder:text-outline-variant/70 shadow-sm"
-            />
-            <Search className="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant/70 text-[20px] group-focus-within:text-primary transition-colors" />
-          </div>
-
-          <Suspense fallback={<div className="font-body-sm text-on-surface-variant py-4">Loading filters...</div>}>
+          <div className="mb-8">{searchField}</div>
+          <Suspense fallback={<div className="font-body-md text-on-surface-variant py-4">Loading filters...</div>}>
             <ShopFilters />
           </Suspense>
         </div>
       </aside>
 
-      {/* Main Product Canvas */}
+      {filtersOpen && (
+        <div className="fixed inset-0 z-[70] md:hidden">
+          <div className="absolute inset-0 bg-on-background/40" onClick={() => setFiltersOpen(false)} />
+          <div className="absolute inset-x-0 bottom-0 max-h-[85dvh] bg-surface rounded-t-2xl shadow-2xl flex flex-col">
+            <div className="flex items-center justify-between px-4 py-4 border-b border-outline-variant/20">
+              <h3 className="font-headline-sm text-lg text-on-surface">Filter</h3>
+              <button
+                type="button"
+                onClick={() => setFiltersOpen(false)}
+                className="w-11 h-11 flex items-center justify-center"
+                aria-label="Close filters"
+              >
+                <Close className="text-[22px]" />
+              </button>
+            </div>
+            <div className="overflow-y-auto p-4 pb-[max(24px,env(safe-area-inset-bottom))]">
+              <div className="mb-6">{searchField}</div>
+              <Suspense fallback={<div className="font-body-md text-on-surface-variant py-4">Loading filters...</div>}>
+                <ShopFilters />
+              </Suspense>
+              <button
+                type="button"
+                onClick={() => setFiltersOpen(false)}
+                className="mt-6 w-full h-12 bg-on-background text-background text-sm rounded-full"
+              >
+                Show products
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <section className="md:col-span-9">
-        <div className="flex justify-between items-center mb-6 pb-2 border-b border-outline-variant">
-          <span className="font-label-md text-label-md text-on-surface-variant">
-            Showing {visibleProducts.length} Products
+        <div className="flex justify-between items-center gap-3 mb-6 pb-2 border-b border-outline-variant">
+          <button
+            type="button"
+            onClick={() => setFiltersOpen(true)}
+            className="md:hidden inline-flex items-center gap-2 h-11 px-4 border border-outline-variant rounded-full text-sm text-on-surface"
+          >
+            <Tune className="text-[18px]" />
+            Filter{filterCount > 0 ? ` (${filterCount})` : ""}
+          </button>
+          <span className="font-body-md text-sm text-on-surface-variant">
+            {visibleProducts.length} products
           </span>
-          <select 
+          <select
             value={sortBy}
             onChange={handleSortChange}
-            className="font-label-md text-label-md text-primary bg-transparent border-none focus:ring-0 cursor-pointer uppercase tracking-widest outline-none"
+            className="font-body-md text-sm text-on-surface bg-transparent border border-outline-variant/40 rounded-full h-11 px-3 outline-none"
           >
-            <option value="recommended">Sort by Featured</option>
+            <option value="recommended">Featured</option>
             <option value="low-to-high">Price: Low to High</option>
             <option value="high-to-low">Price: High to Low</option>
           </select>
@@ -157,57 +221,50 @@ export default function ShopAllContainer({ initialProducts }: { initialProducts:
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-16 mb-16">
+          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-3 md:gap-x-8 gap-y-8 md:gap-y-16 mb-16">
             {visibleProducts.map((product) => {
               const imageUrl = product.images?.[0]?.src || "/hero-2-fixed.png";
 
               return (
-                <Link href={`/product/${product.slug}`} key={product.id} className="group cursor-pointer flex flex-col block transition-all duration-500">
-                  <div className="relative bg-white aspect-[3/4] mb-6 overflow-hidden rounded-sm flex items-center justify-center border border-outline-variant/15 group-hover:border-outline-variant/30 transition-all duration-500 group-hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)]">
-                    <Image 
-                      src={imageUrl} 
-                      alt={product.name} 
-                      fill 
-                      className="object-cover mix-blend-multiply group-hover:scale-[1.03] transition-transform duration-700 ease-out p-6"
-                      sizes="(max-width: 640px) 100vw, 250px"
+                <div key={product.id} className="group flex flex-col">
+                  <Link href={`/product/${product.slug}`} className="relative bg-white aspect-[3/4] mb-3 overflow-hidden rounded-sm flex items-center justify-center border border-outline-variant/15">
+                    <Image
+                      src={imageUrl}
+                      alt={product.name}
+                      fill
+                      className="object-cover mix-blend-multiply p-4 md:p-6"
+                      sizes="(max-width: 640px) 50vw, 250px"
                     />
-                    
-                    {/* Minimalist Floating Pill Button */}
-                    <div className="absolute bottom-6 left-0 w-full px-4 flex justify-center opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-400 ease-out z-10">
-                      {product.stock_status === "instock" ? (
-                        <button 
-                          className="bg-black text-white font-label-md text-[11px] py-3.5 px-8 rounded-full shadow-lg hover:bg-primary transition-colors uppercase tracking-[0.15em] flex items-center gap-2"
-                          onClick={async (e) => {
-                            e.preventDefault(); // Prevent navigating to product page
-                            try {
-                              await addItem(product.id, 1);
-                              openCartDrawer();
-                            } catch (err) {
-                              console.error("Cart error:", err);
-                              toast.error(err instanceof Error ? err.message : "Failed to add to cart. Item might be out of stock.");
-                            }
-                          }}
-                        >
-                          Add to Cart
-                        </button>
-                      ) : (
-                        <button 
-                          disabled
-                          className="bg-surface-container-high text-on-surface-variant font-label-md text-[11px] py-3.5 px-8 rounded-full shadow-sm uppercase tracking-[0.15em] flex items-center gap-2 opacity-80 cursor-not-allowed"
-                          onClick={(e) => e.preventDefault()}
-                        >
-                          Out of Stock
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                  <div className="text-center px-2">
-                    <h4 className="font-label-md text-[13px] text-on-surface mb-2 uppercase tracking-widest line-clamp-2 leading-relaxed" dangerouslySetInnerHTML={{ __html: product.name }} />
-                    <p className="font-headline-sm text-[15px] text-on-surface-variant/80">
+                  </Link>
+                  <div className="text-left md:text-center px-0 md:px-2 flex flex-col flex-1">
+                    <Link href={`/product/${product.slug}`}>
+                      <h4 className="font-body-md text-sm text-on-surface mb-1 line-clamp-2 leading-snug" dangerouslySetInnerHTML={{ __html: product.name }} />
+                    </Link>
+                    <p className="font-headline-sm text-base text-on-surface mb-3">
                       ₦{parseInt(product.price || "0").toLocaleString()}
                     </p>
+                    {product.stock_status === "instock" ? (
+                      <button
+                        type="button"
+                        className="mt-auto w-full h-11 bg-on-background text-background text-sm rounded-full hover:bg-primary transition-colors"
+                        onClick={async () => {
+                          try {
+                            await addItem(product.id, 1);
+                            openCartDrawer();
+                          } catch (err) {
+                            toast.error(err instanceof Error ? err.message : "Could not add this item.");
+                          }
+                        }}
+                      >
+                        Add to cart
+                      </button>
+                    ) : (
+                      <button type="button" disabled className="mt-auto w-full h-11 bg-surface-container-high text-on-surface-variant text-sm rounded-full">
+                        Out of stock
+                      </button>
+                    )}
                   </div>
-                </Link>
+                </div>
               );
             })}
           </div>
